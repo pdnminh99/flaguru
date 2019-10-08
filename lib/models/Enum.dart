@@ -1,0 +1,10 @@
+enum Difficulty { EASY, NORMAL, HARD }
+enum Contintent {
+  ASIA,
+  EUROPE,
+  AFRICA,
+  AUSTRALIA,
+  ANTARRCTICA,
+  NORTH_AMERICA,
+  SOUTH_AMERICA
+}
