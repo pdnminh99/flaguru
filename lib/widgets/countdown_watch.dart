@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CountdownWatch extends StatelessWidget {
   final num time;
 
-  bool get isLastSeconds => time <= 5;
+  bool get isLastSeconds => time < 10;
 
   CountdownWatch({@required this.time});
 

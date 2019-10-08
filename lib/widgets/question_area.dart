@@ -31,40 +31,47 @@ class QuestionArea extends StatelessWidget {
               ),
             ),
             Center(
-              child: isName
-                  ? FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        question.country,
-                        style: TextStyle(
-                          fontSize: constraint.maxHeight * 0.25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: <Shadow>[
-                            Shadow(
-                              offset: Offset(2, 2),
-                              blurRadius: 3,
-                              color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: isName
+                    ? Center(
+                        child: Text(
+                          question.country,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: constraint.maxHeight * 0.22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(2, 2),
+                                blurRadius: 3,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Material(
+                        elevation: 15,
+                        borderRadius: BorderRadius.circular(3),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          height: constraint.maxWidth * 0.55 / 1.7,
+                          width: constraint.maxWidth * 0.55,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: Image.asset(
+                              question.imageUrl,
+                              fit: BoxFit.cover,
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.white, width: 1),
-                      ),
-                      height: constraint.maxWidth * 0.6 / 1.7,
-                      width: constraint.maxWidth * 0.6,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          question.imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+              ),
             ),
           ],
         );

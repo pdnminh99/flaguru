@@ -3,8 +3,8 @@ import 'package:flaguru/models/Answer.dart';
 const List<Map<String, Object>> DUMMY_QA = [
   {
     'question': QuestionUI(
-      country: 'America',
-      imageUrl: 'assets/images/flag-of-Algeria.png',
+      country: 'USA',
+      imageUrl: 'assets/images/flag-of-United-States-of-America.png',
     ),
     'answers': [
       Answer(
@@ -13,8 +13,8 @@ const List<Map<String, Object>> DUMMY_QA = [
         isRight: false,
       ),
       Answer(
-        country: 'America',
-        imageUrl: 'assets/images/flag-of-Algeria.png',
+        country: 'United States of America',
+        imageUrl: 'assets/images/flag-of-United-States-of-America.png',
         isRight: true,
       ),
       Answer(
@@ -32,12 +32,12 @@ const List<Map<String, Object>> DUMMY_QA = [
   {
     'question': QuestionUI(
       country: 'Vietnam',
-      imageUrl: 'assets/images/flag-of-Afghanistan.png',
+      imageUrl: 'assets/images/flag-of-Vietnam.png',
     ),
     'answers': [
       Answer(
         country: 'Vietnam',
-        imageUrl: 'assets/images/flag-of-Algeria.png',
+        imageUrl: 'assets/images/flag-of-Vietnam.png',
         isRight: true,
       ),
       Answer(
@@ -60,7 +60,7 @@ const List<Map<String, Object>> DUMMY_QA = [
   {
     'question': QuestionUI(
       country: 'Japan',
-      imageUrl: 'assets/images/flag-of-El-Salvador.png',
+      imageUrl: 'assets/images/flag-of-Japan.png',
     ),
     'answers': [
       Answer(
@@ -74,14 +74,42 @@ const List<Map<String, Object>> DUMMY_QA = [
         isRight: false,
       ),
       Answer(
-        country: 'Japan',
+        country: 'China',
         imageUrl: 'assets/images/flag-of-Algeria.png',
         isRight: false,
       ),
       Answer(
-        country: 'China',
-        imageUrl: 'assets/images/flag-of-El-Salvador.png',
+        country: 'Japan',
+        imageUrl: 'assets/images/flag-of-Japan.png',
         isRight: true,
+      ),
+    ],
+  },
+  {
+    'question': QuestionUI(
+      country: 'China',
+      imageUrl: 'assets/images/flag-of-China.png',
+    ),
+    'answers': [
+      Answer(
+        country: 'Vietnam',
+        imageUrl: 'assets/images/flag-of-Afghanistan.png',
+        isRight: false,
+      ),
+      Answer(
+        country: 'America',
+        imageUrl: 'assets/images/flag-of-Argentina.png',
+        isRight: false,
+      ),
+      Answer(
+        country: 'China',
+        imageUrl: 'assets/images/flag-of-China.png',
+        isRight: true,
+      ),
+      Answer(
+        country: 'Japan',
+        imageUrl: 'assets/images/flag-of-Japan.png',
+        isRight: false,
       ),
     ],
   }

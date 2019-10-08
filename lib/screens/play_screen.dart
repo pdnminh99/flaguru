@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flaguru/data/question_answers.dart';
-import 'package:flaguru/widgets/flag_answers_set.dart';
+import 'package:flaguru/widgets/answers_area.dart';
 import 'package:flaguru/widgets/question_area.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flaguru/widgets/countdown_watch.dart';
@@ -16,15 +15,16 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen> {
+  static const limit = 15;
   bool isAnswered;
   List<bool> pressStates;
   num time;
-  Timer timer;
-  int index;
+  Timer _timer;
+  int index = 0;
+  var qa = DUMMY_QA;
 
   @override
   void initState() {
-    index = 0;
     initData();
     super.initState();
   }
@@ -32,32 +32,30 @@ class _PlayScreenState extends State<PlayScreen> {
   void initData() {
     isAnswered = false;
     pressStates = [false, false, false, false];
-    time = 10;
-    timer = getTimer();
+    time = limit;
+    _timer = getTimer();
   }
 
-  void changePressState(int i) {
-    pressStates[i] = true;
-  }
+  void changePressState(int i) => pressStates[i] = true;
 
   void doRight() {
-    timer.cancel();
+    _timer.cancel();
     setState(() {
       isAnswered = true;
     });
   }
 
   void doWrong() {
-    timer.cancel();
+    _timer.cancel();
     setState(() {
       isAnswered = true;
     });
   }
 
   void refreshBoard() {
-    timer.cancel();
+    _timer.cancel();
     setState(() {
-      index = (index + 1) % 3;
+      index = (index + 1) % qa.length;
       initData();
     });
   }
@@ -69,9 +67,10 @@ class _PlayScreenState extends State<PlayScreen> {
     });
   }
 
+  bool nameOrFlag() => index % 2 == 1;
+
   @override
   Widget build(BuildContext context) {
-    var qa = DUMMY_QA;
     var height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -90,7 +89,7 @@ class _PlayScreenState extends State<PlayScreen> {
             width: double.infinity,
             height: height * 0.29,
             child: QuestionArea(
-              isName: true,
+              isName: nameOrFlag(),
               question: qa[index]['question'],
             ),
           ),
@@ -102,7 +101,8 @@ class _PlayScreenState extends State<PlayScreen> {
           Container(
             width: double.infinity,
             height: height * 0.35,
-            child: FlagAnswersSet(
+            child: AnswersArea(
+              isFlag: nameOrFlag(),
               isAnswered: isAnswered,
               doRight: doRight,
               doWrong: doWrong,
