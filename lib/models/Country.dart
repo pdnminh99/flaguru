@@ -2,13 +2,13 @@ class Country {
   String id;
   String name;
   String flag;
-  String contintent;
+  String continent;
 
   Country({ String id, String name, String flag, String continent }) {
     this.id = id != null ? id : '';
     this.name = name;
     this.flag = flag;
-    this.contintent = continent;
+    this.continent = continent;
   }
 
   Map<String, dynamic> toMap() {
@@ -16,7 +16,7 @@ class Country {
       'id': '${this.id}',
       'name': '${this.name}',
       'flag': '${this.flag}',
-      'continent': '${this.contintent}',
+      'continent': '${this.continent}',
     };
   }
 }
