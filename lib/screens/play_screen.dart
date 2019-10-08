@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flaguru/data/question_answers.dart';
 import 'package:flaguru/widgets/answers_area.dart';
+import 'package:flaguru/widgets/bottom_bar.dart';
 import 'package:flaguru/widgets/question_area.dart';
 import 'package:flutter/material.dart';
 
@@ -114,18 +115,9 @@ class _PlayScreenState extends State<PlayScreen> {
           Container(
             width: double.infinity,
             height: height * 0.11,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                if (isAnswered)
-                  Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: RaisedButton(
-                      onPressed: refreshBoard,
-                      child: Text('Next'),
-                    ),
-                  ),
-              ],
+            child: BottomBar(
+              isAnswered: isAnswered,
+              onRefresh: refreshBoard,
             ),
           ),
         ],

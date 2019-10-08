@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: PlayScreen.routeName,
       routes: {
-        '/': (context) => MenuScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
+        '/': (context) => MenuScreen(),
       },
     );
   }
