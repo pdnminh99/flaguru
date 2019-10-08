@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FlagButton extends StatelessWidget {
   final Answer answer;
-  final num height;
+  final num width;
   final Function doRight;
   final Function doWrong;
   final bool isAnswered;
@@ -12,7 +12,7 @@ class FlagButton extends StatelessWidget {
 
   FlagButton({
     @required this.answer,
-    @required this.height,
+    @required this.width,
     @required this.doRight,
     @required this.doWrong,
     @required this.isAnswered,
@@ -54,15 +54,15 @@ class FlagButton extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Material(
-          elevation: 5,
+          elevation: (!isAnswered || isPressed) ? 5 : 0,
           borderRadius: borderRadius,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: borderRadius,
               border: Border.all(color: Colors.white, width: 1),
             ),
-            height: height,
-            width: height * 1.7,
+            height: width / 1.7,
+            width: width,
             child: ClipRRect(
               borderRadius: borderRadius,
               child: Image.asset(
@@ -90,7 +90,7 @@ class FlagButton extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withOpacity(0.7),
               ),
             ),
           ),

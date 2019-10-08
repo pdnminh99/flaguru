@@ -2,6 +2,9 @@ import 'package:flaguru/screens/demo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'screens/menu_screen.dart';
+import 'screens/play_screen.dart';
+
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
   SystemChrome.setPreferredOrientations(
@@ -10,25 +13,20 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => DemoScreen();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'New name here',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        fontFamily: 'Quicksand',
+      ),
+      initialRoute: PlayScreen.routeName,
+      routes: {
+        '/': (context) => MenuScreen(),
+        PlayScreen.routeName: (context) => PlayScreen(),
+      },
+    );
+  }
 }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'New name here',
-//       theme: ThemeData(
-//         primarySwatch: Colors.indigo,
-//         accentColor: Colors.amber,
-//         canvasColor: Colors.grey[300],
-//       ),
-//       initialRoute: '/',
-//       routes: {
-//         '/': (context) => MenuScreen(),
-//       },
-//     );
-//   }
-// }

@@ -23,15 +23,15 @@ class FlagAnswersSet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
-      var halfHeight = constraint.maxHeight * 0.9 / 2;
+      var halfWidth = constraint.maxWidth * 0.85 / 2;
 
       var spacingWidget = SizedBox(
-        height: constraint.maxHeight * 0.1,
-        width: constraint.maxHeight * 0.1,
+        height: constraint.maxWidth * 0.05,
+        width: constraint.maxWidth * 0.05,
       );
 
       Widget getFlagButton(int index) => FlagButton(
-            height: halfHeight,
+            width: halfWidth,
             answer: answers[index],
             doRight: doRight,
             doWrong: doWrong,
