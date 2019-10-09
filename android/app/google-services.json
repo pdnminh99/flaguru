@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "854335476367",
+    "firebase_url": "https://flaguru-9f3af.firebaseio.com",
+    "project_id": "flaguru-9f3af",
+    "storage_bucket": "flaguru-9f3af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854335476367:android:a57391be01b2d60f2cd6fa",
+        "android_client_info": {
+          "package_name": "com.example.flaguru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854335476367-mhme71lbpkmrrsk3vs53oj0o1apckpkc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flaguru",
+            "certificate_hash": "51c22ead423be2ade25fd8c7b2f53e607712d1ee"
+          }
+        },
+        {
+          "client_id": "854335476367-cfsgsvpc1isc4qv8vrofdep3ldmi0ofu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzQ0GfECSWxiKYpMy9D2THVSsonfet_mE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854335476367-cfsgsvpc1isc4qv8vrofdep3ldmi0ofu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
