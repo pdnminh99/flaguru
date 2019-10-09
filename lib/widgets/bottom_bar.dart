@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {
   final bool isAnswered;
+  final bool isOver;
   final Function onRefresh;
+  final Function onOver;
 
   BottomBar({
     @required this.isAnswered,
+    @required this.isOver,
     @required this.onRefresh,
+    @required this.onOver,
   });
 
   @override
@@ -25,9 +29,9 @@ class BottomBar extends StatelessWidget {
                 child: RaisedButton(
                   elevation: 5,
                   color: Colors.white,
-                  onPressed: onRefresh,
+                  onPressed: (isOver) ? onOver : onRefresh,
                   child: Icon(
-                    Icons.arrow_forward,
+                    (isOver) ? Icons.airplay : Icons.arrow_forward,
                     size: constraint.maxHeight * 0.55,
                   ),
                   shape: RoundedRectangleBorder(

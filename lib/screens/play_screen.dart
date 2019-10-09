@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/widgets/info_bar.dart';
 import 'package:flaguru/widgets/loading_spinner.dart';
+import 'package:flaguru/widgets/start_button.dart';
+import 'package:flaguru/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flaguru/models/QuestionProvider.dart';
@@ -18,22 +22,33 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> {
   static const limit = 15;
+  static const maxLife = 5;
+
   int index = 0;
   bool isAnswered;
   List<bool> pressStates;
+
+  int remainLives = maxLife;
+  bool isStarted = false;
+  bool isOver = false;
+
   int time;
   Timer _timer;
+
   List<Map<String, Object>> qa;
 
   @override
   void initState() {
-    var qProvider = QuestionProvider();
+    var qProvider = QuestionProvider(level: Difficulty.EASY);
     qProvider.initializeQuestionsProvider().then((_) {
-      initData();
       setState(() => qa = qProvider.getCollections());
     });
-
     super.initState();
+  }
+
+  void startGame() {
+    isStarted = true;
+    initData();
   }
 
   void initData() {
@@ -55,16 +70,23 @@ class _PlayScreenState extends State<PlayScreen> {
   void doWrong() {
     _timer.cancel();
     setState(() {
+      remainLives--;
       isAnswered = true;
+      if (remainLives == 0) isOver = true;
     });
   }
 
-  void refreshBoard() {
+  void getNextQuestion() {
     _timer.cancel();
     setState(() {
-      index = (index + 1) % qa.length;
+      index++;
       initData();
+      if (index == qa.length - 1) isOver = true;
     });
+  }
+
+  void onOver() {
+    // navigate to the result screen
   }
 
   Timer getTimer() {
@@ -82,17 +104,38 @@ class _PlayScreenState extends State<PlayScreen> {
     return Scaffold(
       backgroundColor: Color(0xff019dad),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          if (qa == null) LoadingSpinner(),
-          if (qa != null) ...[
+          Container(
+            width: double.infinity,
+            height: height * 0.09,
+            child: TopBar(
+              level: "easy",
+            ),
+          ),
+          if (qa == null)
             Container(
               width: double.infinity,
-              height: height * 0.09,
+              height: height * 0.91,
+              child: LoadingSpinner(),
             ),
+          if (qa != null && !isStarted)
+            Container(
+              width: double.infinity,
+              height: height * 0.91,
+              child: StartButton(
+                onStart: startGame,
+              ),
+            ),
+          if (qa != null && isStarted) ...[
             Container(
               width: double.infinity,
               height: height * 0.07,
+              child: InfoBar(
+                totalQuestions: qa.length,
+                currentQuestion: index + 1,
+                maxLives: maxLife,
+                remainLives: remainLives,
+              ),
             ),
             Container(
               width: double.infinity,
@@ -125,7 +168,9 @@ class _PlayScreenState extends State<PlayScreen> {
               height: height * 0.11,
               child: BottomBar(
                 isAnswered: isAnswered,
-                onRefresh: refreshBoard,
+                isOver: isOver,
+                onRefresh: getNextQuestion,
+                onOver: onOver,
               ),
             ),
           ],

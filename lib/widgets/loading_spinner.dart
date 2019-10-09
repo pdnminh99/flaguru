@@ -5,7 +5,7 @@ class LoadingSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'Drawing...',
+        'Drawing flags...',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
