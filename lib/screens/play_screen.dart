@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:flaguru/data/question_answers.dart';
+import 'package:flaguru/widgets/loading_spinner.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flaguru/models/QuestionProvider.dart';
 import 'package:flaguru/widgets/answers_area.dart';
 import 'package:flaguru/widgets/bottom_bar.dart';
 import 'package:flaguru/widgets/question_area.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flaguru/widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
@@ -17,16 +18,21 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> {
   static const limit = 15;
+  int index = 0;
   bool isAnswered;
   List<bool> pressStates;
-  num time;
+  int time;
   Timer _timer;
-  int index = 0;
-  var qa = DUMMY_QA;
+  List<Map<String, Object>> qa;
 
   @override
   void initState() {
-    initData();
+    var qProvider = QuestionProvider();
+    qProvider.initializeQuestionsProvider().then((_) {
+      initData();
+      setState(() => qa = qProvider.getCollections());
+    });
+
     super.initState();
   }
 
@@ -73,53 +79,56 @@ class _PlayScreenState extends State<PlayScreen> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Color(0xff019dad),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: height * 0.09,
-          ),
-          Container(
-            width: double.infinity,
-            height: height * 0.07,
-          ),
-          Container(
-            width: double.infinity,
-            height: height * 0.29,
-            child: QuestionArea(
-              isName: nameOrFlag(),
-              question: qa[index]['question'],
+          if (qa == null) LoadingSpinner(),
+          if (qa != null) ...[
+            Container(
+              width: double.infinity,
+              height: height * 0.09,
             ),
-          ),
-          Container(
-            width: double.infinity,
-            height: height * 0.09,
-            child: CountdownWatch(time: time),
-          ),
-          Container(
-            width: double.infinity,
-            height: height * 0.35,
-            child: AnswersArea(
-              isFlag: nameOrFlag(),
-              isAnswered: isAnswered,
-              doRight: doRight,
-              doWrong: doWrong,
-              answers: qa[index]['answers'],
-              pressStates: pressStates,
-              changePressState: changePressState,
+            Container(
+              width: double.infinity,
+              height: height * 0.07,
             ),
-          ),
-          Container(
-            width: double.infinity,
-            height: height * 0.11,
-            child: BottomBar(
-              isAnswered: isAnswered,
-              onRefresh: refreshBoard,
+            Container(
+              width: double.infinity,
+              height: height * 0.29,
+              child: QuestionArea(
+                isName: nameOrFlag(),
+                question: qa[index]['question'],
+              ),
             ),
-          ),
+            Container(
+              width: double.infinity,
+              height: height * 0.09,
+              child: CountdownWatch(time: time),
+            ),
+            Container(
+              width: double.infinity,
+              height: height * 0.35,
+              child: AnswersArea(
+                isFlag: nameOrFlag(),
+                isAnswered: isAnswered,
+                doRight: doRight,
+                doWrong: doWrong,
+                answers: qa[index]['answer'],
+                pressStates: pressStates,
+                changePressState: changePressState,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: height * 0.11,
+              child: BottomBar(
+                isAnswered: isAnswered,
+                onRefresh: refreshBoard,
+              ),
+            ),
+          ],
         ],
       ),
     );

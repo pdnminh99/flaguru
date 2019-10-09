@@ -1,9 +1,9 @@
-import 'package:flaguru/models/Answer.dart';
+import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 
 class QuestionArea extends StatelessWidget {
   final bool isName;
-  final QuestionUI question;
+  final Question question;
 
   QuestionArea({
     @required this.isName,
@@ -65,7 +65,7 @@ class QuestionArea extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(2),
                             child: Image.asset(
-                              question.imageUrl,
+                              question.imageURL,
                               fit: BoxFit.cover,
                             ),
                           ),
