@@ -268,3 +268,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+    fonts:
+    - family:  Menu_Icon
+      fonts:
+      - asset: assets/fonts/Menu_Icon.ttf
