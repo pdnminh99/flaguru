@@ -2,30 +2,36 @@ import 'package:flaguru/screens/demo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'screens/menu_screen.dart';
+import 'screens/play_screen.dart';
+
 void main() {
-  SystemChrome.setEnabledSystemUIOverlays([]); // hide status bar
+  SystemChrome.setEnabledSystemUIOverlays([]);
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp],
+  );
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => DemoScreen();
+  _MyAppState createState() => _MyAppState();
 }
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'New name here',
-//       theme: ThemeData(
-//         primarySwatch: Colors.indigo,
-//         accentColor: Colors.amber,
-//         canvasColor: Colors.grey[300],
-//       ),
-//       initialRoute: '/',
-//       routes: {
-//         '/': (context) => MenuScreen(),
-//       },
-//     );
-//   }
-// }
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'New name here',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        fontFamily: 'Quicksand',
+      ),
+      initialRoute: PlayScreen.routeName,
+      routes: {
+        PlayScreen.routeName: (context) => PlayScreen(),
+        '/': (context) => MenuScreen(),
+      },
+    );
+  }
+}
