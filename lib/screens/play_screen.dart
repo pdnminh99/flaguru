@@ -41,7 +41,7 @@ class _PlayScreenState extends State<PlayScreen> {
   void initState() {
     var qProvider = QuestionProvider(level: Difficulty.EASY);
     qProvider.initializeQuestionsProvider().then((_) {
-      setState(() => qa = qProvider.getCollections());
+      setState(() => qa = qProvider.getCollections(numberOfQuestions: 50, isFirstAnswerCorrect: false));
     });
     super.initState();
   }
