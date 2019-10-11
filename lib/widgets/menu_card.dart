@@ -1,12 +1,17 @@
-import 'package:flag_quiz/icon_and_font/menu__icon_icons.dart';
+
+import 'dart:ffi';
+
+import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
+
   final onpress;
   String _name_button;
-
-  var icon;
-  Menu(this.onpress, this._name_button,this.icon);
+  IconData icon_main; 
+  String icon_G;
+  BuildContext context_param;
+  Menu(this.onpress,this.icon_main, this._name_button,this.icon_G, this.context_param);
   
   @override
   Widget build(BuildContext context) {
@@ -23,9 +28,9 @@ class Menu extends StatelessWidget {
       width: 350,
       child: FlatButton(
           shape:  RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-          onPressed: onpress,
+          onPressed: () {onpress(context_param);},
           padding: EdgeInsets.all(0),
-          color: Colors.white54,
+          color: Colors.white,
           child:
            Container(
              width: double.infinity,
@@ -33,7 +38,7 @@ class Menu extends StatelessWidget {
              decoration: BoxDecoration(
                borderRadius: BorderRadius.circular(10.0),
                boxShadow: [
-                 BoxShadow(color: Colors.white54,
+                 BoxShadow(color: Colors.white,
                  offset: Offset(0,2.0),
                  blurRadius: 1.0)
                ]
@@ -42,7 +47,7 @@ class Menu extends StatelessWidget {
               Expanded(
                     flex: 1,
                     child: Icon(
-                      Menu_Icon.swords,size: 35,
+                      icon_main,size: 35,
                     ),                  
                     ),
               Expanded(
@@ -58,8 +63,17 @@ class Menu extends StatelessWidget {
                   )),
                 Expanded(
                   flex: 1,
-                  child: 
-                    icon == null ? SizedBox(width: 30,) : Icon(Menu_Icon.swords)
+                  child:
+                    icon_G == null ? SizedBox(width: 30,) : 
+                    Container(
+                      width: 30,
+                      height: double.infinity,
+                      decoration: BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 2))),
+                      child : Icon(
+                        Menu_Icon.google,
+                        size: 35,
+                        )
+                    )
                   )
                   //SizedBox(width: 30,)
                   //child: Icon(Sword.swords, size: 35,),),

@@ -22,10 +22,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         fontFamily: 'Quicksand',
       ),
-      initialRoute: PlayScreen.routeName,
+      initialRoute: MenuScreen.routeName,
       routes: {
+        MenuScreen.routeName: (context) => MenuScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
         '/': (context) => MenuScreen(),
+        '/PlayScreen' : (context) => PlayScreen(),
+        
       },
     );
   }
