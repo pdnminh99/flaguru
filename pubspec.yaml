@@ -242,7 +242,8 @@ flutter:
    - assets/images/flag-of-Zambia.png
    - assets/images/flag-of-Zimbabwe.png
    - assets/background/worldmap.jpg
-
+   - assets/background/background_menu_screen.gif
+   - assets/icon/search.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
