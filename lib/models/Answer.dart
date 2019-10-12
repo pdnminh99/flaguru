@@ -10,6 +10,11 @@ class Answer {
     @required this.imageUrl,
     @required this.isRight,
   });
+
+  @override
+  String toString() {
+    return 'name: ${this.country}; flagURL: ${this.imageUrl}; isRight: ${this.isRight}';
+  }
 }
 
 class QuestionUI {
@@ -21,4 +26,3 @@ class QuestionUI {
     @required this.imageUrl,
   });
 }
-
