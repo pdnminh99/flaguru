@@ -29,13 +29,13 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor: Color.fromARGB(255, 1, 157, 173),
+        backgroundColor: Color.fromARGB(255, 1, 157, 173),
         body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(Color.fromRGBO(245,245 , 245, 0.8), BlendMode.dstATop),
-              image: AssetImage("./assets/background/background_menu_screen.gif"),
-              fit: BoxFit.fitHeight)),
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     colorFilter: ColorFilter.mode(Color.fromRGBO(245,245 , 245, 0.8), BlendMode.dstATop),
+          //     image: AssetImage("./assets/background/background_menu_screen.gif"),
+          //     fit: BoxFit.fitHeight)),
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

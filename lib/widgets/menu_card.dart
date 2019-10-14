@@ -2,7 +2,7 @@ import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
-  final onpress;
+  final Function onpress;
   String _name_button;
   IconData icon_main;
   String icon_G;
@@ -23,14 +23,14 @@ class Menu extends StatelessWidget {
     return SizedBox(
       height: 60,
       width: 350,
-      child: FlatButton(
+      child: RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0)),
           onPressed: () {
             onpress(context_param);
           },
           padding: EdgeInsets.all(0),
-          color: Color.fromRGBO(255, 255, 255, 0.7),
+          color: Color.fromRGBO(255, 255, 255, 1),
           child: Container(
             width: double.infinity,
             height: double.infinity,
@@ -38,7 +38,8 @@ class Menu extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
                 boxShadow: [
                   BoxShadow(
-                      color: Color.fromRGBO(250, 250, 250, 0.9),
+                      //color: Color.fromRGBO(250, 250, 250, 0.9),
+                      color: Color.fromRGBO(240, 240, 240, 1),
                       offset: Offset(0, 2.0),
                       blurRadius: 1.0)
                 ]),
