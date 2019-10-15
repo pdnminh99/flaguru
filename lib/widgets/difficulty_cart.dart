@@ -31,8 +31,10 @@ class diffculty_cart extends StatelessWidget{
                       Text(
                         name,
                         style: TextStyle(
-                          fontSize: 40.0,
-                        ),
+                      color: Colors.black,
+                      fontSize: 45,
+                      fontWeight: FontWeight.w600,
+                    ),
                       ),
                       Divider(
                         color: Colors.black38,
@@ -49,7 +51,11 @@ class diffculty_cart extends StatelessWidget{
                             children: <Widget>[
                               Text(
                                 point,
-                                style: TextStyle(fontSize: 30.0),
+                                style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
                               ),
                               Icon(
                                 IconData(
@@ -63,7 +69,11 @@ class diffculty_cart extends StatelessWidget{
                             children: <Widget>[
                               Text(
                                 timer,
-                                style: TextStyle(fontSize: 30.0),
+                                style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
                               ),
                               Icon(
                                 IconData(
