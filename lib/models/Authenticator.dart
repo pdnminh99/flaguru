@@ -1,36 +1,57 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/material.dart';
 
-class Authenticator {
+class UserDetail {
+  String uid;
+  String name;
+  String photoURL;
+  String email;
+
+  UserDetail({String uuid, String name, String photoURL, String email}) {
+    this.uid = uuid;
+    this.name = name;
+    this.photoURL = photoURL;
+    this.email = email;
+  }
+}
+
+class Authentication {
   String signInState;
-  FirebaseUser currentUser;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser user;
 
   Future<FirebaseUser> handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
-
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    user = (await _auth.signInWithCredential(credential));
+    var user = (await _auth.signInWithCredential(credential));
     return user;
   }
 
-  getCurrentUser() async {
-    currentUser = await _auth.currentUser();
-    print('Hello ' + currentUser.displayName.toString());
+  Future<UserDetail> getCurrentUser() async {
+    var currentUser = await _auth.currentUser();
+    if (currentUser == null) {
+      return null;
+    } else {
+      return UserDetail(
+          uuid: currentUser.uid,
+          name: currentUser.displayName,
+          photoURL: currentUser.photoUrl,
+          email: currentUser.email);
+    }
   }
 
-  void signOut() async {
-    await _googleSignIn.signOut();
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+      await this._googleSignIn.signOut();
+    } catch (e) {
+      print(e);
+    }
   }
 }
-
-final Authenticator authen = new Authenticator();
