@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -11,7 +10,8 @@ class DatabaseConnector {
   Future<Database> _db;
 
   Future<Database> _connectSQLite() async {
-    String path = join(await getDatabasesPath(), 'assets/database/flaguru.db');
+    var dbPath = await getDatabasesPath();
+    String path = join(dbPath, 'flaguru.db');
     if (_db == null) {
       // Delete any existing database:
       await deleteDatabase(path);
@@ -51,5 +51,6 @@ class DatabaseConnector {
   Future<void> deleteAllData() async {
     var database = await this._connectSQLite();
     await database.rawDelete("DELETE FROM country");
+    await database.close();
   }
 }
