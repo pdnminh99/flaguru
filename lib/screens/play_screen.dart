@@ -38,15 +38,15 @@ class _PlayScreenState extends State<PlayScreen> {
   int time;
   Timer _timer;
 
-  List<Map<String, Object>> qa;
+  List<Map<String, Object>> qaList;
 
   @override
   void initState() {
 //    qa = DUMMY_QA;
     var qProvider = QuestionProvider(level: Difficulty.EASY);
     qProvider.initializeQuestionsProvider().then((_) {
-      setState(() => qa = qProvider.getCollections(
-          numberOfQuestions: 100, isFirstAnswerCorrect: true));
+      setState(() => qaList = qProvider.getCollections(
+          numberOfQuestions: 20, isFirstAnswerCorrect: true));
     });
     super.initState();
   }
@@ -86,7 +86,7 @@ class _PlayScreenState extends State<PlayScreen> {
     setState(() {
       index++;
       initData();
-      if (index == qa.length - 1) isOver = true;
+      if (index == qaList.length - 1) isOver = true;
     });
   }
 
@@ -121,13 +121,13 @@ class _PlayScreenState extends State<PlayScreen> {
                 level: EnumString.getDifficulty(Difficulty.EASY),
               ),
             ),
-            if (qa == null)
+            if (qaList == null)
               Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: LoadingSpinner(),
               ),
-            if (qa != null && !isStarted)
+            if (qaList != null && !isStarted)
               Container(
                 width: double.infinity,
                 height: height * 0.91,
@@ -135,12 +135,12 @@ class _PlayScreenState extends State<PlayScreen> {
                   onStart: startGame,
                 ),
               ),
-            if (qa != null && isStarted) ...[
+            if (qaList != null && isStarted) ...[
               Container(
                 width: double.infinity,
                 height: height * 0.07,
                 child: InfoBar(
-                  totalQuestions: qa.length,
+                  totalQuestions: qaList.length,
                   currentQuestion: index + 1,
                   maxLives: maxLife,
                   remainLives: remainLives,
@@ -158,13 +158,17 @@ class _PlayScreenState extends State<PlayScreen> {
                       ? BorderRadius.circular(10)
                       : BorderRadius.circular(0),
                 ),
-                child: QuestionArea(
-                  isName: nameOrFlag(),
-                  question: qa[index]['question'],
-                ),
+                child: (isAnswered)
+                    ? InfoArea(
+                        question: qaList[index]['question'],
+                      )
+                    : QuestionArea(
+                        isName: nameOrFlag(),
+                        question: qaList[index]['question'],
+                      ),
               ),
               AnimatedContainer(
-                width: (isAnswered) ? width * 0.5 : width,
+                width: (isAnswered) ? width * 0.7 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
                 duration: Duration(milliseconds: 500),
                 child: CountdownWatch(time: time),
@@ -177,7 +181,7 @@ class _PlayScreenState extends State<PlayScreen> {
                   isAnswered: isAnswered,
                   doRight: doRight,
                   doWrong: doWrong,
-                  answers: qa[index]['answer'],
+                  answers: qaList[index]['answer'],
                   pressStates: pressStates,
                   changePressState: changePressState,
                 ),
