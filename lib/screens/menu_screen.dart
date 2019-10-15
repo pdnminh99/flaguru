@@ -1,5 +1,8 @@
 
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/play_screen.dart';
+
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,7 @@ import 'package:flutter/material.dart';
 class MenuScreen extends StatelessWidget {
   static String routeName = '/menu_screen';
   void go_to_play_screen(BuildContext context) {
-    Navigator.pushNamed(context, PlayScreen.routeName);   
+    Navigator.pushNamed(context, DifficultyScreen.routeName);   
   }
   void go_to_compete(BuildContext context)
   {
