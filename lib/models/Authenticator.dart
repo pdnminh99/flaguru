@@ -35,21 +35,29 @@ class Authentication {
 
   Future<UserDetail> getCurrentUser() async {
     var currentUser = await _auth.currentUser();
-    if (currentUser == null) {
-      return null;
-    } else {
-      return UserDetail(
-          uuid: currentUser.uid,
-          name: currentUser.displayName,
-          photoURL: currentUser.photoUrl,
-          email: currentUser.email);
-    }
+    return currentUser == null
+        ? null
+        : UserDetail(
+            uuid: currentUser.uid,
+            name: currentUser.displayName,
+            photoURL: currentUser.photoUrl,
+            email: currentUser.email);
   }
 
   Future<void> signOut() async {
     try {
       await _auth.signOut();
       await this._googleSignIn.signOut();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> switchUser() async {
+    try {
+      await this._googleSignIn.signOut();
+      await handleSignIn();
+      return 0;
     } catch (e) {
       print(e);
     }
