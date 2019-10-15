@@ -1,5 +1,4 @@
 class Authenticator {
-
   // Future<void> initializeAuthenticator() async {
   //   // check for current user.
   //   this._isInit = true;
@@ -29,7 +28,7 @@ class Authenticator {
 
   // Future<bool> login() async {
   //   try {
-      
+
   //     this._currentUser = await Firebase().login();
   //     return true;
   //   } catch(e) {
