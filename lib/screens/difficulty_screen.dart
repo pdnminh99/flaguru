@@ -1,14 +1,16 @@
-import 'dart:ffi';
-
+import 'package:flaguru/widgets/difficulty_cart.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flaguru/screens/play_screen.dart';
 class DifficultyScreen extends StatelessWidget {
   static String routeName = '/difficulty_screen';
+  int timerIconCode =58405;
+  int poinIconCode= 57377;
+  int infiniteIcon =60221;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color.fromARGB(255, 1, 157, 173),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
@@ -17,266 +19,28 @@ class DifficultyScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                // padding: EdgeInsets.all(1),
-                onPressed: () {
-                  print("@@@");
-                },
-                child: Container(
-                  height: 120,
-                  // color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Easy",
-                        style: TextStyle(
-                          fontSize: 40.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black38,
-                        height: 10,
-                        thickness: 3,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8),
-                      ),
-                      Row(
-                        
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                "0/30",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.games),
-                            ],
-                          ),
-                          SizedBox(width: 70,),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                "120",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.timer)
-                            ],
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 5),
-                      ),
-                    ],
-                  ),
-                ),
+              diffculty_cart("Easy", "0/20", "120",PlayScreen.routeName,poinIconCode,timerIconCode),
+               SizedBox(
+                height: 50,
               ),
+              diffculty_cart("Normal", "0/30", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
+               SizedBox(
+                height: 50,
+              ),
+              diffculty_cart("Hard", "0/50", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
               SizedBox(
                 height: 50,
               ),
-              FlatButton(
-                padding: EdgeInsets.all(1),
-                onPressed: () {
-                  print("@@@");
-                },
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //   // borderRadius: BorderRadius.circular(15.0),
-                  //   border: Border.all(
-                  //     width: 2
-                  //   )
-                  // ),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Normal",
-                        style: TextStyle(
-                          fontSize: 40.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black38,
-                        height: 10,
-                        thickness: 5,
-                      ),
-                      Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "0/30",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.games),
-                            ],
-                          ),
-                          Wrap(
-                            spacing: 100.0,
-                          ),
-                          // Expanded(
-                          //   flex: 1000,
-                          //   child: Container(),
-                          // ),
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "120",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.timer)
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              FlatButton(
-                padding: EdgeInsets.all(1),
-                onPressed: () {
-                  print("@@@");
-                },
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //   // borderRadius: BorderRadius.circular(15.0),
-                  //   border: Border.all(
-                  //     width: 2
-                  //   )
-                  // ),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Difficult",
-                        style: TextStyle(
-                          fontSize: 40.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black38,
-                        height: 10,
-                        thickness: 5,
-                      ),
-                      Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "0/30",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.games),
-                            ],
-                          ),
-                          Wrap(
-                            spacing: 100.0,
-                          ),
-                          // Expanded(
-                          //   flex: 1000,
-                          //   child: Container(),
-                          // ),
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "120",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.timer)
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              FlatButton(
-                padding: EdgeInsets.all(1),
-                onPressed: () {
-                  print("@@@");
-                },
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //   // borderRadius: BorderRadius.circular(15.0),
-                  //   border: Border.all(
-                  //     width: 2
-                  //   )
-                  // ),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Endless",
-                        style: TextStyle(
-                          fontSize: 40.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black38,
-                        height: 10,
-                        thickness: 5,
-                      ),
-                      Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "0/30",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.games),
-                            ],
-                          ),
-                          Wrap(
-                            spacing: 100.0,
-                          ),
-                          // Expanded(
-                          //   flex: 1000,
-                          //   child: Container(),
-                          // ),
-                          Wrap(
-                            children: <Widget>[
-                              Text(
-                                "120",
-                                style: TextStyle(fontSize: 30.0),
-                              ),
-                              Icon(Icons.timer)
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+              diffculty_cart("Enless","", "",PlayScreen.routeName,infiniteIcon,infiniteIcon),
+            ]),
         ),
       ),
     );
   }
 }
-
+              // SizedBox(
+              //   height: 50,
+              // ),
 // class DifficultyTitle extends StatelessWidget{
 
 //   @override

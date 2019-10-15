@@ -29,12 +29,14 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.indigo,
         fontFamily: 'Quicksand',
       ),
-      initialRoute: MenuScreen.routeName,
+      initialRoute: DifficultyScreen.routeName,
       routes: {
+        DifficultyScreen.routeName : (context) => DifficultyScreen(),
         MenuScreen.routeName: (context) => MenuScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
         '/': (context) => MenuScreen(),
         '/PlayScreen' : (context) => PlayScreen(),
+        '/DifficultyScreen' :(context)=> DifficultyScreen(),
         
       },
     );
