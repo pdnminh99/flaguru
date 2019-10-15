@@ -22,11 +22,11 @@ class Answer {
 }
 
 class QuestionUI {
-  final String imageUrl;
+  final String imageURL;
   final String country;
 
   const QuestionUI({
     @required this.country,
-    @required this.imageUrl,
+    @required this.imageURL,
   });
 }

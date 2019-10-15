@@ -22,19 +22,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'New name here',
+      title: 'Flaguru',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
         fontFamily: 'Quicksand',
       ),
-      initialRoute: MenuScreen.routeName,
+      initialRoute: PlayScreen.routeName,
       routes: {
-        DifficultyScreen.routeName: (context) => DifficultyScreen(),
-        MenuScreen.routeName: (context) => MenuScreen(),
-        PlayScreen.routeName: (context) => PlayScreen(),
         '/': (context) => MenuScreen(),
-        '/PlayScreen': (context) => PlayScreen(),
-        '/DifficultyScreen': (context) => DifficultyScreen(),
+        MenuScreen.routeName: (context) => MenuScreen(),
+        DifficultyScreen.routeName: (context) => DifficultyScreen(),
+        PlayScreen.routeName: (context) => PlayScreen(),
       },
     );
   }

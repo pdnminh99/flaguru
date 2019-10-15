@@ -22,6 +22,8 @@ class NameButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var tooLong = answer.country.length > 30;
+
     final borderRadius = BorderRadius.circular(5);
 
     var bgColor = Colors.white;
@@ -54,7 +56,7 @@ class NameButton extends StatelessWidget {
                   child: Text(
                     answer.country,
                     style: TextStyle(
-                      fontSize: width / 8,
+                      fontSize: (tooLong)? width / 9 : width / 8,
                       fontWeight: FontWeight.bold,
                       color: textColor,
                     ),
