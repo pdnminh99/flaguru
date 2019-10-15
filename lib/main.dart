@@ -1,3 +1,4 @@
+import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,15 +22,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'New name here',
+      title: 'Flaguru',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
         fontFamily: 'Quicksand',
       ),
       initialRoute: PlayScreen.routeName,
       routes: {
-        PlayScreen.routeName: (context) => PlayScreen(),
         '/': (context) => MenuScreen(),
+        MenuScreen.routeName: (context) => MenuScreen(),
+        DifficultyScreen.routeName: (context) => DifficultyScreen(),
+        PlayScreen.routeName: (context) => PlayScreen(),
       },
     );
   }

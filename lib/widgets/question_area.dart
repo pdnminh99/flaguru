@@ -1,9 +1,12 @@
+import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 
 class QuestionArea extends StatelessWidget {
   final bool isName;
   final Question question;
+
+//  final QuestionUI question;
 
   QuestionArea({
     @required this.isName,
@@ -12,24 +15,25 @@ class QuestionArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var tooLong = question.country.length > 15;
     return LayoutBuilder(
       builder: (context, constraint) {
         return Stack(
           children: <Widget>[
-            Positioned.fill(
-              child: Material(
-                elevation: 5,
-                child: Image.asset(
-                  'assets/background/worldmap.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Container(
-                color: Color(0xff019dad).withOpacity(0.6),
-              ),
-            ),
+//            Positioned.fill(
+//              child: Material(
+//                elevation: 5,
+//                child: Image.asset(
+//                  'assets/background/worldmap.jpg',
+//                  fit: BoxFit.cover,
+//                ),
+//              ),
+//            ),
+//            Positioned.fill(
+//              child: Container(
+//                color: Color(0xff019dad).withOpacity(0.6),
+//              ),
+//            ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(10),
@@ -39,7 +43,9 @@ class QuestionArea extends StatelessWidget {
                           question.country,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: constraint.maxHeight * 0.22,
+                            fontSize: (tooLong)
+                                ? constraint.maxWidth * 0.1
+                                : constraint.maxWidth * 0.13,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             shadows: <Shadow>[

@@ -22,10 +22,11 @@ class QuestionProvider {
     var database = DatabaseConnector();
     this._countries = await database.collectCountries();
   }
-///
-///   @param int numberOfQuestions: modify number of questions return by the function, default is 20.
-///*  @param bool isFirstAnswerCorrect: if this is true, answer One is always true. Easier for debugging purposes.
-///
+
+  ///
+  ///   @param int numberOfQuestions: modify number of questions return by the function, default is 20.
+  ///*  @param bool isFirstAnswerCorrect: if this is true, answer One is always true. Easier for debugging purposes.
+  ///
   List<Map<String, Object>> getCollections(
       {int numberOfQuestions: 20, bool isFirstAnswerCorrect: false}) {
     var collections = List<Map<String, Object>>();
