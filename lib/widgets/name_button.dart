@@ -1,7 +1,7 @@
 import 'package:flaguru/models/Answer.dart';
 import 'package:flutter/material.dart';
 
-class FlagButton extends StatelessWidget {
+class NameButton extends StatelessWidget {
   final Answer answer;
   final num width;
   final Function doRight;
@@ -10,7 +10,7 @@ class FlagButton extends StatelessWidget {
   final bool isPressed;
   final Function changePressState;
 
-  FlagButton({
+  NameButton({
     @required this.answer,
     @required this.width,
     @required this.doRight,
@@ -22,34 +22,21 @@ class FlagButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var tooLong = answer.country.length > 30;
+
     final borderRadius = BorderRadius.circular(5);
 
-    List<Widget> dotAnnotator(Color color) => [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 4,
-            right: 4,
-            child: Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: color,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(7),
-              ),
-            ),
-          ),
-        ];
+    var bgColor = Colors.white;
+    var textColor = Colors.black;
+
+    if (answer.isRight && isAnswered) {
+      bgColor = Color(0xff69b747);
+      textColor = Colors.white;
+    }
+    if (!answer.isRight && isPressed) {
+      bgColor = Colors.red[300];
+      textColor = Colors.white;
+    }
 
     return Stack(
       children: <Widget>[
@@ -57,20 +44,26 @@ class FlagButton extends StatelessWidget {
           elevation: (!isAnswered || isPressed) ? 5 : 0,
           borderRadius: borderRadius,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              border: Border.all(color: Colors.white, width: 1),
-            ),
-            height: width / 1.7,
-            width: width,
-            child: ClipRRect(
-              borderRadius: borderRadius,
-              child: Image.asset(
-                answer.imageUrl,
-                fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                color: bgColor,
               ),
-            ),
-          ),
+              height: width / 1.7,
+              width: width,
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Center(
+                  child: Text(
+                    answer.country,
+                    style: TextStyle(
+                      fontSize: (tooLong)? width / 9 : width / 8,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )),
         ),
         Positioned.fill(
           child: Material(
@@ -94,9 +87,15 @@ class FlagButton extends StatelessWidget {
               ),
             ),
           ),
-        if (isAnswered && answer.isRight) ...dotAnnotator(Colors.green[300]),
-        if (isAnswered && isPressed && !answer.isRight)
-          ...dotAnnotator(Colors.red[300]),
+        if (isAnswered && isPressed)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                color: Colors.transparent,
+              ),
+            ),
+          ),
       ],
     );
   }

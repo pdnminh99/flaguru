@@ -1,6 +1,9 @@
-import 'package:flaguru/screens/demo_screen.dart';
+import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'screens/menu_screen.dart';
+import 'screens/play_screen.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -10,26 +13,26 @@ void main() {
   runApp(MyApp());
 }
 
-// uncomment when done
 class MyApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => DemoScreen();
+  _MyAppState createState() => _MyAppState();
 }
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'New name here',
-//       theme: ThemeData(
-//         primarySwatch: Colors.indigo,
-//         accentColor: Colors.amber,
-//         canvasColor: Colors.grey[300],
-//       ),
-//       initialRoute: '/',
-//       routes: {
-//         '/': (context) => MenuScreen(),
-//       },
-//     );
-//   }
-// }
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flaguru',
+      theme: ThemeData(
+        fontFamily: 'Quicksand',
+      ),
+      initialRoute: MenuScreen.routeName,
+      routes: {
+        '/': (context) => MenuScreen(),
+        MenuScreen.routeName: (context) => MenuScreen(),
+        DifficultyScreen.routeName: (context) => DifficultyScreen(),
+        PlayScreen.routeName: (context) => PlayScreen(),
+      },
+    );
+  }
+}

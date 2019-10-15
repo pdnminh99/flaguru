@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CountdownWatch extends StatelessWidget {
   final num time;
 
-  bool get isLastSeconds => time <= 5;
+  bool get isLastSeconds => time < 10;
 
   CountdownWatch({@required this.time});
 
@@ -13,7 +13,8 @@ class CountdownWatch extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraint) {
-        return Center(
+        return Align(
+          alignment: Alignment.bottomCenter,
           child: Stack(
             children: <Widget>[
               if (isLastSeconds)
@@ -30,6 +31,7 @@ class CountdownWatch extends StatelessWidget {
                 ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(
                     width: 10,
@@ -37,7 +39,7 @@ class CountdownWatch extends StatelessWidget {
                   Text(
                     time.toString(),
                     style: TextStyle(
-                      fontSize: constraint.maxHeight * 0.6,
+                      fontSize: constraint.maxHeight * 0.65,
                       color: color,
                     ),
                   ),
@@ -46,7 +48,7 @@ class CountdownWatch extends StatelessWidget {
                   ),
                   Icon(
                     Icons.access_alarm,
-                    size: constraint.maxHeight * 0.5,
+                    size: constraint.maxHeight * 0.55,
                     color: color,
                   )
                 ],

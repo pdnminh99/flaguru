@@ -1,3 +1,12 @@
+CREATE TABLE country
+(
+    ID          INTEGER PRIMARY KEY autoincrement,
+    name        TEXT,
+    flag        TEXT,
+    continent   INTEGER,
+    ratio       REAL,
+    description TEXT
+);
 INSERT INTO country(name, flag, ratio, description) VALUES('Afghanistan', 'assets/images/flag-of-Afghanistan.png', 100, 'Afghanistan is a country of ...');
 INSERT INTO country(name, flag, ratio, description) VALUES('Albania', 'assets/images/flag-of-Albania.png', 100, 'Albania is a country of ...');
 INSERT INTO country(name, flag, ratio, description) VALUES('Algeria', 'assets/images/flag-of-Algeria.png', 100, 'Algeria is a country of ...');
@@ -195,3 +204,4 @@ INSERT INTO country(name, flag, ratio, description) VALUES('Vietnam', 'assets/im
 INSERT INTO country(name, flag, ratio, description) VALUES('Yemen', 'assets/images/flag-of-Yemen.png', 100, 'Yemen is a country of ...');
 INSERT INTO country(name, flag, ratio, description) VALUES('Zambia', 'assets/images/flag-of-Zambia.png', 100, 'Zambia is a country of ...');
 INSERT INTO country(name, flag, ratio, description) VALUES('Zimbabwe', 'assets/images/flag-of-Zimbabwe.png', 100, 'Zimbabwe is a country of ...');
+SELECT * FROM country

@@ -4,102 +4,29 @@ class Answer {
   final String imageUrl;
   final String country;
   final bool isRight;
+  final double ratio;
+  final String description;
 
   const Answer({
     @required this.country,
     @required this.imageUrl,
     @required this.isRight,
+    @required this.ratio,
+    @required this.description,
   });
 
   @override
   String toString() {
-    return 'name: ${this.country}; flagURL: ${this.imageUrl}; isRight: ${this.isRight}';
+    return '${this.country}, isRight: ${this.isRight}, description ${this.description}';
   }
-
 }
 
-// class Question {
-//   final String imageUrl;
-//   final String country;
+class QuestionUI {
+  final String imageURL;
+  final String country;
 
-//   const Question({
-//     @required this.country,
-//     @required this.imageUrl,
-//   });
-// }
-
-// Map<String, Object> questionAnswers = {
-//   'question': Question(
-//     country: 'America',
-//     imageUrl: 'assets/images/flag2.png',
-//   ),
-//   'answers': [
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag1.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'America',
-//       imageUrl: 'assets/images/flag2.png',
-//       isRight: true,
-//     ),
-//     Answer(
-//       country: 'Japan',
-//       imageUrl: 'assets/images/flag3.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'China',
-//       imageUrl: 'assets/images/flag4.png',
-//       isRight: false,
-//     ),
-//   ],
-// };
-
-// const List<List<Answer>> DUMMY_ANSWERS = [
-//   [
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag1.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'America',
-//       imageUrl: 'assets/images/flag2.png',
-//       isRight: true,
-//     ),
-//     Answer(
-//       country: 'Japan',
-//       imageUrl: 'assets/images/flag3.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'China',
-//       imageUrl: 'assets/images/flag4.png',
-//       isRight: false,
-//     ),
-//   ],
-//   [
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag4.png',
-//       isRight: true,
-//     ),
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag1.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag2.png',
-//       isRight: false,
-//     ),
-//     Answer(
-//       country: 'Vietnam',
-//       imageUrl: 'assets/images/flag3.png',
-//       isRight: false,
-//     ),
-//   ]
-// ];
+  const QuestionUI({
+    @required this.country,
+    @required this.imageURL,
+  });
+}

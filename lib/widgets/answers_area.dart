@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import "../models/Answer.dart";
 import 'flag_button.dart';
+import 'name_button.dart';
 
-class FlagAnswersSet extends StatelessWidget {
+class AnswersArea extends StatelessWidget {
+  final bool isFlag;
   final List<Answer> answers;
   final bool isAnswered;
   final Function doRight;
@@ -11,7 +13,8 @@ class FlagAnswersSet extends StatelessWidget {
   final List<bool> pressStates;
   final Function changePressState;
 
-  FlagAnswersSet({
+  AnswersArea({
+    @required this.isFlag,
     @required this.answers,
     @required this.isAnswered,
     @required this.doRight,
@@ -20,25 +23,37 @@ class FlagAnswersSet extends StatelessWidget {
     @required this.changePressState,
   });
 
+  Widget getButton(int index, num width) {
+    if (isFlag)
+      return FlagButton(
+        width: width,
+        answer: answers[index],
+        doRight: doRight,
+        doWrong: doWrong,
+        isAnswered: isAnswered,
+        isPressed: pressStates[index],
+        changePressState: () => changePressState(index),
+      );
+    return NameButton(
+      width: width,
+      answer: answers[index],
+      doRight: doRight,
+      doWrong: doWrong,
+      isAnswered: isAnswered,
+      isPressed: pressStates[index],
+      changePressState: () => changePressState(index),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
-      var halfHeight = constraint.maxHeight * 0.9 / 2;
+      var halfWidth = constraint.maxWidth * 0.85 / 2;
 
       var spacingWidget = SizedBox(
-        height: constraint.maxHeight * 0.1,
-        width: constraint.maxHeight * 0.1,
+        height: constraint.maxWidth * 0.05,
+        width: constraint.maxWidth * 0.05,
       );
-
-      Widget getFlagButton(int index) => FlagButton(
-            height: halfHeight,
-            answer: answers[index],
-            doRight: doRight,
-            doWrong: doWrong,
-            isAnswered: isAnswered,
-            isPressed: pressStates[index],
-            changePressState: () => changePressState(index),
-          );
 
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -46,18 +61,18 @@ class FlagAnswersSet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getFlagButton(0),
+              getButton(0, halfWidth),
               spacingWidget,
-              getFlagButton(1),
+              getButton(1, halfWidth),
             ],
           ),
           spacingWidget,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getFlagButton(2),
+              getButton(2, halfWidth),
               spacingWidget,
-              getFlagButton(3),
+              getButton(3, halfWidth),
             ],
           )
         ],
