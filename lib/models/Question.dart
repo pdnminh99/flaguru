@@ -3,6 +3,8 @@ import 'package:flaguru/models/Country.dart';
 class Question {
   String country;
   String imageURL;
+  double ratio;
+  String description;
   // int questionID;
   // var answers = List<Country>();
   // int time;
@@ -10,12 +12,14 @@ class Question {
 
   @override
   String toString() {
-    return 'name: ${this.country}; flagURL: ${this.imageURL}';
+    return 'name: ${this.country}; flagURL: ${this.imageURL}; ratio: ${this.ratio} and description: ${this.description}';
   }
 
   Question(Country country) {
     this.country = country.name;
     this.imageURL = country.flag;
+    this.ratio = country.ratio;
+    this.description = country.description;
     // this.questionID = initID;
     // this.time = time;
     // this._correctAnswer = country;

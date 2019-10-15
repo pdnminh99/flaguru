@@ -40,7 +40,8 @@ class DatabaseConnector {
         id: maps[i]['ID'].toString(),
         name: maps[i]['name'],
         flag: maps[i]['flag'],
-        continent: maps[i]['continent'],
+        ratio: maps[i]['ratio'],
+        description: maps[i]['description'],
       );
     });
     await database.close();
