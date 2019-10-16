@@ -131,7 +131,7 @@ class _PlayScreenState extends State<PlayScreen> {
               width: double.infinity,
               height: height * 0.09,
               child: TopBar(
-                level: EnumString.getDifficulty(Difficulty.EASY),
+                difficulty: EnumString.getDifficulty(Difficulty.EASY),
               ),
             ),
             if (qaList == null)
