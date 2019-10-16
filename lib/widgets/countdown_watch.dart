@@ -37,7 +37,7 @@ class CountdownWatch extends StatelessWidget {
                   children: <Widget>[
                     Container(
                       width: (time.toString().length > 1)
-                          ? constraint.maxWidth * 0.1
+                          ? constraint.maxWidth * 0.14
                           : constraint.maxWidth * 0.07,
                       child: Text(
                         time.toString(),
