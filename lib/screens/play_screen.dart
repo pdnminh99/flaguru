@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:flaguru/data/question_answers.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/widgets/info_area.dart';
 import 'package:flaguru/widgets/info_bar.dart';
 import 'package:flaguru/widgets/loading_spinner.dart';
+import 'package:flaguru/widgets/play_screen_drawer.dart';
+import 'package:flaguru/widgets/question_info_area.dart';
 import 'package:flaguru/widgets/start_button.dart';
 import 'package:flaguru/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flaguru/models/QuestionProvider.dart';
 import 'package:flaguru/widgets/answers_area.dart';
 import 'package:flaguru/widgets/bottom_bar.dart';
-import 'package:flaguru/widgets/question_area.dart';
 import 'package:flaguru/widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
@@ -25,6 +24,7 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> {
   static const timeLimit = 15;
+  static const redTime = timeLimit - 5;
   static const maxLife = 5;
 
   int index = 0;
@@ -42,24 +42,30 @@ class _PlayScreenState extends State<PlayScreen> {
 
   @override
   void initState() {
-//    qa = DUMMY_QA;
+//    qaList = DUMMY_QA;
     var qProvider = QuestionProvider(level: Difficulty.EASY);
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() => qaList = qProvider.getCollections(
-          numberOfQuestions: 20, isFirstAnswerCorrect: false));
+          numberOfQuestions: 20, isFirstAnswerCorrect: true));
     });
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   void startGame() {
-    isStarted = true;
     initData();
+    isStarted = true;
   }
 
   void initData() {
     isAnswered = false;
     pressStates = [false, false, false, false];
-    time = timeLimit;
+    time = (isStarted) ? timeLimit : timeLimit + 1;
     _timer = getTimer();
   }
 
@@ -91,7 +97,7 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   void onOver() {
-    // navigate to the result screen
+    Navigator.pushNamed(context, PlayScreen.routeName);
   }
 
   Timer getTimer() {
@@ -107,8 +113,11 @@ class _PlayScreenState extends State<PlayScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var millis = 500;
+
     return Scaffold(
       backgroundColor: Color(0xff019dad),
+      drawer: PlayScreenDrawer(),
       body: WillPopScope(
         onWillPop: () async => false,
         child: Column(
@@ -146,32 +155,22 @@ class _PlayScreenState extends State<PlayScreen> {
                   remainLives: remainLives,
                 ),
               ),
-              AnimatedContainer(
-                width: (isAnswered) ? width * 0.9 : width,
-                height: (isAnswered) ? height * 0.38 : height * 0.29,
-                duration: Duration(milliseconds: 500),
-                decoration: BoxDecoration(
-                  color: (isAnswered)
-                      ? Colors.white.withOpacity(0.6)
-                      : Colors.white.withOpacity(0.3),
-                  borderRadius: (isAnswered)
-                      ? BorderRadius.circular(10)
-                      : BorderRadius.circular(0),
-                ),
-                child: (isAnswered)
-                    ? InfoArea(
-                        question: qaList[index]['question'],
-                      )
-                    : QuestionArea(
-                        isName: nameOrFlag(),
-                        question: qaList[index]['question'],
-                      ),
+              QuestionInfoArea(
+                isAnswered: isAnswered,
+                isName: nameOrFlag(),
+                height: height,
+                width: width,
+                millis: millis,
+                question: qaList[index]['question'],
               ),
               AnimatedContainer(
-                width: (isAnswered) ? width * 0.7 : width,
+                width: (isAnswered) ? width * 0.2 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
-                duration: Duration(milliseconds: 500),
-                child: CountdownWatch(time: time),
+                duration: Duration(milliseconds: millis),
+                child: CountdownWatch(
+                  time: time,
+                  redTime: redTime,
+                ),
               ),
               Container(
                 width: double.infinity,

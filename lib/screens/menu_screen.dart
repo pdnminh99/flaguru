@@ -5,7 +5,7 @@ import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 
 class MenuScreen extends StatelessWidget {
-  static String routeName = '/menu_screen';
+  static String routeName = '/';
 
   void go_to_play_screen(BuildContext context) {
     Navigator.pushNamed(context, DifficultyScreen.routeName);
