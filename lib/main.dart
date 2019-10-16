@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'Quicksand',
       ),
-      initialRoute: PlayScreen.routeName,
+      initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
         MenuScreen.routeName: (context) => MenuScreen(),
