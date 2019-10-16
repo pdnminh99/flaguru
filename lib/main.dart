@@ -29,7 +29,6 @@ class _MyAppState extends State<MyApp> {
       initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
-        MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
       },

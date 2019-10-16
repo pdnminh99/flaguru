@@ -29,7 +29,9 @@ class TopBar extends StatelessWidget {
                 height: constraint.maxHeight * 0.8,
                 width: constraint.maxHeight * 1.1,
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                   child: Icon(
                     Icons.more_horiz,
                     size: constraint.maxHeight * 0.5,

@@ -34,7 +34,7 @@ class _InfoAreaState extends State<InfoArea> {
       builder: (context, constraint) {
         num fontSize = constraint.maxHeight * 0.1;
         if (widget.question.country.length > 20)
-          fontSize *= 0.3;
+          fontSize *= 0.6;
         else if (widget.question.country.length > 15) fontSize *= 0.7;
         return Column(
           children: <Widget>[
@@ -45,15 +45,14 @@ class _InfoAreaState extends State<InfoArea> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3),
-                        border: Border.all(color: Colors.white, width: 1),
-                      ),
-                      width: constraint.maxHeight * 0.3,
-                      height: constraint.maxHeight * 0.3 / 1.7,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(3),
+                    child: Material(
+                      elevation: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                        ),
+                        width: constraint.maxHeight * 0.3,
+                        height: constraint.maxHeight * 0.3 / 1.7,
                         child: Image.asset(
                           widget.question.imageURL,
                           fit: BoxFit.cover,
