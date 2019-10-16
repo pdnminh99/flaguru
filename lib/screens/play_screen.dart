@@ -91,7 +91,7 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   void onOver() {
-    // navigate to the result screen
+    Navigator.pushNamed(context, PlayScreen.routeName);
   }
 
   Timer getTimer() {
@@ -107,6 +107,8 @@ class _PlayScreenState extends State<PlayScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var millis = 500;
+
     return Scaffold(
       backgroundColor: Color(0xff019dad),
       body: WillPopScope(
@@ -149,7 +151,7 @@ class _PlayScreenState extends State<PlayScreen> {
               AnimatedContainer(
                 width: (isAnswered) ? width * 0.9 : width,
                 height: (isAnswered) ? height * 0.38 : height * 0.29,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: millis),
                 decoration: BoxDecoration(
                   color: (isAnswered)
                       ? Colors.white.withOpacity(0.6)
@@ -161,6 +163,7 @@ class _PlayScreenState extends State<PlayScreen> {
                 child: (isAnswered)
                     ? InfoArea(
                         question: qaList[index]['question'],
+                        millis: millis,
                       )
                     : QuestionArea(
                         isName: nameOrFlag(),
@@ -170,7 +173,7 @@ class _PlayScreenState extends State<PlayScreen> {
               AnimatedContainer(
                 width: (isAnswered) ? width * 0.7 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: millis),
                 child: CountdownWatch(time: time),
               ),
               Container(
