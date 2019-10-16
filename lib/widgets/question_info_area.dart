@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Answer.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Question.dart';
@@ -10,7 +11,8 @@ class QuestionInfoArea extends StatelessWidget {
   final num width;
   final num height;
   final int millis;
-  final Question question;
+//  final Question question;
+  final QuestionUI question;
 
   QuestionInfoArea({
     @required this.isAnswered,

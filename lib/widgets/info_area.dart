@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class InfoArea extends StatefulWidget {
-  final Question question;
+//  final Question question;
+  final QuestionUI question;
   final int millis;
 
   InfoArea({
@@ -22,8 +25,7 @@ class _InfoAreaState extends State<InfoArea> {
   @override
   void initState() {
     Timer(Duration(milliseconds: widget.millis), () {
-      setState(() => description = widget.question.description +
-          ' Flutter is a dream of every mobile developer.');
+      setState(() => description = widget.question.description);
     });
     super.initState();
   }
@@ -33,8 +35,7 @@ class _InfoAreaState extends State<InfoArea> {
     return LayoutBuilder(
       builder: (context, constraint) {
         num fontSize = constraint.maxHeight * 0.1;
-        if (widget.question.country.length > 20)
-          fontSize *= 0.6;
+        if (widget.question.country.length > 20) fontSize *= 0.6;
         else if (widget.question.country.length > 15) fontSize *= 0.7;
         return Column(
           children: <Widget>[
@@ -62,14 +63,22 @@ class _InfoAreaState extends State<InfoArea> {
                   ),
                   Container(
                     height: constraint.maxHeight * 0.3 / 1.7,
-                    child: Center(
-                      child: Text(
-                        widget.question.country,
-                        style: TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.bold,
+                    constraints: BoxConstraints(
+                      maxWidth: constraint.maxWidth * 0.6,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          widget.question.country,
+                          style: TextStyle(
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
@@ -80,7 +89,7 @@ class _InfoAreaState extends State<InfoArea> {
               child: Text(
                 description,
                 style: TextStyle(
-                  fontSize: constraint.maxWidth * 0.05,
+                  fontSize: constraint.maxHeight * 0.064,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.justify,

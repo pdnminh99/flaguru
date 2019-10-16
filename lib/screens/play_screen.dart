@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flaguru/data/question_answers.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/utils/enum_string.dart';
 import 'package:flaguru/widgets/info_bar.dart';
@@ -17,6 +18,7 @@ import 'package:flaguru/widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
   static String routeName = '/play_screen';
+  final Difficulty difficulty = Difficulty.EASY;
 
   @override
   _PlayScreenState createState() => _PlayScreenState();
@@ -42,12 +44,12 @@ class _PlayScreenState extends State<PlayScreen> {
 
   @override
   void initState() {
-//    qaList = DUMMY_QA;
-    var qProvider = QuestionProvider(level: Difficulty.EASY);
-    qProvider.initializeQuestionsProvider().then((_) {
-      setState(() => qaList = qProvider.getCollections(
-          numberOfQuestions: 20, isFirstAnswerCorrect: true));
-    });
+    qaList = DUMMY_QA;
+//    var qProvider = QuestionProvider(level: Difficulty.EASY);
+//    qProvider.initializeQuestionsProvider().then((_) {
+//      setState(() => qaList = qProvider.getCollections(
+//          numberOfQuestions: 20, isFirstAnswerCorrect: true));
+//    });
     super.initState();
   }
 
@@ -117,7 +119,9 @@ class _PlayScreenState extends State<PlayScreen> {
 
     return Scaffold(
       backgroundColor: Color(0xff019dad),
-      drawer: PlayScreenDrawer(),
+      drawer: PlayScreenDrawer(
+        difficulty: widget.difficulty,
+      ),
       body: WillPopScope(
         onWillPop: () async => false,
         child: Column(
@@ -164,7 +168,7 @@ class _PlayScreenState extends State<PlayScreen> {
                 question: qaList[index]['question'],
               ),
               AnimatedContainer(
-                width: (isAnswered) ? width * 0.2 : width,
+                width: (isAnswered) ? width * 0.3 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
                 duration: Duration(milliseconds: millis),
                 child: CountdownWatch(
