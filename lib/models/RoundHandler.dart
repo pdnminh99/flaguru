@@ -7,12 +7,12 @@ class RoundHandler {
   // Life props
   int _lifeCount = 0;
   int _remainLives = 0;
-  get getRemainLives {
+  int get remainLives {
     return this._remainLives;
   }
 
-  set _setLife(int life) {
-    this._remainLives = life;
+  set _setRemainLife(int newlife) {
+    this._remainLives = newlife;
     if (this._remainLives == 0) {
       this._status = RoundStatus.OVER;
     }
@@ -23,7 +23,7 @@ class RoundHandler {
   // Question props
   int _questions = 0;
   int _remainQuestions = 0;
-  get getRemainQuestions {
+  int get remainQuestions {
     return this._remainQuestions;
   }
 
@@ -36,11 +36,11 @@ class RoundHandler {
 
   // Round starting status
   RoundStatus _status;
-  get status {
+  RoundStatus get status {
     return this._status;
   }
 
-  get result {
+  Result get result {
     if (this._status != RoundStatus.OVER) return null;
     return new Result(
         level: this._level,
@@ -77,18 +77,18 @@ class RoundHandler {
       @required int countdownRemain,
       int answerCountry}) {
     if (isCorrect) {
-      this._remainQuestions -= 1;
+      this._setRemainQuestions = this.remainQuestions - 1;
     } else {
-      this._setLife -= 1;
-      this._setRemainQuestions -= 1;
+      this._setRemainLife = this.remainLives - 1;
+      this._setRemainQuestions = this.remainQuestions - 1;
     }
     this._roundTimer += countdownRemain;
   }
 
   void reset() {
     this._status = RoundStatus.IDLE;
-    this._remainLives = this._lifeCount;
-    this._remainQuestions = this._questions;
+    this._setRemainLife = this._lifeCount;
+    this._setRemainQuestions = this._questions;
   }
 
   bool start() {

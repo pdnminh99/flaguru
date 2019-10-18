@@ -2,7 +2,7 @@ import 'package:flaguru/models/Enum.dart';
 import 'package:flutter/cupertino.dart';
 
 class Result {
-  get score {
+  int get score {
     int currentscore = totaltime * 10 + correctAnswers * 20;
     switch (this.level) {
       case Difficulty.HARD:
@@ -18,7 +18,7 @@ class Result {
 
   int totaltime;
   int correctAnswers;
-  get wrongAnswers {
+  int get wrongAnswers {
     return this.questionsCounter - this.correctAnswers;
   }
 
