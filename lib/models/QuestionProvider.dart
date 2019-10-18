@@ -35,7 +35,6 @@ class QuestionProvider {
           country: this._countries[this._rand.nextInt(this._countries.length)],
           isFirstAnswerCorrect: isFirstAnswerCorrect));
     }
-    print(collections[0]["question"]);
     return collections;
   }
 
