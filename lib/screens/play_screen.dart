@@ -42,7 +42,7 @@ class _PlayScreenState extends State<PlayScreen> {
 
   @override
   void initState() {
-//    qa = DUMMY_QA;
+    //    qa = DUMMY_QA;
     var qProvider = QuestionProvider(level: Difficulty.EASY);
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() => qaList = qProvider.getCollections(

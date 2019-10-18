@@ -8,3 +8,4 @@ enum Continent {
   NORTH_AMERICA,
   SOUTH_AMERICA
 }
+enum RoundStatus { IDLE, PLAYING, OVER }
