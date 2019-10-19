@@ -8,17 +8,17 @@ class LoadingSpinner extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
-            'Drawing flags...',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+//          Text(
+//            'Drawing flags...',
+//            style: TextStyle(
+//              fontSize: 20,
+//              fontWeight: FontWeight.bold,
+//              color: Colors.white,
+//            ),
+//          ),
+//          const SizedBox(
+//            height: 25,
+//          ),
           SpinKitCubeGrid(
             color: Colors.white,
             size: 50,

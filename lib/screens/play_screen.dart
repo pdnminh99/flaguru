@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flaguru/data/question_answers.dart';
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/screens/result_screen.dart';
 import 'package:flaguru/utils/enum_string.dart';
 import 'package:flaguru/widgets/info_bar.dart';
 import 'package:flaguru/widgets/loading_spinner.dart';
@@ -99,7 +100,8 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   void onOver() {
-    Navigator.pushNamed(context, PlayScreen.routeName);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => ResultScreen()));
   }
 
   Timer getTimer() {
