@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flaguru/data/question_answers.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flaguru/models/RoundHandler.dart';
@@ -51,7 +50,7 @@ class _PlayScreenState extends State<PlayScreen>
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
         qaList = qProvider.getCollections(
-            numberOfQuestions: 100, isFirstAnswerCorrect: true);
+            numberOfQuestions: 20, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifecount: maxLife,
@@ -130,10 +129,12 @@ class _PlayScreenState extends State<PlayScreen>
   }
 
   void onOver() {
-//    Navigator.pushReplacement(
-//        context, MaterialPageRoute(builder: (context) => ResultScreen()));
-    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName,
-        arguments: widget.difficulty);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreen(roundHandler.result)));
+//    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName,
+//        arguments: widget.difficulty);
   }
 
   Timer getTimer() {

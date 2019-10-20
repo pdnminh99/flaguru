@@ -1,10 +1,15 @@
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/Result.dart';
+import 'package:flaguru/utils/enum_string.dart';
 import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatefulWidget {
-  final Result result = Result();
+  final Result result;
+
+  ResultScreen(this.result);
 
   @override
   _ResultScreenState createState() => _ResultScreenState();
@@ -26,6 +31,12 @@ class _ResultScreenState extends State<ResultScreen>
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -38,10 +49,18 @@ class _ResultScreenState extends State<ResultScreen>
             children: <Widget>[
               Container(
                 width: double.infinity,
-                height: height * 0.15,
+                height: height * 0.1,
                 child: FadeTransition(
                   opacity: animation.titleOpacity,
-                  child: getTitleResults('RESULTS'),
+                  child: buildResultTitle('RESULTS'),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: height * 0.05,
+                child: FadeTransition(
+                  opacity: animation.titleOpacity,
+                  child: buildDifficultyText(widget.result.level),
                 ),
               ),
               Stack(
@@ -62,7 +81,9 @@ class _ResultScreenState extends State<ResultScreen>
                       height: height * 0.16,
                       child: FadeTransition(
                         opacity: animation.resultButtonArea,
-                        child: ResultButtonArea(),
+                        child: ResultButtonArea(
+                            difficulty: widget.result.level,
+                            controller: animation.resultButtonArea),
                       ),
                     ),
                   ),
@@ -73,23 +94,45 @@ class _ResultScreenState extends State<ResultScreen>
     );
   }
 
-  Widget getTitleResults(String title) {
-    return Center(
+  Widget buildResultTitle(String title) {
+    return Align(
+      alignment: Alignment.bottomCenter,
       child: Text(
         title,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.white,
-          fontSize: 40,
+          fontSize: 35,
+          shadows: <Shadow>[
+            Shadow(
+              offset: Offset(2, 2),
+              blurRadius: 5,
+              color: Colors.black26,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildDifficultyText(Difficulty difficulty) {
+    return Center(
+      child: Text(
+        EnumString.getDifficulty(difficulty),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          fontSize: 20,
         ),
       ),
     );
   }
 }
-
-class Result {
-  final right = 15;
-  final life = 3;
-  final time = 74;
-  final point = 450;
-}
+//
+//class Result {
+//  final level = Difficulty.HARD;
+//  final right = 15;
+//  final life = 3;
+//  final time = 74;
+//  final point = 450;
+//}
