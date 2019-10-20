@@ -1,4 +1,3 @@
-import 'package:flaguru/widgets/loading_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -15,12 +14,11 @@ class _StartButtonState extends State<StartButton>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> animation;
-  bool isPressed = false;
 
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 800), vsync: this);
     animation = Tween(begin: 0.0, end: 15.0)
         .animate(CurvedAnimation(parent: controller, curve: Curves.easeIn))
           ..addStatusListener((status) {
@@ -41,11 +39,6 @@ class _StartButtonState extends State<StartButton>
 
   @override
   Widget build(BuildContext context) {
-    if (isPressed)
-      return SpinKitCubeGrid(
-        color: Colors.white,
-        size: 50,
-      );
     return Center(
       child: AnimatedBuilder(
         animation: controller,
@@ -56,10 +49,7 @@ class _StartButtonState extends State<StartButton>
             child: RaisedButton(
               color: Colors.white,
               elevation: 10,
-              onPressed: () {
-                setState(() => isPressed = true);
-                widget.onStart();
-              },
+              onPressed: widget.onStart,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Icon(Icons.play_arrow, size: 30 + animation.value),

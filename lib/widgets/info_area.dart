@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 
 class InfoArea extends StatefulWidget {
   final Question question;
+
 //  final QuestionUI question;
   final int millis;
 
@@ -21,13 +22,20 @@ class InfoArea extends StatefulWidget {
 
 class _InfoAreaState extends State<InfoArea> {
   String description = '';
+  Timer _timer;
 
   @override
   void initState() {
-    Timer(Duration(milliseconds: widget.millis), () {
+    _timer = Timer(Duration(milliseconds: widget.millis), () {
       setState(() => description = widget.question.description);
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -35,7 +43,10 @@ class _InfoAreaState extends State<InfoArea> {
     return LayoutBuilder(
       builder: (context, constraint) {
         num fontSize = constraint.maxHeight * 0.1;
-        if (widget.question.country.length > 20) fontSize *= 0.6;
+        if (widget.question.country.length > 20)
+          fontSize *= 0.6;
+        else if (widget.question.country.length > 15)
+          fontSize *= 0.7;
         else if (widget.question.country.length > 15) fontSize *= 0.7;
         return Column(
           children: <Widget>[
@@ -46,18 +57,20 @@ class _InfoAreaState extends State<InfoArea> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Material(
-                      elevation: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
+                    child: Container(
+                      decoration: BoxDecoration(
                           border: Border.all(color: Colors.white, width: 1),
-                        ),
-                        width: constraint.maxHeight * 0.3,
-                        height: constraint.maxHeight * 0.3 / 1.7,
-                        child: Image.asset(
-                          widget.question.imageURL,
-                          fit: BoxFit.cover,
-                        ),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 3,
+                                spreadRadius: 2)
+                          ]),
+                      width: constraint.maxHeight * 0.3,
+                      height: constraint.maxHeight * 0.3 / 1.7,
+                      child: Image.asset(
+                        widget.question.imageURL,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),

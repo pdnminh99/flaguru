@@ -9,7 +9,7 @@ class LoadingSpinner extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'Weaving flags...',
+            'Drawing flags...',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
