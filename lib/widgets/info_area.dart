@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class InfoArea extends StatefulWidget {
-//  final Question question;
-  final QuestionUI question;
+  final Question question;
+//  final QuestionUI question;
   final int millis;
 
   InfoArea({

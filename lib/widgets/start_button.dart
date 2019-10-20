@@ -1,5 +1,6 @@
 import 'package:flaguru/widgets/loading_spinner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class StartButton extends StatefulWidget {
   final Function onStart;
@@ -20,7 +21,7 @@ class _StartButtonState extends State<StartButton>
   void initState() {
     controller = AnimationController(
         duration: Duration(milliseconds: 1000), vsync: this);
-    animation = Tween(begin: 0.0, end: 30.0)
+    animation = Tween(begin: 0.0, end: 15.0)
         .animate(CurvedAnimation(parent: controller, curve: Curves.easeIn))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed)
@@ -40,7 +41,11 @@ class _StartButtonState extends State<StartButton>
 
   @override
   Widget build(BuildContext context) {
-    if (isPressed) return LoadingSpinner();
+    if (isPressed)
+      return SpinKitCubeGrid(
+        color: Colors.white,
+        size: 50,
+      );
     return Center(
       child: AnimatedBuilder(
         animation: controller,

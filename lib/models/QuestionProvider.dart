@@ -43,7 +43,6 @@ class QuestionProvider {
     var questionCounter = 4;
     var candidates = List<Answer>();
     while (candidates.length != questionCounter) {
-      // print(this._countries);
       var c = this._countries[this._rand.nextInt(this._countries.length)];
       if (this._isExisted(candidates, country) || c.id == country.id) continue;
       candidates.add(c.toAnswer(isCorrect: false));

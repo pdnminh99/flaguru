@@ -37,7 +37,7 @@ class DatabaseConnector {
     }
     var countries = List.generate(maps.length, (i) {
       return Country(
-        id: maps[i]['ID'].toString(),
+        id: maps[i]['ID'],
         name: maps[i]['name'],
         flag: maps[i]['flag'],
         ratio: maps[i]['ratio'],

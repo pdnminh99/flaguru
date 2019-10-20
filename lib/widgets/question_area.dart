@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class QuestionArea extends StatelessWidget {
   final bool isName;
-//  final Question question;
-  final QuestionUI question;
+  final Question question;
+//  final QuestionUI question;
 
   QuestionArea({
     @required this.isName,
