@@ -1,4 +1,5 @@
 import 'package:flaguru/screens/difficulty_screen.dart';
+import 'package:flaguru/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,12 +27,13 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'Quicksand',
       ),
-      initialRoute: PlayScreen.routeName,
-      routes: {
-        '/': (context) => MenuScreen(),
-        DifficultyScreen.routeName: (context) => DifficultyScreen(),
-        PlayScreen.routeName: (context) => PlayScreen(),
-      },
+      home: ResultScreen(),
+//      initialRoute: PlayScreen.routeName,
+//      routes: {
+//        '/': (context) => MenuScreen(),
+//        DifficultyScreen.routeName: (context) => DifficultyScreen(),
+//        PlayScreen.routeName: (context) => PlayScreen(),
+//      },
     );
   }
 }
