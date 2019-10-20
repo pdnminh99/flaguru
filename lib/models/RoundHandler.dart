@@ -46,11 +46,14 @@ class RoundHandler {
         level: this._level,
         totaltime: this._roundTimer,
         // fix this later
-        correctAnswers: this._questions - 1,
-        questionsCounter: this._questions);
+        correctAnswers: this._correctAnswersCounter,
+        questionsCounter: this._questions,
+        remainLives: this.remainLives,
+        totalLives: this._lifeCount);
   }
 
   int _roundTimer = 0;
+  int _correctAnswersCounter = 0;
 
   RoundHandler({
     @required Difficulty level,
@@ -76,8 +79,11 @@ class RoundHandler {
       @required int questionCountry,
       @required int countdownRemain,
       int answerCountry}) {
+    if (this.status != RoundStatus.PLAYING)
+      throw Exception("Round status is yet started or is over");
     if (isCorrect) {
       this._setRemainQuestions = this.remainQuestions - 1;
+      this._correctAnswersCounter += 1;
     } else {
       this._setRemainLife = this.remainLives - 1;
       this._setRemainQuestions = this.remainQuestions - 1;
