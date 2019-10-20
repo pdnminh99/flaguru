@@ -18,7 +18,7 @@ class _ResultScreenState extends State<ResultScreen>
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 5000), vsync: this);
+        duration: Duration(milliseconds: 10000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
 
@@ -31,13 +31,13 @@ class _ResultScreenState extends State<ResultScreen>
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xff019dad),
+      backgroundColor: const Color(0xff019dad),
       body: WillPopScope(
           onWillPop: () async => false,
           child: Column(
             children: <Widget>[
               Container(
-                width: width,
+                width: double.infinity,
                 height: height * 0.15,
                 child: FadeTransition(
                   opacity: animation.titleOpacity,
@@ -47,10 +47,11 @@ class _ResultScreenState extends State<ResultScreen>
               Stack(
                 children: <Widget>[
                   Container(
-                    width: width,
+                    width: double.infinity,
                     height: height * 0.5,
                     child: ResultArea(
-                      animation: animation.resultArea,
+                      result: widget.result,
+                      controller: animation.resultArea,
                       bottomMargin: height * 0.08,
                     ),
                   ),
@@ -89,6 +90,6 @@ class _ResultScreenState extends State<ResultScreen>
 class Result {
   final right = 15;
   final life = 3;
-  final time = 80;
-  final point = 1200;
+  final time = 74;
+  final point = 450;
 }
