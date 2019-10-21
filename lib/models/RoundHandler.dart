@@ -1,3 +1,5 @@
+import 'package:flaguru/models/Answer.dart';
+import 'package:flaguru/models/Question.dart';
 import 'package:flaguru/models/Result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flaguru/models/Enum.dart';
@@ -45,15 +47,24 @@ class RoundHandler {
     return new Result(
         level: this._level,
         totaltime: this._roundTimer,
-        // fix this later
         correctAnswers: this._correctAnswersCounter,
         questionsCounter: this._questions,
         remainLives: this.remainLives,
-        totalLives: this._lifeCount);
+        totalLives: this._lifeCount,
+        answerLogs: this._logs);
   }
 
   int _roundTimer = 0;
   int _correctAnswersCounter = 0;
+  var _answerLogs = List<Map<String, Object>>();
+  List<Map<String, Object>> get _logs {
+    return this._answerLogs;
+  }
+
+  set _setLogs(Map<String, Object> log) {
+    this._answerLogs.add(log);
+    this._roundTimer += log['answertime'];
+  }
 
   RoundHandler({
     @required Difficulty level,
@@ -76,11 +87,13 @@ class RoundHandler {
 
   void getAnswer(
       {@required bool isCorrect,
-      @required int questionCountry,
+      @required Question question,
       @required int countdownRemain,
-      int answerCountry}) {
+      Answer answer}) {
     if (this.status != RoundStatus.PLAYING)
       throw Exception("Round status is yet started or is over");
+    if (this._countdown < countdownRemain)
+      throw Exception("Why would countdown remain greater than countdown time?");
     if (isCorrect) {
       this._setRemainQuestions = this.remainQuestions - 1;
       this._correctAnswersCounter += 1;
@@ -88,7 +101,12 @@ class RoundHandler {
       this._setRemainLife = this.remainLives - 1;
       this._setRemainQuestions = this.remainQuestions - 1;
     }
-    this._roundTimer += countdownRemain;
+    this._setLogs = {
+      'question': question,
+      'answer': answer,
+      'isCorrect': isCorrect,
+      'answertime': isCorrect ? this._countdown - countdownRemain : 0,
+    };
   }
 
   void reset() {
