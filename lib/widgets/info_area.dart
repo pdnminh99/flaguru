@@ -49,6 +49,7 @@ class _InfoAreaState extends State<InfoArea> {
           fontSize *= 0.7;
         else if (widget.question.country.length > 15) fontSize *= 0.7;
         return Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -59,7 +60,7 @@ class _InfoAreaState extends State<InfoArea> {
                     padding: const EdgeInsets.only(right: 10),
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
+                          border: Border.all(color: Colors.white, width: 0.5),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.black12,
@@ -97,15 +98,21 @@ class _InfoAreaState extends State<InfoArea> {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                description,
-                style: TextStyle(
-                  fontSize: constraint.maxHeight * 0.064,
-                  fontWeight: FontWeight.bold,
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 15, left: 15, right: 15),
+                child: SingleChildScrollView(
+                  child: Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: constraint.maxHeight * 0.064,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
-                textAlign: TextAlign.justify,
               ),
             ),
           ],

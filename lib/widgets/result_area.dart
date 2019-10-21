@@ -69,7 +69,7 @@ class ResultArea extends AnimatedWidget {
                   height: height * 0.2,
                   child: ResultRow(
                     animation: animation.time,
-                    maxNum: result.totaltime,
+                    maxNum: result.totalTime,
                     icon: Icons.access_time,
                     leading: 'Time',
                     color: rowColor,

@@ -24,20 +24,25 @@ class _ResultScreenState extends State<ResultScreen>
 
   AnimationController historyController;
 
-  bool showHistoryBtn = true;
+  bool showingHistoryBtn = true;
+  bool showingHistoryArea = false;
 
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 7000), vsync: this);
     animation = ResultScreenAnimation(controller);
+    animation.resultArea.addStatusListener((status) {
+      if (status == AnimationStatus.completed)
+        setState(() => showingHistoryArea = true);
+    });
     controller.forward();
 
     historyController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this)
           ..addStatusListener((status) {
             if (status == AnimationStatus.dismissed)
-              setState(() => showHistoryBtn = true);
+              setState(() => showingHistoryBtn = true);
           });
 
     super.initState();
@@ -110,18 +115,19 @@ class _ResultScreenState extends State<ResultScreen>
                     ),
                   ],
                 ),
-                if (!showHistoryBtn)
+                if (showingHistoryArea && !showingHistoryBtn)
                   Container(
                     width: width,
                     height: height,
                     alignment: Alignment.bottomCenter,
                     child: HistoryArea(
+                      result: widget.result,
                       initHeight: historyInitHeight,
                       controller: historyController,
                       reverseAnim: historyController.reverse,
                     ),
                   ),
-                if (showHistoryBtn)
+                if (showingHistoryArea && showingHistoryBtn)
                   Positioned(
                     bottom: 0,
                     child: Container(
@@ -130,12 +136,9 @@ class _ResultScreenState extends State<ResultScreen>
                       alignment: Alignment.center,
                       child: FadeTransition(
                         opacity: animation.historyBtn,
-                        // change to animated widget
                         child: RoundHistoryButton(showHistory: () {
                           historyController.forward();
-                          setState(() {
-                            showHistoryBtn = false;
-                          });
+                          setState(() => showingHistoryBtn = false);
                         }),
                       ),
                     ),

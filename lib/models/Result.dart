@@ -1,26 +1,28 @@
+import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flutter/cupertino.dart';
 
 class Result {
   int get score {
-    int currentscore =
-        this.totaltime * 10 + this.correctAnswers * 20 + this.remainLives * 30;
+    int currentScore =
+        this.totalTime * 10 + this.correctAnswers * 20 + this.remainLives * 30;
     switch (this.level) {
       case Difficulty.HARD:
-        currentscore *= 3;
-        return currentscore;
+        currentScore *= 3;
+        return currentScore;
       case Difficulty.NORMAL:
-        currentscore *= 2;
-        return currentscore;
+        currentScore *= 2;
+        return currentScore;
       default:
-        return currentscore;
+        return currentScore;
     }
   }
 
-  int totaltime;
+  int totalTime;
 
   int questionsCounter;
   int correctAnswers;
+
   int get wrongAnswers {
     return this.questionsCounter - this.correctAnswers;
   }
@@ -28,11 +30,11 @@ class Result {
   Difficulty level;
   int remainLives;
   int totalLives;
-  var answerLogs = List<Map<String, Object>>();
+  var answerLogs = List<AnswerLog>();
 
   Result(
       {@required this.level,
-      @required this.totaltime,
+      @required this.totalTime,
       @required this.correctAnswers,
       @required this.questionsCounter,
       @required this.remainLives,
@@ -49,5 +51,5 @@ class Result {
 
   @override
   String toString() =>
-      "level $level in $totaltime secs with $correctAnswers/$questionsCounter correct answers => $score score";
+      "level $level in $totalTime secs with $correctAnswers/$questionsCounter correct answers => $score score";
 }

@@ -50,7 +50,7 @@ class _PlayScreenState extends State<PlayScreen>
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
         qaList = qProvider.getCollections(
-            numberOfQuestions: 1, isFirstAnswerCorrect: true);
+            numberOfQuestions: 20, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifecount: maxLife,
@@ -97,23 +97,19 @@ class _PlayScreenState extends State<PlayScreen>
   void changePressState(int i) => pressStates[i] = true;
 
   void doRight() {
-    _timer.cancel();
-    setState(() {
-      roundHandler.getAnswer(
-          isCorrect: true,
-          questionCountry: (qaList[index]['question'] as Question).countryID,
-          countdownRemain: time);
-
-      isAnswered = true;
-    });
+    processAfterAnswered(true);
   }
 
   void doWrong() {
+    processAfterAnswered(false);
+  }
+
+  void processAfterAnswered(bool isRightAnswer) {
     _timer.cancel();
     setState(() {
       roundHandler.getAnswer(
-          isCorrect: false,
-          questionCountry: (qaList[index]['question'] as Question).countryID,
+          isCorrect: isRightAnswer,
+          question: (qaList[index]['question'] as Question),
           countdownRemain: time);
       isAnswered = true;
     });
@@ -133,8 +129,6 @@ class _PlayScreenState extends State<PlayScreen>
         context,
         MaterialPageRoute(
             builder: (context) => ResultScreen(roundHandler.result)));
-//    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName,
-//        arguments: widget.difficulty);
   }
 
   Timer getTimer() {
