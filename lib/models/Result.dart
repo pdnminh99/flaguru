@@ -28,6 +28,13 @@ class Result {
   Difficulty level;
   int remainLives;
   int totalLives;
+  // Format of answerLogs element:
+  // {
+  //     'question': Question class instance,
+  //     'answer': Answer class instance,
+  //     'isCorrect': boolean,
+  //     'answertime': if 'isCorrect' true: return time that the player answer else 0,
+  // }
   var answerLogs = List<Map<String, Object>>();
 
   Result(
