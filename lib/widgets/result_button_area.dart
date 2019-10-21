@@ -25,13 +25,13 @@ class ResultButtonArea extends AnimatedWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getButton(animation.value * constraints.maxWidth * 0.2,
+              getButton(animation.value * constraints.maxHeight * 0.8,
                   Icons.menu, () => navigateToMenu(context)),
               const SizedBox(width: 15),
-              getButton(animation.value * constraints.maxWidth * 0.23,
+              getButton(animation.value * constraints.maxHeight * 0.9,
                   Icons.refresh, () => restart(context, difficulty)),
               const SizedBox(width: 15),
-              getButton(animation.value * constraints.maxWidth * 0.2,
+              getButton(animation.value * constraints.maxHeight * 0.8,
                   Icons.share, () {}),
             ],
           ),

@@ -9,8 +9,8 @@ class ResultScreenAnimation {
 
   ResultScreenAnimation(this.controller) {
     titleOpacity = Tween(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: Interval(0, 0.1)));
-    resultArea = CurvedAnimation(parent: controller, curve: Interval(0.1, 0.9));
+        .animate(CurvedAnimation(parent: controller, curve: Interval(0, 0.05)));
+    resultArea = CurvedAnimation(parent: controller, curve: Interval(0.05, 0.9));
     resultButtonArea =
         CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
     leaderBoardButton =

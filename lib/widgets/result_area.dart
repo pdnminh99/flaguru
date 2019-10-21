@@ -16,14 +16,17 @@ class ResultArea extends AnimatedWidget {
     animation = ResultAreaAnimation(listenable as Animation<double>);
   }
 
+  final rowColor = Colors.white.withOpacity(0.9);
+
   @override
   Widget build(BuildContext context) {
+    final score = '--';
     return FadeTransition(
       opacity: animation.bgOpacity,
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(right: 20, left: 20, bottom: bottomMargin),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(
             color: const Color(0xff24b6c5),
             borderRadius: BorderRadius.circular(10),
@@ -37,67 +40,93 @@ class ResultArea extends AnimatedWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                  height: height * 0.22,
+                  height: height * 0.2,
                   child: ResultRow(
                     animation: animation.right,
                     maxNum: result.correctAnswers,
                     icon: Icons.check_circle_outline,
                     leading: 'Right',
-                    trailing: ' / 20',
-                    color: Colors.white.withOpacity(0.9),
+                    trailing: ' / ' + result.questionsCounter.toString(),
+                    color: rowColor,
                     fontSize: height * 0.1,
                     getString: (val) => (val as num).toString(),
                   ),
                 ),
                 Container(
-                  height: height * 0.22,
+                  height: height * 0.2,
                   child: ResultRow(
                     animation: animation.life,
                     maxNum: result.remainLives,
                     icon: Icons.favorite_border,
                     leading: 'Life',
-                    trailing: ' / 5',
-                    color: Colors.white.withOpacity(0.9),
+                    trailing: ' / ' + result.totalLives.toString(),
+                    color: rowColor,
                     fontSize: height * 0.1,
                     getString: (val) => (val as num).toString(),
                   ),
                 ),
                 Container(
-                  height: height * 0.22,
+                  height: height * 0.2,
                   child: ResultRow(
                     animation: animation.time,
                     maxNum: result.totaltime,
                     icon: Icons.access_time,
                     leading: 'Time',
-                    color: Colors.white.withOpacity(0.9),
+                    color: rowColor,
                     fontSize: height * 0.1,
                     getString: (val) => getTime(val as num),
                   ),
                 ),
                 Container(
-                  height: height * 0.34,
+                  height: height * 0.3,
                   alignment: Alignment.center,
                   child: Container(
-                    width: animation.bgPoint.value * constraints.maxWidth,
+                    width: animation.bgScore.value * constraints.maxWidth,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(10)),
                     child: ResultRow(
-                      animation: animation.point,
+                      animation: animation.score,
                       maxNum: result.score,
                       icon: Icons.functions,
-                      leading: 'Point',
+                      leading: 'Score',
                       color: const Color(0xff019dad),
-                      fontSize: 30,
+                      fontSize: height * 0.12,
                       getString: (val) => (val as num).toString(),
                     ),
                   ),
+                ),
+                FadeTransition(
+                  opacity: animation.best,
+                  child: buildBestRow(height, score),
                 ),
               ],
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget buildBestRow(double height, String score) {
+    final style = TextStyle(
+        fontSize: height * 0.08, fontWeight: FontWeight.bold, color: rowColor);
+    return Container(
+      height: height * 0.1,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(Icons.star_border, color: rowColor, size: height * 0.09),
+              const SizedBox(width: 5),
+              Text('Best', style: style),
+            ],
+          ),
+          Text(score, style: style),
+        ],
       ),
     );
   }
