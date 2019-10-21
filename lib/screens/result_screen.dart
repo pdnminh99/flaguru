@@ -56,95 +56,94 @@ class _ResultScreenState extends State<ResultScreen>
 
     var historyInitHeight = height * 0.07;
 
-    return Scaffold(
-      backgroundColor: const Color(0xff019dad),
-      body: WillPopScope(
-          onWillPop: () async => false,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: height * 0.1,
-                    child: FadeTransition(
-                      opacity: animation.titleOpacity,
-                      child: buildResultTitle('RESULTS'),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: height * 0.05,
-                    child: FadeTransition(
-                      opacity: animation.titleOpacity,
-                      child: buildDifficultyText(widget.result.level),
-                    ),
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        height: height * 0.45,
-                        child: ResultArea(
-                          result: widget.result,
-                          controller: animation.resultArea,
-                          bottomMargin: height * 0.06,
-                        ),
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        backgroundColor: const Color(0xff019dad),
+        body: WillPopScope(
+            onWillPop: () async => false,
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: height * 0.1,
+                      child: FadeTransition(
+                        opacity: animation.titleOpacity,
+                        child: buildResultTitle('RESULTS'),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          width: width,
-                          height: height * 0.12,
-                          child: FadeTransition(
-                            opacity: animation.resultButtonArea,
-                            child: ResultButtonArea(
-                                difficulty: widget.result.level,
-                                controller: animation.resultButtonArea),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: height * 0.05,
+                      child: FadeTransition(
+                        opacity: animation.titleOpacity,
+                        child: buildDifficultyText(widget.result.level),
+                      ),
+                    ),
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          height: height * 0.45,
+                          child: ResultArea(
+                            result: widget.result,
+                            controller: animation.resultArea,
+                            bottomMargin: height * 0.06,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              if (!showHistoryBtn)
-                Container(
-                  width: width,
-                  height: height,
-                  alignment: Alignment.bottomCenter,
-                  child: HistoryArea(
-                    initHeight: historyInitHeight,
-                    controller: historyController,
-                    reverseAnim: reverseHistoryAnim,
-                  ),
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            width: width,
+                            height: height * 0.12,
+                            child: FadeTransition(
+                              opacity: animation.resultButtonArea,
+                              child: ResultButtonArea(
+                                  difficulty: widget.result.level,
+                                  controller: animation.resultButtonArea),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              if (showHistoryBtn)
-                Positioned(
-                  bottom: 0,
-                  child: Container(
+                if (!showHistoryBtn)
+                  Container(
                     width: width,
-                    height: historyInitHeight,
-                    alignment: Alignment.center,
-                    child: FadeTransition(
-                      opacity: animation.historyBtn,
-                      // change to animated widget
-                      child: RoundHistoryButton(showHistory: () {
-                        historyController.forward();
-                        setState(() {
-                          showHistoryBtn = false;
-                        });
-                      }),
+                    height: height,
+                    alignment: Alignment.bottomCenter,
+                    child: HistoryArea(
+                      initHeight: historyInitHeight,
+                      controller: historyController,
+                      reverseAnim: historyController.reverse,
                     ),
                   ),
-                ),
-            ],
-          )),
+                if (showHistoryBtn)
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: width,
+                      height: historyInitHeight,
+                      alignment: Alignment.center,
+                      child: FadeTransition(
+                        opacity: animation.historyBtn,
+                        // change to animated widget
+                        child: RoundHistoryButton(showHistory: () {
+                          historyController.forward();
+                          setState(() {
+                            showHistoryBtn = false;
+                          });
+                        }),
+                      ),
+                    ),
+                  ),
+              ],
+            )),
+      ),
     );
-  }
-
-  void reverseHistoryAnim() {
-    historyController.reverse();
   }
 
   Widget buildResultTitle(String title) {
@@ -157,11 +156,7 @@ class _ResultScreenState extends State<ResultScreen>
           color: Colors.white,
           fontSize: 35,
           shadows: <Shadow>[
-            Shadow(
-              offset: Offset(2, 2),
-              blurRadius: 5,
-              color: Colors.black26,
-            ),
+            Shadow(offset: Offset(2, 2), blurRadius: 5, color: Colors.black26),
           ],
         ),
       ),
