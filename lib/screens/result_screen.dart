@@ -18,9 +18,13 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AnimationController controller;
   ResultScreenAnimation animation;
+
+  AnimationController historyController;
+
+  bool showHistoryBtn = true;
 
   @override
   void initState() {
@@ -28,6 +32,9 @@ class _ResultScreenState extends State<ResultScreen>
         duration: Duration(milliseconds: 8000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
+
+    historyController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -97,26 +104,34 @@ class _ResultScreenState extends State<ResultScreen>
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 0,
-                child: Container(
+              if (!showHistoryBtn)
+                Container(
                   width: width,
-                  height: historyInitHeight,
-                  alignment: Alignment.center,
-                  child: RoundHistoryButton(showHistory: () {
-                    print('hisoty');
-                  }),
+                  height: height,
+                  alignment: Alignment.bottomCenter,
+                  child: HistoryArea(
+                    initHeight: historyInitHeight,
+                    controller: historyController,
+                  ),
                 ),
-              ),
-              Container(
-                width: width,
-                height: height,
-                alignment: Alignment.bottomCenter,
-                child: HistoryArea(
-                  initHeight: historyInitHeight,
-                  controller: controller,
+              if (showHistoryBtn)
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    width: width,
+                    height: historyInitHeight,
+                    alignment: Alignment.center,
+                    child: FadeTransition(
+                      opacity: animation.historyBtn,
+                      child: RoundHistoryButton(showHistory: () {
+                        historyController.forward();
+                        setState(() {
+                          showHistoryBtn = false;
+                        });
+                      }),
+                    ),
+                  ),
                 ),
-              ),
             ],
           )),
     );

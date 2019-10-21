@@ -5,7 +5,7 @@ class ResultScreenAnimation {
   Animation<double> titleOpacity;
   Animation<double> resultArea;
   Animation<double> resultButtonArea;
-  Animation<double> leaderBoardButton;
+  Animation<double> historyBtn;
 
   ResultScreenAnimation(this.controller) {
     titleOpacity = Tween(begin: 0.0, end: 1.0)
@@ -13,7 +13,7 @@ class ResultScreenAnimation {
     resultArea = CurvedAnimation(parent: controller, curve: Interval(0.05, 0.9));
     resultButtonArea =
         CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
-    leaderBoardButton =
+    historyBtn =
         CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
   }
 }

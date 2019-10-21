@@ -50,7 +50,7 @@ class _PlayScreenState extends State<PlayScreen>
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
         qaList = qProvider.getCollections(
-            numberOfQuestions: 5, isFirstAnswerCorrect: true);
+            numberOfQuestions: 1, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifecount: maxLife,
