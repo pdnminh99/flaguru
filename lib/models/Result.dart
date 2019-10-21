@@ -28,13 +28,16 @@ class Result {
   Difficulty level;
   int remainLives;
   int totalLives;
+  var answerLogs = List<Map<String, Object>>();
+
   Result(
       {@required this.level,
       @required this.totaltime,
       @required this.correctAnswers,
       @required this.questionsCounter,
       @required this.remainLives,
-      @required this.totalLives}) {
+      @required this.totalLives,
+      @required this.answerLogs}) {
     if (this.correctAnswers > this.questionsCounter)
       throw Exception(
           "Why would correct answers greater than number of questions?");
