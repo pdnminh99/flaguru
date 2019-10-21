@@ -29,12 +29,16 @@ class _ResultScreenState extends State<ResultScreen>
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 8000), vsync: this);
+        duration: Duration(milliseconds: 1000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
 
     historyController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.dismissed)
+              setState(() => showHistoryBtn = true);
+          });
 
     super.initState();
   }
@@ -112,6 +116,7 @@ class _ResultScreenState extends State<ResultScreen>
                   child: HistoryArea(
                     initHeight: historyInitHeight,
                     controller: historyController,
+                    reverseAnim: reverseHistoryAnim,
                   ),
                 ),
               if (showHistoryBtn)
@@ -123,6 +128,7 @@ class _ResultScreenState extends State<ResultScreen>
                     alignment: Alignment.center,
                     child: FadeTransition(
                       opacity: animation.historyBtn,
+                      // change to animated widget
                       child: RoundHistoryButton(showHistory: () {
                         historyController.forward();
                         setState(() {
@@ -135,6 +141,10 @@ class _ResultScreenState extends State<ResultScreen>
             ],
           )),
     );
+  }
+
+  void reverseHistoryAnim() {
+    historyController.reverse();
   }
 
   Widget buildResultTitle(String title) {
