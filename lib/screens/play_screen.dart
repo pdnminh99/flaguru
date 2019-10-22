@@ -162,18 +162,23 @@ class _PlayScreenState extends State<PlayScreen>
                 difficulty: EnumString.getDifficulty(widget.difficulty),
               ),
             ),
-            if (roundHandler == null)
-              Container(
+            Visibility(
+              visible: roundHandler == null,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: LoadingSpinner(),
               ),
-            if (roundHandler != null && roundHandler.status == RoundStatus.IDLE)
-              Container(
+            ),
+            Visibility(
+              visible: roundHandler != null &&
+                  roundHandler.status == RoundStatus.IDLE,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: StartButton(onStart: startGame),
               ),
+            ),
             if (roundHandler != null &&
                 roundHandler.status != RoundStatus.IDLE) ...[
               Container(

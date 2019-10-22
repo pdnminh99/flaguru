@@ -10,10 +10,12 @@ class ResultScreenAnimation {
   ResultScreenAnimation(this.controller) {
     titleOpacity = Tween(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(parent: controller, curve: Interval(0, 0.05)));
-    resultArea = CurvedAnimation(parent: controller, curve: Interval(0.05, 0.9));
+    resultArea =
+        CurvedAnimation(parent: controller, curve: Interval(0.05, 0.9));
     resultButtonArea =
         CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
-    historyBtn =
-        CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
+    historyBtn = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.95, 1)));
   }
 }

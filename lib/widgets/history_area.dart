@@ -1,11 +1,11 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Result.dart';
 import 'package:flaguru/widgets/history_area_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
 class HistoryArea extends StatefulWidget {
   final double btnHeight;
@@ -29,8 +29,8 @@ class _HistoryAreaState extends State<HistoryArea>
 
   @override
   void initState() {
-    _controller = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+    _controller =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = HistoryAreaAnimation(_controller);
 
     super.initState();
@@ -52,39 +52,32 @@ class _HistoryAreaState extends State<HistoryArea>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        return BackdropFilter(
-          filter: ui.ImageFilter.blur(
-            sigmaX: animation.listDimensionAnim.value * 5,
-            sigmaY: animation.listDimensionAnim.value * 5,
+        return Container(
+          width: widthArea,
+          height: widget.btnHeight +
+              animation.listAnim.value * (heightArea - widget.btnHeight),
+          margin: EdgeInsets.only(
+            bottom: animation.bottomMarginAnim.value * heightArea * 1.25 * 0.1,
           ),
-          child: Container(
-            width: widthArea,
-            height: widget.btnHeight +
-                animation.listDimensionAnim.value *
-                    (heightArea - widget.btnHeight),
-            margin: EdgeInsets.only(
-                bottom:
-                    animation.bottomMarginAnim.value * heightArea * 1.25 * 0.1),
-            decoration: BoxDecoration(
-              color: animation.colorAnim.value,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(radius),
-                topRight: Radius.circular(radius),
-                bottomLeft:
-                    Radius.circular(animation.listDimensionAnim.value * radius),
-                bottomRight:
-                    Radius.circular(animation.listDimensionAnim.value * radius),
-              ),
+          decoration: BoxDecoration(
+            color: animation.colorAnim.value,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(radius),
+              topRight: Radius.circular(radius),
+              bottomLeft: Radius.circular(animation.listAnim.value * radius),
+              bottomRight: Radius.circular(animation.listAnim.value * radius),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                buildListView(widget.result.answerLogs, widthArea,
-                    heightArea * 0.93 - widget.padding * 3, animation),
-                buildBackButton(
-                    widthArea, widget.btnHeight, animation.btnDimensionAnim),
-              ],
-            ),
+            boxShadow: [
+              BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 5),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              buildListView(widget.result.answerLogs, widthArea,
+                  heightArea * 0.93 - widget.padding * 4, animation),
+              buildBackButton(widthArea, widget.btnHeight, animation.btnAnim),
+            ],
           ),
         );
       },
@@ -97,7 +90,7 @@ class _HistoryAreaState extends State<HistoryArea>
     return FadeTransition(
       opacity: animation.contentShowingAnim,
       child: Container(
-        height: animation.listDimensionAnim.value * height,
+        height: animation.listAnim.value * height,
         width: double.infinity,
         child: ListView.builder(
           itemCount: logs.length,
@@ -122,10 +115,11 @@ class _HistoryAreaState extends State<HistoryArea>
           CircleAvatar(
               radius: realHeight * 0.35,
               backgroundColor:
-                  log.isCorrect ? Colors.green[600] : Colors.red[800],
+                  log.isCorrect ? Colors.green[600] : Colors.red[600],
               child: Icon(
                 log.isCorrect ? Icons.done : Icons.clear,
                 size: realHeight * 0.5,
+                color: Colors.white,
               )),
           const SizedBox(width: 10),
           Expanded(
@@ -143,13 +137,9 @@ class _HistoryAreaState extends State<HistoryArea>
           ),
           const SizedBox(width: 10),
           Material(
-            elevation: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 0.5)),
-              child: Image.asset(log.question.imageURL,
-                  height: realHeight * 0.8, width: realHeight * 0.8 * 1.7),
-            ),
+            elevation: 5,
+            child: Image.asset(log.question.imageURL,
+                height: realHeight * 0.8, width: realHeight * 0.8 * 1.7),
           ),
         ],
       ),

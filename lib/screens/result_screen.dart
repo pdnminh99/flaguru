@@ -5,7 +5,6 @@ import 'package:flaguru/widgets/history_area.dart';
 import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
-import 'package:flaguru/widgets/round_history_button.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -22,19 +21,12 @@ class _ResultScreenState extends State<ResultScreen>
   AnimationController controller;
   ResultScreenAnimation animation;
 
-  AnimationController historyController;
-
-  bool showingHistoryBtn = true;
-
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 6000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
-
-    historyController = AnimationController(
-        duration: Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -111,20 +103,19 @@ class _ResultScreenState extends State<ResultScreen>
                   width: width,
                   height: height,
                   alignment: Alignment.bottomCenter,
-                  child: HistoryArea(
-                      result: widget.result, btnHeight: historyBtnHeight),
+                  child: AnimatedBuilder(
+                    animation: controller,
+                    child: HistoryArea(
+                        result: widget.result, btnHeight: historyBtnHeight),
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                            0, animation.historyBtn.value * historyBtnHeight),
+                        child: child,
+                      );
+                    },
+                  ),
                 ),
-//                Visibility(
-//                  visible: !showingHistoryBtn,
-//                  child: Positioned(
-//                    bottom: 0,
-//                    child: Container(
-//                      width: width,
-//                      height: historyBtnHeight,
-//                      color: Colors.green,
-//                    ),
-//                  ),
-//                ),
               ],
             )),
       ),

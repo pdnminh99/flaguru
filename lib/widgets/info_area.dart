@@ -45,9 +45,8 @@ class _InfoAreaState extends State<InfoArea> {
         num fontSize = constraint.maxHeight * 0.1;
         if (widget.question.country.length >= 20)
           fontSize *= 0.6;
-        else if (widget.question.country.length >= 15)
+        else if (widget.question.country.length >= 14)
           fontSize *= 0.7;
-        else if (widget.question.country.length > 15) fontSize *= 0.7;
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
