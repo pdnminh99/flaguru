@@ -9,12 +9,39 @@ class SettingsHandler {
     return this._currentSettings.isSoundON;
   }
 
+  set isSoundEnabled(bool newstate) {
+    var database = DatabaseConnector();
+    this._currentSettings.isSoundON = newstate;
+    database
+        .updateExistingSettingsSync(
+            this._currentSettings.currentUser.uuid, this._currentSettings)
+        .catchError((error) => print(error));
+  }
+
   bool get isAudioEnabled {
     return this._currentSettings.isAudioON;
   }
 
+  set isAudioEnabled(bool newstate) {
+    this._currentSettings.isAudioON = newstate;
+    var database = DatabaseConnector();
+    database
+        .updateExistingSettingsSync(
+            this._currentSettings.currentUser.uuid, this._currentSettings)
+        .catchError((error) => print(error));
+  }
+
   bool get skipTutorials {
     return this._currentSettings.skipTutorials;
+  }
+
+  set skipTutorials(bool newstate) {
+    this._currentSettings.skipTutorials = newstate;
+    var database = DatabaseConnector();
+    database
+        .updateExistingSettingsSync(
+            this._currentSettings.currentUser.uuid, this._currentSettings)
+        .catchError((error) => print(error));
   }
 
   SettingsHandler._internal();
@@ -37,53 +64,53 @@ class SettingsHandler {
     return settingInstance;
   }
 
-  /*
-   * THESE MUST BE CALLED WITH AWAIT
-   */
-  Future<void> switchAudio() async {
-    this._currentSettings.isAudioON = !this.isAudioEnabled;
-    var databaseConn = DatabaseConnector();
-    await databaseConn.updateExistingSettings(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // /*
+  //  * THESE MUST BE CALLED WITH AWAIT
+  //  */
+  // Future<void> switchAudio() async {
+  //   this._currentSettings.isAudioON = !this.isAudioEnabled;
+  //   var databaseConn = DatabaseConnector();
+  //   await databaseConn.updateExistingSettings(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
-  Future<void> switchSound() async {
-    this._currentSettings.isSoundON = !this.isSoundEnabled;
-    var databaseConn = DatabaseConnector();
-    await databaseConn.updateExistingSettings(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // Future<void> switchSound() async {
+  //   this._currentSettings.isSoundON = !this.isSoundEnabled;
+  //   var databaseConn = DatabaseConnector();
+  //   await databaseConn.updateExistingSettings(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
-  Future<void> finishTutorials() async {
-    this._currentSettings.skipTutorials = true;
-    var databaseConn = DatabaseConnector();
-    await databaseConn.updateExistingSettings(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // Future<void> finishTutorials() async {
+  //   this._currentSettings.skipTutorials = true;
+  //   var databaseConn = DatabaseConnector();
+  //   await databaseConn.updateExistingSettings(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
-  /*
-   * NOT CALLED WITH AWAIT
-   */
-  void switchAudioSync() {
-    this._currentSettings.isAudioON = !this.isAudioEnabled;
-    var databaseConn = DatabaseConnector();
-    databaseConn.updateExistingSettingsSync(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // /*
+  //  * NOT CALLED WITH AWAIT
+  //  */
+  // void switchAudioSync() {
+  //   this._currentSettings.isAudioON = !this.isAudioEnabled;
+  //   var databaseConn = DatabaseConnector();
+  //   databaseConn.updateExistingSettingsSync(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
-  void switchSoundSync() {
-    this._currentSettings.isSoundON = !this.isSoundEnabled;
-    var databaseConn = DatabaseConnector();
-    databaseConn.updateExistingSettingsSync(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // void switchSoundSync() {
+  //   this._currentSettings.isSoundON = !this.isSoundEnabled;
+  //   var databaseConn = DatabaseConnector();
+  //   databaseConn.updateExistingSettingsSync(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
-  void finishTutorialsSync() {
-    this._currentSettings.skipTutorials = true;
-    var databaseConn = DatabaseConnector();
-    databaseConn.updateExistingSettingsSync(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // void finishTutorialsSync() {
+  //   this._currentSettings.skipTutorials = true;
+  //   var databaseConn = DatabaseConnector();
+  //   return databaseConn.updateExistingSettingsSync(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
   /*
    * OTHERs METHODS
@@ -94,6 +121,7 @@ class SettingsHandler {
         .collectExistingSettings(this._currentSettings.currentUser);
     if (newsettings != null) {
       print("Found an existing settings $newsettings");
+      print(newsettings.toString());
       if (newsettings.isAudioON != this.isAudioEnabled)
         this._currentSettings.isAudioON = newsettings.isAudioON;
       if (newsettings.isSoundON != this.isSoundEnabled)

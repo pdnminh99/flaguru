@@ -1,26 +1,15 @@
-import 'package:flaguru/models/Country.dart';
-import 'package:flaguru/models/DatabaseConnector.dart';
-import 'package:flaguru/models/QuestionProvider.dart';
+import 'package:flaguru/models/SettingsHandler.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 
 class DemoScreen extends State<MyApp> {
-  var countries = List<Country>();
-  var collection = List<Map<String, Object>>();
+  SettingsHandler settings;
 
   DemoScreen() {
-    var database = DatabaseConnector();
-    var questionProvider = QuestionProvider();
-    // get questions/answer collection.
-    questionProvider.initializeQuestionsProvider().then((res) {
-      this.collection = questionProvider.getCollections();
-    });
-    // get countries collection.
-    database.collectCountries().then((countries) {
+    SettingsHandler.getInstance().then((settings) {
       setState(() {
-        this.countries = countries;
+        this.settings = settings;
       });
-      print("There are ${countries.length} countries retrieved");
     });
   }
 
@@ -32,14 +21,8 @@ class DemoScreen extends State<MyApp> {
     );
   }
 
-  Widget parseQuestionToCard(Map<String, Object> question) => Card(
-    child: Column(
-      children: <Widget>[
-        Text(question['question'].toString()),
-        for (var answer in question['answer']) Text(answer.toString())
-      ],
-    ),
-  );
+  Widget state(String text, bool isTrue) =>
+      isTrue ? Text("$text ON") : Text("$text OFF");
 
   Widget parseCollectionToListView() => Scaffold(
         appBar: AppBar(
@@ -48,68 +31,31 @@ class DemoScreen extends State<MyApp> {
         body: ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
-            for (var item in this.collection) parseQuestionToCard(item)
-          ],
-        ),
-      );
-
-  Widget parseFlagsToListView() => Scaffold(
-        appBar: AppBar(
-          title: Text("Test"),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
             RaisedButton(
-              child: Text("Delete all data from table"),
-              onPressed: () async {
-                var database = DatabaseConnector();
-                await database.deleteCountries();
-                var countries = await database.collectCountries();
+              child: state("Audio", this.settings.isAudioEnabled),
+              onPressed: () {
                 setState(() {
-                  this.countries = countries;
+                  this.settings.isAudioEnabled = !this.settings.isAudioEnabled;
                 });
-                print("There are ${countries.length} countries retrieved");
-                for (var country in this.countries) {
-                  print("${country.name}\n");
-                }
               },
             ),
-            ...parseImage(this.countries)
+            RaisedButton(
+              child: state("Sound", this.settings.isSoundEnabled),
+              onPressed: () {
+                setState(() {
+                  this.settings.isSoundEnabled = !this.settings.isSoundEnabled;
+                });
+              },
+            ),
+            RaisedButton(
+              child: state("Skip tutorials", this.settings.skipTutorials),
+              onPressed: () {
+                setState(() {
+                  this.settings.skipTutorials = !this.settings.skipTutorials;
+                });
+              },
+            )
           ],
         ),
-        // body: Container(
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       RaisedButton(
-        //         child: Text("Delete all data from table"),
-        //         onPressed: () async {
-        //           var database = DatabaseConnector();
-        //           database.deleteAllData();
-        //           database.collectCountries().then((countries) {
-        //             setState(() {
-        //               this.countries = countries;
-        //             });
-        //             print("There are ${countries.length} countries retrieved");
-        //             for (var country in this.countries) {
-        //               print("${country.name}\n");
-        //             }
-        //           });
-        //         },
-        //       ),
-        //       ...parseImage(this.countries),
-        //     ],
-        //   ),
-        // ),
       );
-
-  List<Widget> parseImage(List<Country> countries) {
-    var imageParser = List<Widget>();
-    for (var country in countries) {
-      imageParser.add(Image.asset('${country.flag}'));
-    }
-    print("total widgets are ${imageParser.length}");
-    return imageParser;
-  }
 }

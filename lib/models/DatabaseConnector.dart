@@ -65,7 +65,6 @@ class DatabaseConnector {
     if (maps.length > 1)
       throw Exception(
           "Why there are two users with the same user in Settings table?");
-    print(maps);
     return Settings(
         isAudioON: maps[0]['audio'] == 0 ? false : true,
         isSoundON: maps[0]['sound'] == 0 ? false : true,
@@ -77,28 +76,23 @@ class DatabaseConnector {
       String currentUUID, Settings newSettings) async {
     var database = await this._connectSQLite();
     await database.rawUpdate(
-        "UPDATE settings SET sound=${newSettings.isSoundON ? 1 : 0}, audio=${newSettings.isAudioON ? 1 : 0} WHERE user=$currentUUID");
+        "UPDATE settings SET sound=${newSettings.isSoundON ? 1 : 0}, audio=${newSettings.isAudioON ? 1 : 0} WHERE user='$currentUUID'");
     database.close();
   }
 
-  void updateExistingSettingsSync(String currentUUID, Settings newSettings) {
-    this
-        ._connectSQLite()
-        .then((database) => database
-            .rawUpdate(
-                "UPDATE settings SET sound=${newSettings.isSoundON ? 1 : 0}, audio=${newSettings.isAudioON ? 1 : 0} WHERE user=$currentUUID")
-            .then((_) => database.close()))
-        .catchError((error) => print(error));
+  Future<void> updateExistingSettingsSync(
+      String currentUUID, Settings newSettings) {
+    return this._connectSQLite().then((database) => database
+        .rawUpdate(
+            "UPDATE settings SET sound=${newSettings.isSoundON ? 1 : 0}, audio=${newSettings.isAudioON ? 1 : 0} WHERE user='$currentUUID'")
+        .then((_) => database.close()));
   }
 
-  void saveNewSettingsSync(String currentUUID, Settings newSettings) {
-    this
-        ._connectSQLite()
-        .then((database) => database
-            .rawInsert(
-                "INSERT INTO settings(user, sound, audio, skiptutorials) VALUES ('$currentUUID', ${newSettings.isSoundON ? 1 : 0}, ${newSettings.isAudioON ? 1 : 0}, ${newSettings.skipTutorials ? 1 : 0})")
-            .then((_) => database.close()))
-        .catchError((error) => print(error));
+  Future<void> saveNewSettingsSync(String currentUUID, Settings newSettings) {
+    return this._connectSQLite().then((database) => database
+        .rawInsert(
+            "INSERT INTO settings(user, sound, audio, skiptutorials) VALUES ('$currentUUID', ${newSettings.isSoundON ? 1 : 0}, ${newSettings.isAudioON ? 1 : 0}, ${newSettings.skipTutorials ? 1 : 0})")
+        .then((_) => database.close()));
   }
 
   Future<void> saveNewSettings(String currentUUID, Settings newSettings) async {

@@ -18,4 +18,8 @@ class Settings {
   }) {
     this._currentUser = newUser;
   }
+
+  @override
+  String toString() =>
+      "Setting of user ${this.currentUser.name}: Audio ${this.isAudioON ? 'ON' : 'OFF'}, Sound ${this.isSoundON ? 'ON' : 'OFF'} and skip Tutorials ${this.skipTutorials ? 'ON' : 'OFF'}";
 }
