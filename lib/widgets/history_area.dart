@@ -71,12 +71,22 @@ class _HistoryAreaState extends State<HistoryArea>
               BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 5),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Stack(
             children: <Widget>[
-              buildListView(widget.result.answerLogs, widthArea,
-                  heightArea * 0.93 - widget.padding * 4, animation),
-              buildBackButton(widthArea, widget.btnHeight, animation.btnAnim),
+              buildListView(
+                widget.result.answerLogs,
+                widthArea,
+                heightArea,
+                animation,
+              ),
+              Positioned(
+                bottom: 0,
+                child: buildBackButton(
+                  widthArea,
+                  widget.btnHeight,
+                  animation.btnAnim,
+                ),
+              ),
             ],
           ),
         );
@@ -86,7 +96,7 @@ class _HistoryAreaState extends State<HistoryArea>
 
   Widget buildListView(List<AnswerLog> logs, double width, double height,
       HistoryAreaAnimation animation) {
-    final tileHeight = height * 1 / 9;
+    final tileHeight = 52.0;
     return FadeTransition(
       opacity: animation.contentShowingAnim,
       child: Container(
@@ -103,7 +113,7 @@ class _HistoryAreaState extends State<HistoryArea>
   }
 
   Widget buildListTile(int index, AnswerLog log, double height) {
-    final padding = 10.0;
+    final padding = 9.0;
     final realHeight = height - padding * 2;
     return Container(
       height: height,
@@ -149,12 +159,12 @@ class _HistoryAreaState extends State<HistoryArea>
   Widget buildBackButton(
       double width, double height, Animation<double> animation) {
     return Container(
-      width: width,
+      width: width - animation.value * widget.padding * 2,
       height: height,
       margin: EdgeInsets.all(animation.value * widget.padding),
+      decoration: BoxDecoration(),
       child: RaisedButton(
-        elevation: 3,
-        color: const Color(0xff24b6c5),
+        color: const Color(0xee24b6c5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8),

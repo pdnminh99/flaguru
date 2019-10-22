@@ -5,7 +5,7 @@ class ResultScreenAnimation {
   Animation<double> titleOpacity;
   Animation<double> resultArea;
   Animation<double> resultButtonArea;
-  Animation<double> historyBtn;
+  Animation<Offset> historyBtnOffset;
 
   ResultScreenAnimation(this.controller) {
     titleOpacity = Tween(begin: 0.0, end: 1.0)
@@ -14,8 +14,8 @@ class ResultScreenAnimation {
         CurvedAnimation(parent: controller, curve: Interval(0.05, 0.9));
     resultButtonArea =
         CurvedAnimation(parent: controller, curve: Interval(0.9, 1));
-    historyBtn = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
-        parent: controller,
-        curve: Interval(0.95, 1)));
+    historyBtnOffset = Tween(
+            begin: Offset(0, 1), end: Offset.zero)
+        .animate(CurvedAnimation(parent: controller, curve: Interval(0.95, 1)));
   }
 }

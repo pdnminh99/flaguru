@@ -18,8 +18,8 @@ class ResultAreaAnimation {
     time = CurvedAnimation(parent: controller, curve: Interval(0.4, 0.6));
     bgScore = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: controller,
-        curve: Interval(0.6, 0.8, curve: Curves.bounceOut)));
-    score = CurvedAnimation(parent: controller, curve: Interval(0.75, 0.95));
+        curve: Interval(0.6, 0.75, curve: Curves.bounceOut)));
+    score = CurvedAnimation(parent: controller, curve: Interval(0.7, 0.95));
     best = Tween(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(parent: controller, curve: Interval(0.95, 1)));
   }

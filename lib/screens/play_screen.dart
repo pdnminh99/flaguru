@@ -19,7 +19,7 @@ import 'package:flaguru/widgets/bottom_bar.dart';
 import 'package:flaguru/widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
-  static String routeName = '/play_screen';
+  static final routeName = '/play_screen';
   final Difficulty difficulty = Difficulty.EASY;
 
   @override
@@ -28,9 +28,9 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen>
     with SingleTickerProviderStateMixin {
-  static final int questionTotal = 100;
-  static final int timeLimit = 15;
-  static final int maxLife = 5;
+  final questionTotal = 30;
+  final timeLimit = 15;
+  final maxLife = 5;
   RoundHandler roundHandler;
 
   int index = 0;

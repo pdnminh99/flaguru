@@ -24,7 +24,7 @@ class _ResultScreenState extends State<ResultScreen>
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 6000), vsync: this);
+        duration: Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
 
@@ -42,7 +42,7 @@ class _ResultScreenState extends State<ResultScreen>
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    var historyBtnHeight = height * 0.07;
+    final double historyBtnHeight = 50;
 
     return SafeArea(
       bottom: false,
@@ -103,17 +103,10 @@ class _ResultScreenState extends State<ResultScreen>
                   width: width,
                   height: height,
                   alignment: Alignment.bottomCenter,
-                  child: AnimatedBuilder(
-                    animation: controller,
+                  child: SlideTransition(
+                    position: animation.historyBtnOffset,
                     child: HistoryArea(
                         result: widget.result, btnHeight: historyBtnHeight),
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                            0, animation.historyBtn.value * historyBtnHeight),
-                        child: child,
-                      );
-                    },
                   ),
                 ),
               ],
