@@ -19,11 +19,12 @@ class Menu extends StatelessWidget {
     //       color: Colors.white60,
     //       borderRadius: BorderRadius.circular(10.0),
     //     ),
-    //     child: Row(children: <Widget>[
-    return SizedBox(
+    //     child: 
+   return SizedBox(
       height: 60,
       width: 350,
-      child: RaisedButton(
+      child :
+       RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0)),
           onPressed: () {
@@ -36,13 +37,14 @@ class Menu extends StatelessWidget {
             height: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                      //color: Color.fromRGBO(250, 250, 250, 0.9),
-                      color: Color.fromRGBO(240, 240, 240, 1),
-                      offset: Offset(0, 2.0),
-                      blurRadius: 1.0)
-                ]),
+                // boxShadow: [
+                //   BoxShadow(
+                //       //color: Color.fromRGBO(250, 250, 250, 0.9),
+                //       color: Color.fromRGBO(35, 35, 35, 1),
+                //       offset: Offset(0, 5.0),
+                //       blurRadius: 1.0)
+                //]
+                ),
             child: Row(children: <Widget>[
               Expanded(
                 flex: 1,
@@ -58,7 +60,7 @@ class Menu extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 35,
+                      fontSize: 30,
                       fontWeight: FontWeight.w600,
                     ),
                   )),
@@ -90,6 +92,7 @@ class Menu extends StatelessWidget {
               //child: Icon(Sword.swords, size: 35,),),
             ]),
           )),
-    );
+    
+        );
   }
 }
