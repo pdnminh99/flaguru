@@ -1,10 +1,21 @@
+import 'package:flaguru/models/User.dart';
+import 'package:flutter/widgets.dart';
 
 class Settings {
-  bool isAudioON = false;
-  bool isSoundON = false;
+  User _currentUser;
+  bool isAudioON;
+  bool isSoundON;
+  bool skipTutorials;
+  User get currentUser {
+    return this._currentUser;
+  }
 
   Settings({
-    this.isAudioON,
-    this.isSoundON,
-  });
+    this.isAudioON: true,
+    this.isSoundON: true,
+    this.skipTutorials: false,
+    @required User newUser,
+  }) {
+    this._currentUser = newUser;
+  }
 }
