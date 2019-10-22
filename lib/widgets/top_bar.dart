@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget {
-  final String level;
+  final String difficulty;
 
   TopBar({
-    @required this.level,
+    @required this.difficulty,
   });
 
   @override
@@ -17,19 +17,24 @@ class TopBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                level.toUpperCase(),
-                style: TextStyle(
-                  fontSize: constraint.maxHeight * 0.4,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  difficulty.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: constraint.maxHeight * 0.4,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               SizedBox(
                 height: constraint.maxHeight * 0.8,
                 width: constraint.maxHeight * 1.1,
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                   child: Icon(
                     Icons.more_horiz,
                     size: constraint.maxHeight * 0.5,

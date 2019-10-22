@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flaguru/models/Country.dart';
+import 'package:flaguru/models/Settings.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -48,9 +49,20 @@ class DatabaseConnector {
     return countries;
   }
 
-  Future<void> deleteAllData() async {
+  Future<void> deleteCountries() async {
     var database = await this._connectSQLite();
     await database.rawDelete("DELETE FROM country");
     await database.close();
+  }
+
+  Future<Settings> collectExistingSettings(String UUID) async {
+    var database = await this._connectSQLite();
+    var maps =
+        await database.rawQuery("SELECT * FROM settings WHERE UUID = $UUID");
+    if (maps.length == 0) return null;
+    if (maps.length > 1)
+      throw Exception(
+          "Why there are two users with the same UUID in Settings table?");
+    return Settings(isAudioON: maps[0]['audio'], isSoundON: maps[0]['sound']);
   }
 }

@@ -67,7 +67,7 @@ class FlagButton extends StatelessWidget {
               borderRadius: borderRadius,
               child: Image.asset(
                 answer.imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
           ),

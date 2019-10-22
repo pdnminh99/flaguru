@@ -64,7 +64,7 @@ class DemoScreen extends State<MyApp> {
               child: Text("Delete all data from table"),
               onPressed: () async {
                 var database = DatabaseConnector();
-                await database.deleteAllData();
+                await database.deleteCountries();
                 var countries = await database.collectCountries();
                 setState(() {
                   this.countries = countries;

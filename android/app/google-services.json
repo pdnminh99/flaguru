@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "854335476367",
-    "firebase_url": "https://flaguru-9f3af.firebaseio.com",
-    "project_id": "flaguru-9f3af",
-    "storage_bucket": "flaguru-9f3af.appspot.com"
+    "project_number": "185711489467",
+    "firebase_url": "https://flaguru-35568.firebaseio.com",
+    "project_id": "flaguru-35568",
+    "storage_bucket": "flaguru-35568.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:854335476367:android:a57391be01b2d60f2cd6fa",
+        "mobilesdk_app_id": "1:185711489467:android:04c220626aa30cb240549e",
         "android_client_info": {
           "package_name": "com.example.flaguru"
         }
       },
       "oauth_client": [
         {
-          "client_id": "854335476367-mhme71lbpkmrrsk3vs53oj0o1apckpkc.apps.googleusercontent.com",
+          "client_id": "185711489467-rlkbhadkah1ouq67v6l2gfg5e4ub6rmv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.flaguru",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "854335476367-cfsgsvpc1isc4qv8vrofdep3ldmi0ofu.apps.googleusercontent.com",
+          "client_id": "185711489467-j0ce1371safricd61l8vn2qpubq54l1e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAzQ0GfECSWxiKYpMy9D2THVSsonfet_mE"
+          "current_key": "AIzaSyCx8trgVEdPxcDrqlLwT19aR8vJN2m8t-8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "854335476367-cfsgsvpc1isc4qv8vrofdep3ldmi0ofu.apps.googleusercontent.com",
+              "client_id": "185711489467-j0ce1371safricd61l8vn2qpubq54l1e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

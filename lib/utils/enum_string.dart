@@ -4,11 +4,11 @@ class EnumString {
   static String getDifficulty(Difficulty difficulty) {
     switch (difficulty) {
       case Difficulty.EASY:
-        return 'easy';
+        return 'Easy';
       case Difficulty.NORMAL:
-        return 'normal';
+        return 'Normal';
       case Difficulty.HARD:
-        return 'hard';
+        return 'Hard';
       default:
         return '';
     }
