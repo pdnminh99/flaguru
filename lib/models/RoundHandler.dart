@@ -1,14 +1,17 @@
 import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flaguru/models/Result.dart';
+import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flaguru/models/Enum.dart';
 
 class RoundHandler {
   Difficulty _level = Difficulty.EASY;
+
   // Life props
   int _lifeCount = 0;
   int _remainLives = 0;
+
   int get remainLives {
     return this._remainLives;
   }
@@ -22,9 +25,11 @@ class RoundHandler {
 
   // Time props
   int _countdown = 0;
+
   // Question props
   int _questions = 0;
   int _remainQuestions = 0;
+
   int get remainQuestions {
     return this._remainQuestions;
   }
@@ -38,6 +43,7 @@ class RoundHandler {
 
   // Round starting status
   RoundStatus _status;
+
   RoundStatus get status {
     return this._status;
   }
@@ -46,7 +52,7 @@ class RoundHandler {
     if (this._status != RoundStatus.OVER) return null;
     return new Result(
         level: this._level,
-        totaltime: this._roundTimer,
+        totalTime: this._roundTimer,
         correctAnswers: this._correctAnswersCounter,
         questionsCounter: this._questions,
         remainLives: this.remainLives,
@@ -56,14 +62,15 @@ class RoundHandler {
 
   int _roundTimer = 0;
   int _correctAnswersCounter = 0;
-  var _answerLogs = List<Map<String, Object>>();
-  List<Map<String, Object>> get _logs {
+  var _answerLogs = List<AnswerLog>();
+
+  List<AnswerLog> get _logs {
     return this._answerLogs;
   }
 
-  set _setLogs(Map<String, Object> log) {
+  set _setLogs(AnswerLog log) {
     this._answerLogs.add(log);
-    this._roundTimer += log['answertime'];
+    this._roundTimer += log.answerTime;
   }
 
   RoundHandler({
@@ -93,7 +100,8 @@ class RoundHandler {
     if (this.status != RoundStatus.PLAYING)
       throw Exception("Round status is yet started or is over");
     if (this._countdown < countdownRemain)
-      throw Exception("Why would countdown remain greater than countdown time?");
+      throw Exception(
+          "Why would countdown remain greater than countdown time?");
     if (isCorrect) {
       this._setRemainQuestions = this.remainQuestions - 1;
       this._correctAnswersCounter += 1;
@@ -101,12 +109,12 @@ class RoundHandler {
       this._setRemainLife = this.remainLives - 1;
       this._setRemainQuestions = this.remainQuestions - 1;
     }
-    this._setLogs = {
-      'question': question,
-      'answer': answer,
-      'isCorrect': isCorrect,
-      'answertime': isCorrect ? this._countdown - countdownRemain : 0,
-    };
+    this._setLogs = AnswerLog(
+      question,
+      answer,
+      isCorrect,
+      isCorrect ? this._countdown - countdownRemain : 0,
+    );
   }
 
   void reset() {

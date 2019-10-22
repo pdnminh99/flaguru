@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CountdownWatch extends StatelessWidget {
   final num time;
+  final num redTime;
 
-  bool get isLastSeconds => time < 10;
+  CountdownWatch({
+    @required this.time,
+    @required this.redTime,
+  });
 
-  CountdownWatch({@required this.time});
+  bool get isLastSeconds => time < redTime;
 
   @override
   Widget build(BuildContext context) {
@@ -17,41 +22,42 @@ class CountdownWatch extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Stack(
             children: <Widget>[
-              if (isLastSeconds)
-                Positioned.fill(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: constraint.maxWidth / 2.8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: constraint.maxWidth / 2.7,
+                  vertical: 5,
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    time.toString(),
-                    style: TextStyle(
-                      fontSize: constraint.maxHeight * 0.65,
-                      color: color,
+                decoration: BoxDecoration(
+                  color: (isLastSeconds) ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: (time.toString().length > 1)
+                          ? constraint.maxWidth * 0.14
+                          : constraint.maxWidth * 0.07,
+                      child: Text(
+                        time.toString(),
+                        style: TextStyle(
+                          fontSize: constraint.maxHeight * 0.65,
+                          color: color,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 3,
-                  ),
-                  Icon(
-                    Icons.access_alarm,
-                    size: constraint.maxHeight * 0.55,
-                    color: color,
-                  )
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SpinKitChasingDots(
+                      color: color,
+                      size: constraint.maxHeight * 0.4,
+                      duration: Duration(seconds: 2),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

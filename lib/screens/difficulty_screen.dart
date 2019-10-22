@@ -8,31 +8,32 @@ class DifficultyScreen extends StatelessWidget {
   int infiniteIcon =60221;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 1, 157, 173),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Center(
-          // Center Aligment
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              diffculty_cart("Easy", "0/20", "120",PlayScreen.routeName,poinIconCode,timerIconCode),
-               SizedBox(
-                height: 50,
-              ),
-              diffculty_cart("Normal", "0/30", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
-               SizedBox(
-                height: 50,
-              ),
-              diffculty_cart("Hard", "0/50", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
-              SizedBox(
-                height: 50,
-              ),
-              diffculty_cart("Enless","", "",PlayScreen.routeName,infiniteIcon,infiniteIcon),
-            ]),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Center(
+            // Center Aligment
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                diffculty_cart("Easy", "0/20", "120",PlayScreen.routeName,poinIconCode,timerIconCode),
+                 SizedBox(
+                  height: 50,
+                ),
+                diffculty_cart("Normal", "0/30", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
+                 SizedBox(
+                  height: 50,
+                ),
+                diffculty_cart("Hard", "0/50", "100",PlayScreen.routeName,poinIconCode,timerIconCode),
+                SizedBox(
+                  height: 50,
+                ),
+                diffculty_cart("Enless","", "",PlayScreen.routeName,infiniteIcon,infiniteIcon),
+              ]),
+          ),
         ),
       ),
     );
