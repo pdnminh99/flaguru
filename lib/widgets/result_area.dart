@@ -69,7 +69,7 @@ class ResultArea extends AnimatedWidget {
                   height: height * 0.2,
                   child: ResultRow(
                     animation: animation.time,
-                    maxNum: result.totalTime,
+                    maxNum: result.totalTimeElapsed,
                     icon: Icons.access_time,
                     leading: 'Time',
                     color: rowColor,
@@ -112,6 +112,7 @@ class ResultArea extends AnimatedWidget {
   Widget buildBestRow(double height, String score) {
     final style = TextStyle(
         fontSize: height * 0.08, fontWeight: FontWeight.bold, color: rowColor);
+
     return Container(
       height: height * 0.1,
       padding: const EdgeInsets.symmetric(horizontal: 10),

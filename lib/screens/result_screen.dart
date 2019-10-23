@@ -16,15 +16,13 @@ class ResultScreen extends StatefulWidget {
   _ResultScreenState createState() => _ResultScreenState();
 }
 
-class _ResultScreenState extends State<ResultScreen>
-    with TickerProviderStateMixin {
+class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMixin {
   AnimationController controller;
   ResultScreenAnimation animation;
 
   @override
   void initState() {
-    controller = AnimationController(
-        duration: Duration(milliseconds: 5000), vsync: this);
+    controller = AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
 
@@ -105,8 +103,7 @@ class _ResultScreenState extends State<ResultScreen>
                   alignment: Alignment.bottomCenter,
                   child: SlideTransition(
                     position: animation.historyBtnOffset,
-                    child: HistoryArea(
-                        result: widget.result, btnHeight: historyBtnHeight),
+                    child: HistoryArea(result: widget.result, btnHeight: historyBtnHeight),
                   ),
                 ),
               ],
