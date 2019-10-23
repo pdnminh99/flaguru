@@ -29,7 +29,7 @@ class Authentication {
       idToken: googleAuth.idToken,
     );
 
-    var user = (await _auth.signInWithCredential(credential));
+    var user = (await _auth.signInWithCredential(credential)).user;
     return user;
   }
 
