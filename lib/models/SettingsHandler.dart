@@ -63,10 +63,6 @@ class SettingsHandler {
     }
     return settingInstance;
   }
-
-  // /*
-  //  * THESE MUST BE CALLED WITH AWAIT
-  //  */
   // Future<void> switchAudio() async {
   //   this._currentSettings.isAudioON = !this.isAudioEnabled;
   //   var databaseConn = DatabaseConnector();
