@@ -1,23 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
-
+import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 
 class MenuScreen extends StatelessWidget {
   static String routeName = '/';
-
-  void go_to_play_screen(BuildContext context) {
+  var auth = Authentication();
+  void gotoPlayScreen(BuildContext context) {
     Navigator.pushNamed(context, DifficultyScreen.routeName);
   }
 
-  void go_to_compete(BuildContext context) {}
+  void gotoLogin(BuildContext context) {
+    this.auth.handleSignIn().then((FirebaseUser user) {
+      print(this.auth.getCurrentUser());
+      return this.auth.getCurrentUser();
+    }).then((user) {
+      Navigator.pushNamed(context, InfoScreen.routeName);
+    }).catchError((e) => print("myerr" + e));
+  }
 
-  void go_to_tutorial(BuildContext context) {}
+  void gotoTutorial(BuildContext context) {}
 
-  void go_to_seetings(BuildContext context) {}
+  void gotoSetting(BuildContext context) {}
 
-  void go_to_about(BuildContext context) {}
+  void gotoAbout(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +45,25 @@ class MenuScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Menu(
-                      go_to_play_screen, Menu_Icon.play, "Play", null, context),
+                  Menu(gotoPlayScreen, Menu_Icon.play, "Play", null, context),
                   SizedBox(
                     height: 30,
                   ),
-                  Menu(
-                      go_to_compete, Menu_Icon.swords, "Compete", "G", context),
+                  Menu(gotoLogin, Menu_Icon.swords, "Login", "G", context),
                   SizedBox(
                     height: 30,
                   ),
-                  Menu(go_to_tutorial, Menu_Icon.open_book, "Tutorial", null,
+                  Menu(gotoTutorial, Menu_Icon.open_book, "Tutorial", null,
                       context),
                   SizedBox(
                     height: 30,
                   ),
-                  Menu(go_to_seetings, Menu_Icon.settings, "Settings", null,
+                  Menu(gotoSetting, Menu_Icon.settings, "Settings", null,
                       context),
                   SizedBox(
                     height: 30,
                   ),
-                  Menu(go_to_about, Menu_Icon.info_outline, "About", null,
+                  Menu(gotoAbout, Menu_Icon.info_outline, "About", null,
                       context),
                 ],
               )),
