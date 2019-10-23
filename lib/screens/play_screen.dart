@@ -1,22 +1,21 @@
 import 'dart:async';
-
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/Question.dart';
-import 'package:flaguru/models/RoundHandler.dart';
-import 'package:flaguru/screens/result_screen.dart';
-import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/widgets/info_bar.dart';
-import 'package:flaguru/widgets/loading_spinner.dart';
-import 'package:flaguru/widgets/play_screen_drawer.dart';
-import 'package:flaguru/widgets/question_info_area.dart';
-import 'package:flaguru/widgets/start_button.dart';
-import 'package:flaguru/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flaguru/models/QuestionProvider.dart';
-import 'package:flaguru/widgets/answers_area.dart';
-import 'package:flaguru/widgets/bottom_bar.dart';
-import 'package:flaguru/widgets/countdown_watch.dart';
+import '../models/Enum.dart';
+import '../models/Question.dart';
+import '../models/RoundHandler.dart';
+import '../screens/result_screen.dart';
+import '../utils/enum_string.dart';
+import '../widgets/info_bar.dart';
+import '../widgets/loading_spinner.dart';
+import '../widgets/play_screen_drawer.dart';
+import '../widgets/question_info_area.dart';
+import '../widgets/start_button.dart';
+import '../widgets/top_bar.dart';
+import '../models/QuestionProvider.dart';
+import '../widgets/answers_area.dart';
+import '../widgets/bottom_bar.dart';
+import '../widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
   static final routeName = '/play_screen';
@@ -28,8 +27,8 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen>
     with SingleTickerProviderStateMixin {
-  final questionTotal = 30;
-  final timeLimit = 15;
+  final questionTotal = 20;
+  final timeLimit = 20;
   final maxLife = 5;
   RoundHandler roundHandler;
 
@@ -53,8 +52,8 @@ class _PlayScreenState extends State<PlayScreen>
             numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
-          lifecount: maxLife,
-          countdown: timeLimit,
+          lifeCount: maxLife,
+          timeLimit: timeLimit,
           questions: qaList.length,
         );
       });
@@ -78,7 +77,7 @@ class _PlayScreenState extends State<PlayScreen>
       roundHandler.start();
       initData();
     });
-    Timer(Duration(milliseconds: 500), _operate);
+    Timer(Duration(milliseconds: 300), _operate);
   }
 
   void _operate() {
@@ -97,10 +96,12 @@ class _PlayScreenState extends State<PlayScreen>
 
   void doRight() {
     processAfterAnswered(true);
+    // play sound
   }
 
   void doWrong() {
     processAfterAnswered(false);
+    // play sound
   }
 
   void processAfterAnswered(bool isRightAnswer) {
@@ -108,8 +109,8 @@ class _PlayScreenState extends State<PlayScreen>
     setState(() {
       roundHandler.getAnswer(
           isCorrect: isRightAnswer,
-          question: (qaList[index]['question'] as Question),
-          countdownRemain: time);
+          question: qaList[index]['question'],
+          timeLeft: time);
       isAnswered = true;
     });
   }
@@ -141,15 +142,13 @@ class _PlayScreenState extends State<PlayScreen>
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    var millis = 500;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final millis = 500;
 
     return Scaffold(
       backgroundColor: Color(0xff019dad),
-      drawer: PlayScreenDrawer(
-        difficulty: widget.difficulty,
-      ),
+      drawer: PlayScreenDrawer(difficulty: widget.difficulty),
       body: WillPopScope(
         onWillPop: () async => false,
         child: Column(
@@ -203,10 +202,7 @@ class _PlayScreenState extends State<PlayScreen>
                 width: (isAnswered) ? width * 0.2 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
                 duration: Duration(milliseconds: millis),
-                child: CountdownWatch(
-                  time: time,
-                  redTime: timeLimit - 5,
-                ),
+                child: CountdownWatch(time: time, redTime: 10),
               ),
               Container(
                 width: double.infinity,

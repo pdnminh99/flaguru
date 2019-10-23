@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Result.dart';
@@ -26,12 +25,8 @@ class _HistoryAreaState extends State<HistoryArea>
   HistoryAreaAnimation animation;
   bool isUp = false;
 
-  bool transparent = false;
-
-  ScrollController _scroller;
-
   final padding = 12.0;
-  final tileHeight = 52.0;
+  final tileHeight = 50.0;
 
   @override
   void initState() {
@@ -39,27 +34,11 @@ class _HistoryAreaState extends State<HistoryArea>
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = HistoryAreaAnimation(_controller);
 
-    _scroller = ScrollController()
-      ..addListener(() {
-        if (!transparent &&
-            _scroller.offset >=
-                _scroller.position.maxScrollExtent - tileHeight * 3)
-          setState(() {
-            transparent = true;
-          });
-        if (transparent &&
-            _scroller.offset < _scroller.position.maxScrollExtent - tileHeight * 3)
-          setState(() {
-            transparent = false;
-          });
-      });
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _scroller.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -68,6 +47,9 @@ class _HistoryAreaState extends State<HistoryArea>
   Widget build(BuildContext context) {
     final heightArea = MediaQuery.of(context).size.height * 0.8;
     final widthArea = MediaQuery.of(context).size.width * 0.8;
+
+    final transparent = widget.result.answerLogs.length * tileHeight >
+        heightArea - widget.btnHeight - padding;
 
     final radius = 10.0;
 
@@ -95,15 +77,12 @@ class _HistoryAreaState extends State<HistoryArea>
           ),
           child: Stack(
             children: <Widget>[
-              buildListView(widget.result.answerLogs, widthArea, heightArea,
-                  animation, _scroller),
+              buildListView(
+                  widget.result.answerLogs, widthArea, heightArea, animation),
               Positioned(
                 bottom: 0,
-                child: buildBackButton(
-                  widthArea,
-                  widget.btnHeight,
-                  animation.btnAnim,
-                ),
+                child: buildBackButton(transparent, widthArea, widget.btnHeight,
+                    animation.btnAnim),
               ),
             ],
           ),
@@ -113,14 +92,13 @@ class _HistoryAreaState extends State<HistoryArea>
   }
 
   Widget buildListView(List<AnswerLog> logs, double width, double height,
-      HistoryAreaAnimation animation, ScrollController controller) {
+      HistoryAreaAnimation animation) {
     return FadeTransition(
       opacity: animation.contentShowingAnim,
       child: Container(
         height: animation.listAnim.value * height,
         width: double.infinity,
         child: ListView.builder(
-          controller: controller,
           itemCount: logs.length,
           itemBuilder: (BuildContext context, int index) {
             return buildListTile(index, logs[index], tileHeight);
@@ -174,8 +152,8 @@ class _HistoryAreaState extends State<HistoryArea>
     );
   }
 
-  Widget buildBackButton(
-      double width, double height, Animation<double> animation) {
+  Widget buildBackButton(bool transparent, double width, double height,
+      Animation<double> animation) {
     return GestureDetector(
       onTap: () {
         isUp ? _controller.reverse() : _controller.forward();
@@ -187,7 +165,7 @@ class _HistoryAreaState extends State<HistoryArea>
         margin: EdgeInsets.all(animation.value * padding),
         decoration: BoxDecoration(
           color:
-              transparent ? const Color(0x3324b6c5) : const Color(0xdd24b6c5),
+              transparent ? const Color(0x3324b6c5) : const Color(0xcc24b6c5),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),

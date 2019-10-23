@@ -7,7 +7,7 @@ class AnswerLog {
   final bool isCorrect;
   final int answerTime;
 
-  const AnswerLog(
+  AnswerLog(
     this.question,
     this.answer,
     this.isCorrect,
