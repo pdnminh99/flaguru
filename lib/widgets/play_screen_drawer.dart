@@ -3,30 +3,45 @@ import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
 
-class PlayScreenDrawer extends StatelessWidget {
+class PlayScreenDrawer extends StatefulWidget {
   final Difficulty difficulty;
 
-  PlayScreenDrawer({
-    @required this.difficulty,
-  });
+  PlayScreenDrawer({@required this.difficulty});
+
+  @override
+  _PlayScreenDrawerState createState() => _PlayScreenDrawerState();
+}
+
+class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
+  bool soundEnabled, musicEnabled;
+
+  @override
+  void initState() {
+    // read db
+    soundEnabled = true;
+    musicEnabled = true;
+
+    super.initState();
+  }
+
+  void changeSoundStatus(bool status) {
+    //update db
+    setState(() => soundEnabled = status);
+  }
+
+  void changeMusicStatus(bool status) {
+    // update db
+    setState(() => musicEnabled = status);
+  }
 
   void navigateToMenu(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
   void restart(BuildContext context) {
-    Navigator.of(context)
-        .pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
-  }
-
-  Widget getListTile(String title, IconData leadingIcon, Function onTap) {
-    return ListTile(
-      leading: Icon(leadingIcon, color: Colors.white),
-      onTap: onTap,
-      title: Text(
-        title,
-        style: TextStyle(fontSize: 20, color: Colors.white),
-      ),
+    Navigator.of(context).pushReplacementNamed(
+      PlayScreen.routeName,
+      arguments: widget.difficulty,
     );
   }
 
@@ -39,24 +54,53 @@ class PlayScreenDrawer extends StatelessWidget {
           color: Color(0xff019dad),
           child: ListView(
             children: <Widget>[
-              DrawerHeader(
-                child: Center(
-                    child: Text(
-                  'FLAGURU',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                )),
-              ),
-              getListTile('Restart', Icons.refresh, () => restart(context)),
-              getListTile(
-                  'Main Menu', Icons.menu, () => navigateToMenu(context)),
+              buildDrawerHeader(),
+              buildListTile('Restart', Icons.refresh, () => restart(context)),
+              buildListTile('Main Menu', Icons.menu, () => navigateToMenu(context)),
+              const SizedBox(height: 30),
+              buildSwitchTile('Sound', Icons.music_note, soundEnabled, changeSoundStatus),
+              buildSwitchTile('Music', Icons.music_video, musicEnabled, changeMusicStatus),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildDrawerHeader() {
+    return DrawerHeader(
+      child: Center(
+        child: Text(
+          'FLAGURU',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget buildListTile(String title, IconData leadingIcon, Function onTap) {
+    return ListTile(
+      leading: Icon(leadingIcon, color: Colors.white),
+      title: Text(title, style: TextStyle(fontSize: 20, color: Colors.white)),
+      onTap: onTap,
+    );
+  }
+
+  Widget buildSwitchTile(String title, IconData leadingIcon, bool status, Function onChange) {
+    final fontSize = 20.0;
+    final color = Colors.white;
+
+    return SwitchListTile(
+      title: Row(
+        children: <Widget>[
+          Icon(leadingIcon, size: fontSize + 5, color: color),
+          SizedBox(width: 30),
+          Text(title, style: TextStyle(fontSize: fontSize, color: color)),
+        ],
+      ),
+      value: status,
+      onChanged: (val) => onChange(val),
+      activeColor: Colors.tealAccent,
     );
   }
 }
