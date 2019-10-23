@@ -1,8 +1,9 @@
 import 'package:flaguru/screens/difficulty_screen.dart';
+import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'screens/info_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/play_screen.dart';
 
@@ -30,9 +31,11 @@ class _MyAppState extends State<MyApp> {
 //      home: ResultScreen(),
       initialRoute: MenuScreen.routeName,
       routes: {
-        '/': (context) => MenuScreen(),
+        '/': (context) => InfoScreen(),
+        MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
+        InfoScreen.routeName: (context) => InfoScreen()
       },
     );
   }
