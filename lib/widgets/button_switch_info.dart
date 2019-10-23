@@ -31,7 +31,8 @@ class ButtonSwitchButtonLogout extends StatelessWidget {
                     color: Colors.purpleAccent,
                     child: Text(
                       'Switch Accout',
-                      style: TextStyle(fontSize: 15.0),
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
                     ),
                   ))),
           SizedBox(
@@ -49,7 +50,8 @@ class ButtonSwitchButtonLogout extends StatelessWidget {
                   color: Colors.purpleAccent,
                   child: Text(
                     'Logout',
-                    style: TextStyle(fontSize: 15.0),
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                 ),
               )),
