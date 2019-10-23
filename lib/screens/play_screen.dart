@@ -19,7 +19,7 @@ import 'package:flaguru/widgets/bottom_bar.dart';
 import 'package:flaguru/widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
-  static String routeName = '/play_screen';
+  static final routeName = '/play_screen';
   final Difficulty difficulty = Difficulty.EASY;
 
   @override
@@ -28,8 +28,9 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen>
     with SingleTickerProviderStateMixin {
-  static final int timeLimit = 15;
-  static final int maxLife = 5;
+  final questionTotal = 30;
+  final timeLimit = 15;
+  final maxLife = 5;
   RoundHandler roundHandler;
 
   int index = 0;
@@ -42,7 +43,6 @@ class _PlayScreenState extends State<PlayScreen>
   List<Map<String, Object>> qaList = [];
 
   AnimationController _controller;
-  Animation<double> animation;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _PlayScreenState extends State<PlayScreen>
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
         qaList = qProvider.getCollections(
-            numberOfQuestions: 20, isFirstAnswerCorrect: true);
+            numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifecount: maxLife,
@@ -62,7 +62,6 @@ class _PlayScreenState extends State<PlayScreen>
 
     _controller =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
 
     super.initState();
   }
@@ -163,18 +162,23 @@ class _PlayScreenState extends State<PlayScreen>
                 difficulty: EnumString.getDifficulty(widget.difficulty),
               ),
             ),
-            if (roundHandler == null)
-              Container(
+            Visibility(
+              visible: roundHandler == null,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: LoadingSpinner(),
               ),
-            if (roundHandler != null && roundHandler.status == RoundStatus.IDLE)
-              Container(
+            ),
+            Visibility(
+              visible: roundHandler != null &&
+                  roundHandler.status == RoundStatus.IDLE,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: StartButton(onStart: startGame),
               ),
+            ),
             if (roundHandler != null &&
                 roundHandler.status != RoundStatus.IDLE) ...[
               Container(
