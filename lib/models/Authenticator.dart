@@ -35,6 +35,7 @@ class Authentication {
 
   Future<UserDetail> getCurrentUser() async {
     var currentUser = await _auth.currentUser();
+    print(currentUser);
     return currentUser == null
         ? null
         : UserDetail(

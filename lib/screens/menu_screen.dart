@@ -15,10 +15,11 @@ class MenuScreen extends StatelessWidget {
 
   void gotoLogin(BuildContext context) {
     this.auth.handleSignIn().then((FirebaseUser user) {
+      print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
-    }).then((user){
+    }).then((user) {
       Navigator.pushNamed(context, InfoScreen.routeName);
-    }).catchError((e) => print("myerr" + e ));
+    }).catchError((e) => print("myerr" + e));
   }
 
   void gotoTutorial(BuildContext context) {}

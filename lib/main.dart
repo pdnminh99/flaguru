@@ -27,13 +27,13 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'Quicksand',
       ),
-      initialRoute: InfoScreen.routeName,
+      initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => InfoScreen(),
         MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
-        PlayScreen.routeName: (context) => PlayScreen(),    
-        InfoScreen.routeName: (context) => InfoScreen()   
+        PlayScreen.routeName: (context) => PlayScreen(),
+        InfoScreen.routeName: (context) => InfoScreen()
       },
     );
   }

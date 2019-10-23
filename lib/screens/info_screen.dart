@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
 import 'package:flaguru/widgets/info_user.dart';
@@ -37,14 +38,17 @@ class _InfoMainState extends State<InfoMain> {
     });
   }
   //meth
-  void signout() {
-    this.auth.signOut().then((_) {
-      return this.auth.getCurrentUser();
-    }).then((user) {
-      setState(() {
-        this._currentUser = user;
-      });
-    }).catchError((err) => print(err));
+  void signout(BuildContext context) {
+    // Navigator.pushNamed(context, MenuScreen.routeName);
+    // Navigator.pop(context);
+    // this.auth.signOut().then((_) {
+    //   Navigator.of(context).pop();
+    //   Navigator.pushNamed(context, MenuScreen.routeName);
+    //   // }).then((user) {
+    //   //   setState(() {
+    //   //     this._currentUser = user;
+    //   //   });
+    // }).catchError((err) => print(err));
   }
 
   void switchuser() {
@@ -86,9 +90,15 @@ class _InfoMainState extends State<InfoMain> {
             child: Column(
               children: <Widget>[
                 ProgressUser(),
-                InfoUser(name: _currentUser.name, email: _currentUser.email, score: '100',),
+                InfoUser(
+                  name: _currentUser.name,
+                  email: _currentUser.email,
+                  score: '100',
+                ),
                 ButtonSwitchButtonLogout(
-                    signout: signout, switchuser: switchuser),
+                    signout: signout,
+                    switchuser: switchuser,
+                    paramcontext: context),
               ],
             ),
           ),

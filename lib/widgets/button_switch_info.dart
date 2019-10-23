@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class ButtonSwitchButtonLogout extends StatelessWidget {
   final Function switchuser;
   final Function signout;
-
+  final BuildContext paramcontext;
   ButtonSwitchButtonLogout({
-  @required this.switchuser, 
-  @required this.signout
+    @required this.switchuser,
+    @required this.signout,
+    @required this.paramcontext,
   });
 
   @override
@@ -28,7 +29,10 @@ class ButtonSwitchButtonLogout extends StatelessWidget {
                       switchuser();
                     },
                     color: Colors.purpleAccent,
-                    child: Text('Switch Accout', style: TextStyle(fontSize: 15.0),),
+                    child: Text(
+                      'Switch Accout',
+                      style: TextStyle(fontSize: 15.0),
+                    ),
                   ))),
           SizedBox(
             width: 10,
@@ -40,10 +44,13 @@ class ButtonSwitchButtonLogout extends StatelessWidget {
                 width: double.infinity,
                 child: RaisedButton(
                   onPressed: () {
-                    signout();
+                    signout(paramcontext);
                   },
                   color: Colors.purpleAccent,
-                  child: Text('Logout', style: TextStyle(fontSize: 15.0),),
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 15.0),
+                  ),
                 ),
               )),
         ],
