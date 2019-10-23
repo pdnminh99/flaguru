@@ -21,17 +21,11 @@ class PlayScreenDrawer extends StatelessWidget {
 
   Widget getListTile(String title, IconData leadingIcon, Function onTap) {
     return ListTile(
-      leading: Icon(
-        leadingIcon,
-        color: Colors.white,
-      ),
+      leading: Icon(leadingIcon, color: Colors.white),
       onTap: onTap,
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
+        style: TextStyle(fontSize: 20, color: Colors.white),
       ),
     );
   }

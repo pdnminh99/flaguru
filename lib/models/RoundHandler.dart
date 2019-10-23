@@ -16,15 +16,15 @@ class RoundHandler {
     return this._remainLives;
   }
 
-  set _setRemainLife(int newlife) {
-    this._remainLives = newlife;
+  set _setRemainLife(int newLife) {
+    this._remainLives = newLife;
     if (this._remainLives == 0) {
       this._status = RoundStatus.OVER;
     }
   }
 
   // Time props
-  int _countdown = 0;
+  int _timeLimit;
 
   // Question props
   int _questions = 0;
@@ -52,7 +52,8 @@ class RoundHandler {
     if (this._status != RoundStatus.OVER) return null;
     return new Result(
         level: this._level,
-        totalTime: this._roundTimer,
+        totalTimeElapsed: this._totalTimeElapsed,
+        totalTimeLeftRightAnswers: this._totalTimeLeftRightAnswers,
         correctAnswers: this._correctAnswersCounter,
         questionsCounter: this._questions,
         remainLives: this.remainLives,
@@ -60,7 +61,8 @@ class RoundHandler {
         answerLogs: this._logs);
   }
 
-  int _roundTimer = 0;
+  int _totalTimeElapsed = 0;
+  int _totalTimeLeftRightAnswers = 0;
   int _correctAnswersCounter = 0;
   var _answerLogs = List<AnswerLog>();
 
@@ -70,51 +72,49 @@ class RoundHandler {
 
   set _setLogs(AnswerLog log) {
     this._answerLogs.add(log);
-    this._roundTimer += log.answerTime;
   }
 
   RoundHandler({
     @required Difficulty level,
-    @required int lifecount,
+    @required int lifeCount,
     @required int questions,
-    @required int countdown,
+    @required int timeLimit,
   }) {
-    if (lifecount < 1)
-      throw Exception("Life count per round should be greater than 0");
-    if (countdown < 1) throw Exception("countdown time should be at least 1");
+    if (lifeCount < 1) throw Exception("Life count per round should be greater than 0");
+    if (timeLimit < 1) throw Exception("countdown time should be at least 1");
     if (questions < 1) throw Exception("There should be at least one question");
     this._level = level;
-    this._lifeCount = lifecount;
-    this._remainLives = lifecount;
+    this._lifeCount = lifeCount;
+    this._remainLives = lifeCount;
     this._questions = questions;
     this._remainQuestions = questions;
-    this._countdown = countdown;
+    this._timeLimit = timeLimit;
     this._status = RoundStatus.IDLE;
   }
 
   void getAnswer(
       {@required bool isCorrect,
       @required Question question,
-      @required int countdownRemain,
+      @required int timeLeft,
       Answer answer}) {
     if (this.status != RoundStatus.PLAYING)
       throw Exception("Round status is yet started or is over");
-    if (this._countdown < countdownRemain)
-      throw Exception(
-          "Why would countdown remain greater than countdown time?");
+    if (this._timeLimit < timeLeft)
+      throw Exception("Why would countdown remain greater than countdown time?");
+
+    final timeElapsed = _timeLimit - timeLeft;
+
+    this._totalTimeElapsed += timeElapsed;
+    this._setRemainQuestions = this.remainQuestions - 1;
+
     if (isCorrect) {
-      this._setRemainQuestions = this.remainQuestions - 1;
       this._correctAnswersCounter += 1;
+      this._totalTimeLeftRightAnswers += timeLeft;
     } else {
       this._setRemainLife = this.remainLives - 1;
-      this._setRemainQuestions = this.remainQuestions - 1;
     }
-    this._setLogs = AnswerLog(
-      question,
-      answer,
-      isCorrect,
-      isCorrect ? this._countdown - countdownRemain : 0,
-    );
+
+    this._setLogs = AnswerLog(question, answer, isCorrect, timeElapsed);
   }
 
   void reset() {

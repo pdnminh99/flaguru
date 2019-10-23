@@ -27,8 +27,8 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen>
     with SingleTickerProviderStateMixin {
-  final questionTotal = 30;
-  final timeLimit = 15;
+  final questionTotal = 20;
+  final timeLimit = 20;
   final maxLife = 5;
   RoundHandler roundHandler;
 
@@ -52,8 +52,8 @@ class _PlayScreenState extends State<PlayScreen>
             numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
-          lifecount: maxLife,
-          countdown: timeLimit,
+          lifeCount: maxLife,
+          timeLimit: timeLimit,
           questions: qaList.length,
         );
       });
@@ -77,7 +77,7 @@ class _PlayScreenState extends State<PlayScreen>
       roundHandler.start();
       initData();
     });
-    Timer(Duration(milliseconds: 500), _operate);
+    Timer(Duration(milliseconds: 300), _operate);
   }
 
   void _operate() {
@@ -96,10 +96,12 @@ class _PlayScreenState extends State<PlayScreen>
 
   void doRight() {
     processAfterAnswered(true);
+    // play sound
   }
 
   void doWrong() {
     processAfterAnswered(false);
+    // play sound
   }
 
   void processAfterAnswered(bool isRightAnswer) {
@@ -107,8 +109,8 @@ class _PlayScreenState extends State<PlayScreen>
     setState(() {
       roundHandler.getAnswer(
           isCorrect: isRightAnswer,
-          question: (qaList[index]['question'] as Question),
-          countdownRemain: time);
+          question: qaList[index]['question'],
+          timeLeft: time);
       isAnswered = true;
     });
   }
@@ -140,15 +142,13 @@ class _PlayScreenState extends State<PlayScreen>
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    var millis = 500;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final millis = 500;
 
     return Scaffold(
       backgroundColor: Color(0xff019dad),
-      drawer: PlayScreenDrawer(
-        difficulty: widget.difficulty,
-      ),
+      drawer: PlayScreenDrawer(difficulty: widget.difficulty),
       body: WillPopScope(
         onWillPop: () async => false,
         child: Column(
@@ -202,10 +202,7 @@ class _PlayScreenState extends State<PlayScreen>
                 width: (isAnswered) ? width * 0.2 : width,
                 height: (isAnswered) ? height * 0 : height * 0.09,
                 duration: Duration(milliseconds: millis),
-                child: CountdownWatch(
-                  time: time,
-                  redTime: timeLimit - 5,
-                ),
+                child: CountdownWatch(time: time, redTime: 10),
               ),
               Container(
                 width: double.infinity,
