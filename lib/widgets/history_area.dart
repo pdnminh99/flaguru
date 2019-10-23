@@ -1,98 +1,141 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Result.dart';
+import 'package:flaguru/widgets/history_area_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
-class HistoryArea extends AnimatedWidget {
-  final double initHeight;
-  final Function reverseAnim;
+class HistoryArea extends StatefulWidget {
+  final double btnHeight;
   final Result result;
 
   HistoryArea({
     @required this.result,
-    @required this.initHeight,
-    @required this.reverseAnim,
-    @required Animation<double> controller,
-  }) : super(listenable: controller);
+    @required this.btnHeight,
+  });
+
+  @override
+  _HistoryAreaState createState() => _HistoryAreaState();
+}
+
+class _HistoryAreaState extends State<HistoryArea>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  HistoryAreaAnimation animation;
+  bool isUp = false;
+
+  bool transparent = false;
+
+  ScrollController _scroller;
+
+  final padding = 12.0;
+  final tileHeight = 52.0;
+
+  @override
+  void initState() {
+    _controller =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    animation = HistoryAreaAnimation(_controller);
+
+    _scroller = ScrollController()
+      ..addListener(() {
+        if (!transparent &&
+            _scroller.offset >=
+                _scroller.position.maxScrollExtent - tileHeight * 3)
+          setState(() {
+            transparent = true;
+          });
+        if (transparent &&
+            _scroller.offset < _scroller.position.maxScrollExtent - tileHeight * 3)
+          setState(() {
+            transparent = false;
+          });
+      });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scroller.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final heightArea = MediaQuery.of(context).size.height * 0.8;
     final widthArea = MediaQuery.of(context).size.width * 0.8;
 
-    final controller = listenable as Animation<double>;
-    final dimensionAnim = Tween(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: Curves.ease));
-    final contentShowingAnim = Tween(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: Interval(0.7, 1)));
-    final colorAnim = ColorTween(
-            begin: const Color(0xff24b6c5), end: Colors.white.withOpacity(0.5))
-        .animate(
-            CurvedAnimation(parent: controller, curve: Curves.easeInCubic));
-
     final radius = 10.0;
-    final padding = 12.0;
 
-    return BackdropFilter(
-      filter: ui.ImageFilter.blur(
-        sigmaX: dimensionAnim.value * 5,
-        sigmaY: dimensionAnim.value * 5,
-      ),
-      child: Container(
-        width: widthArea,
-        height: initHeight + dimensionAnim.value * (heightArea - initHeight),
-        margin: EdgeInsets.only(
-            bottom: dimensionAnim.value * heightArea * 1.25 * 0.1),
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(
-          color: colorAnim.value,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius),
-            bottomLeft: Radius.circular(dimensionAnim.value * radius),
-            bottomRight: Radius.circular(dimensionAnim.value * radius),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Container(
+          width: widthArea,
+          height: widget.btnHeight +
+              animation.listAnim.value * (heightArea - widget.btnHeight),
+          margin: EdgeInsets.only(
+            bottom: animation.bottomMarginAnim.value * heightArea * 1.25 * 0.1,
           ),
-        ),
-        child: FadeTransition(
-          opacity: contentShowingAnim,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-                buildListView(result.answerLogs, widthArea,
-                    heightArea * 0.93 - padding * 3, dimensionAnim),
-              buildBackButton(
-                  widthArea - padding * 2, heightArea * 0.07, dimensionAnim),
+          decoration: BoxDecoration(
+            color: animation.colorAnim.value,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(radius),
+              topRight: Radius.circular(radius),
+              bottomLeft: Radius.circular(animation.listAnim.value * radius),
+              bottomRight: Radius.circular(animation.listAnim.value * radius),
+            ),
+            boxShadow: [
+              BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 5),
             ],
           ),
-        ),
-      ),
+          child: Stack(
+            children: <Widget>[
+              buildListView(widget.result.answerLogs, widthArea, heightArea,
+                  animation, _scroller),
+              Positioned(
+                bottom: 0,
+                child: buildBackButton(
+                  widthArea,
+                  widget.btnHeight,
+                  animation.btnAnim,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget buildListView(List<AnswerLog> logs, double width, double height,
-      Animation<double> animation) {
-    final tileHeight = height * 1 / 10;
-    return Container(
-      height: animation.value * height,
-      width: double.infinity,
-      child: ListView.builder(
-        itemCount: logs.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildListTile(index, logs[index], tileHeight);
-        },
+      HistoryAreaAnimation animation, ScrollController controller) {
+    return FadeTransition(
+      opacity: animation.contentShowingAnim,
+      child: Container(
+        height: animation.listAnim.value * height,
+        width: double.infinity,
+        child: ListView.builder(
+          controller: controller,
+          itemCount: logs.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildListTile(index, logs[index], tileHeight);
+          },
+        ),
       ),
     );
   }
 
   Widget buildListTile(int index, AnswerLog log, double height) {
-    final padding = 5.0;
+    final padding = 9.0;
     final realHeight = height - padding * 2;
     return Container(
       height: height,
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.symmetric(vertical: padding, horizontal: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,10 +143,11 @@ class HistoryArea extends AnimatedWidget {
           CircleAvatar(
               radius: realHeight * 0.35,
               backgroundColor:
-                  log.isCorrect ? Colors.green[600] : Colors.red[800],
+                  log.isCorrect ? Colors.green[600] : Colors.red[600],
               child: Icon(
                 log.isCorrect ? Icons.done : Icons.clear,
                 size: realHeight * 0.5,
+                color: Colors.white,
               )),
           const SizedBox(width: 10),
           Expanded(
@@ -116,19 +160,14 @@ class HistoryArea extends AnimatedWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: realHeight * 0.45,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
           const SizedBox(width: 10),
           Material(
-            elevation: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 0.5)),
-              child: Image.asset(log.question.imageURL,
-                  height: realHeight * 0.8, width: realHeight * 0.8 * 1.7),
-            ),
+            elevation: 5,
+            child: Image.asset(log.question.imageURL,
+                height: realHeight * 0.8, width: realHeight * 0.8 * 1.7),
           ),
         ],
       ),
@@ -137,20 +176,32 @@ class HistoryArea extends AnimatedWidget {
 
   Widget buildBackButton(
       double width, double height, Animation<double> animation) {
-    return SizedBox(
-      width: width,
-      height: animation.value * height,
-      child: RaisedButton(
-        elevation: 3,
-        color: const Color(0xff24b6c5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        onPressed: () {
-          reverseAnim();
-        },
-        child: Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.white.withOpacity(0.9),
-          size: animation.value * height * 0.8,
+    return GestureDetector(
+      onTap: () {
+        isUp ? _controller.reverse() : _controller.forward();
+        isUp = !isUp;
+      },
+      child: Container(
+        width: width - animation.value * padding * 2,
+        height: height,
+        margin: EdgeInsets.all(animation.value * padding),
+        decoration: BoxDecoration(
+          color:
+              transparent ? const Color(0x3324b6c5) : const Color(0xdd24b6c5),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8),
+            topRight: Radius.circular(8),
+            bottomLeft: Radius.circular(animation.value * 8),
+            bottomRight: Radius.circular(animation.value * 8),
+          ),
+        ),
+        child: Transform.rotate(
+          angle: animation.value * pi,
+          child: Icon(
+            Icons.keyboard_arrow_up,
+            color: Colors.white.withOpacity(0.9),
+            size: height * 0.8,
+          ),
         ),
       ),
     );

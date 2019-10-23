@@ -5,7 +5,6 @@ import 'package:flaguru/widgets/history_area.dart';
 import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
-import 'package:flaguru/widgets/round_history_button.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -22,28 +21,12 @@ class _ResultScreenState extends State<ResultScreen>
   AnimationController controller;
   ResultScreenAnimation animation;
 
-  AnimationController historyController;
-
-  bool showingHistoryBtn = true;
-  bool showingHistoryArea = false;
-
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 7000), vsync: this);
+        duration: Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
-    animation.resultArea.addStatusListener((status) {
-      if (status == AnimationStatus.completed)
-        setState(() => showingHistoryArea = true);
-    });
     controller.forward();
-
-    historyController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.dismissed)
-              setState(() => showingHistoryBtn = true);
-          });
 
     super.initState();
   }
@@ -59,7 +42,7 @@ class _ResultScreenState extends State<ResultScreen>
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    var historyInitHeight = height * 0.07;
+    final double historyBtnHeight = 50;
 
     return SafeArea(
       bottom: false,
@@ -106,8 +89,9 @@ class _ResultScreenState extends State<ResultScreen>
                             child: FadeTransition(
                               opacity: animation.resultButtonArea,
                               child: ResultButtonArea(
-                                  difficulty: widget.result.level,
-                                  controller: animation.resultButtonArea),
+                                difficulty: widget.result.level,
+                                controller: animation.resultButtonArea,
+                              ),
                             ),
                           ),
                         ),
@@ -115,34 +99,16 @@ class _ResultScreenState extends State<ResultScreen>
                     ),
                   ],
                 ),
-                if (showingHistoryArea && !showingHistoryBtn)
-                  Container(
-                    width: width,
-                    height: height,
-                    alignment: Alignment.bottomCenter,
+                Container(
+                  width: width,
+                  height: height,
+                  alignment: Alignment.bottomCenter,
+                  child: SlideTransition(
+                    position: animation.historyBtnOffset,
                     child: HistoryArea(
-                      result: widget.result,
-                      initHeight: historyInitHeight,
-                      controller: historyController,
-                      reverseAnim: historyController.reverse,
-                    ),
+                        result: widget.result, btnHeight: historyBtnHeight),
                   ),
-                if (showingHistoryArea && showingHistoryBtn)
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      width: width,
-                      height: historyInitHeight,
-                      alignment: Alignment.center,
-                      child: FadeTransition(
-                        opacity: animation.historyBtn,
-                        child: RoundHistoryButton(showHistory: () {
-                          historyController.forward();
-                          setState(() => showingHistoryBtn = false);
-                        }),
-                      ),
-                    ),
-                  ),
+                ),
               ],
             )),
       ),
