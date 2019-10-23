@@ -6,32 +6,21 @@ import 'Answer.dart';
 import 'Question.dart';
 
 class Country {
-  String id;
+  int id;
   String name;
   String flag;
   double ratio;
   String description;
 
   Country(
-      {@required String id,
-      String name,
-      String flag,
-      double ratio,
-      String description}) {
-    this.id = id;
-    this.name = name;
-    this.flag = flag;
-    this.ratio = ratio;
-    this.description = description;
-    // print(this.toString());
-  }
+      {@required this.id, this.name, this.flag, this.ratio, this.description});
 
   Answer toAnswer({isCorrect: false}) {
     return Answer(
+        countryID: this.id,
         country: this.name,
         imageUrl: this.flag,
         isRight: isCorrect,
-        ratio: this.ratio,
         description: this.description);
   }
 
@@ -41,6 +30,6 @@ class Country {
 
   @override
   String toString() {
-    return '$name has ratio $ratio with description $description';
+    return 'id $id: $name\n';
   }
 }

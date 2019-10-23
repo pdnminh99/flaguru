@@ -17,9 +17,10 @@ class LoadingSpinner extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
-          SpinKitCubeGrid(
+          SpinKitCircle(
+            duration: Duration(seconds: 2),
             color: Colors.white,
             size: 50,
           ),

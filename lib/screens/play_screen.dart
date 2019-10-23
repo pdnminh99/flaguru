@@ -1,103 +1,132 @@
 import 'dart:async';
-
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/widgets/info_bar.dart';
-import 'package:flaguru/widgets/loading_spinner.dart';
-import 'package:flaguru/widgets/play_screen_drawer.dart';
-import 'package:flaguru/widgets/question_info_area.dart';
-import 'package:flaguru/widgets/start_button.dart';
-import 'package:flaguru/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flaguru/models/QuestionProvider.dart';
-import 'package:flaguru/widgets/answers_area.dart';
-import 'package:flaguru/widgets/bottom_bar.dart';
-import 'package:flaguru/widgets/countdown_watch.dart';
+import '../models/Enum.dart';
+import '../models/Question.dart';
+import '../models/RoundHandler.dart';
+import '../screens/result_screen.dart';
+import '../utils/enum_string.dart';
+import '../widgets/info_bar.dart';
+import '../widgets/loading_spinner.dart';
+import '../widgets/play_screen_drawer.dart';
+import '../widgets/question_info_area.dart';
+import '../widgets/start_button.dart';
+import '../widgets/top_bar.dart';
+import '../models/QuestionProvider.dart';
+import '../widgets/answers_area.dart';
+import '../widgets/bottom_bar.dart';
+import '../widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
-  static String routeName = '/play_screen';
+  static final routeName = '/play_screen';
+  final Difficulty difficulty = Difficulty.EASY;
 
   @override
   _PlayScreenState createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends State<PlayScreen> {
-  static const timeLimit = 15;
-  static const redTime = timeLimit - 5;
-  static const maxLife = 5;
+class _PlayScreenState extends State<PlayScreen>
+    with SingleTickerProviderStateMixin {
+  final questionTotal = 30;
+  final timeLimit = 15;
+  final maxLife = 5;
+  RoundHandler roundHandler;
 
   int index = 0;
   bool isAnswered;
   List<bool> pressStates;
 
-  int remainLives = maxLife;
-  bool isStarted = false;
-  bool isOver = false;
-
   int time;
   Timer _timer;
 
-  List<Map<String, Object>> qaList;
+  List<Map<String, Object>> qaList = [];
+
+  AnimationController _controller;
 
   @override
   void initState() {
-//    qaList = DUMMY_QA;
-    var qProvider = QuestionProvider(level: Difficulty.EASY);
+    var qProvider = QuestionProvider(level: widget.difficulty);
     qProvider.initializeQuestionsProvider().then((_) {
-      setState(() => qaList = qProvider.getCollections(
-          numberOfQuestions: 20, isFirstAnswerCorrect: true));
+      setState(() {
+        qaList = qProvider.getCollections(
+            numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
+        roundHandler = RoundHandler(
+          level: widget.difficulty,
+          lifecount: maxLife,
+          countdown: timeLimit,
+          questions: qaList.length,
+        );
+      });
     });
+
+    _controller =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
   void startGame() {
-    initData();
-    isStarted = true;
+    setState(() {
+      roundHandler.start();
+      initData();
+    });
+    Timer(Duration(milliseconds: 500), _operate);
+  }
+
+  void _operate() {
+    _timer = getTimer();
+    _controller.value = 0;
+    _controller.forward();
   }
 
   void initData() {
     isAnswered = false;
     pressStates = [false, false, false, false];
-    time = (isStarted) ? timeLimit : timeLimit + 1;
-    _timer = getTimer();
+    time = timeLimit;
   }
 
   void changePressState(int i) => pressStates[i] = true;
 
   void doRight() {
-    _timer.cancel();
-    setState(() {
-      isAnswered = true;
-    });
+    processAfterAnswered(true);
   }
 
   void doWrong() {
+    processAfterAnswered(false);
+  }
+
+  void processAfterAnswered(bool isRightAnswer) {
     _timer.cancel();
     setState(() {
-      remainLives--;
+      roundHandler.getAnswer(
+          isCorrect: isRightAnswer,
+          question: (qaList[index]['question'] as Question),
+          countdownRemain: time);
       isAnswered = true;
-      if (remainLives == 0) isOver = true;
     });
   }
 
   void getNextQuestion() {
     _timer.cancel();
+    _operate();
     setState(() {
       index++;
       initData();
-      if (index == qaList.length - 1) isOver = true;
     });
   }
 
   void onOver() {
-    Navigator.pushNamed(context, PlayScreen.routeName);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreen(roundHandler.result)));
   }
 
   Timer getTimer() {
@@ -117,7 +146,9 @@ class _PlayScreenState extends State<PlayScreen> {
 
     return Scaffold(
       backgroundColor: Color(0xff019dad),
-      drawer: PlayScreenDrawer(),
+      drawer: PlayScreenDrawer(
+        difficulty: widget.difficulty,
+      ),
       body: WillPopScope(
         onWillPop: () async => false,
         child: Column(
@@ -127,24 +158,28 @@ class _PlayScreenState extends State<PlayScreen> {
               width: double.infinity,
               height: height * 0.09,
               child: TopBar(
-                level: EnumString.getDifficulty(Difficulty.EASY),
+                difficulty: EnumString.getDifficulty(widget.difficulty),
               ),
             ),
-            if (qaList == null)
-              Container(
+            Visibility(
+              visible: roundHandler == null,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: LoadingSpinner(),
               ),
-            if (qaList != null && !isStarted)
-              Container(
+            ),
+            Visibility(
+              visible: roundHandler != null &&
+                  roundHandler.status == RoundStatus.IDLE,
+              child: Container(
                 width: double.infinity,
                 height: height * 0.91,
-                child: StartButton(
-                  onStart: startGame,
-                ),
+                child: StartButton(onStart: startGame),
               ),
-            if (qaList != null && isStarted) ...[
+            ),
+            if (roundHandler != null &&
+                roundHandler.status != RoundStatus.IDLE) ...[
               Container(
                 width: double.infinity,
                 height: height * 0.07,
@@ -152,7 +187,7 @@ class _PlayScreenState extends State<PlayScreen> {
                   totalQuestions: qaList.length,
                   currentQuestion: index + 1,
                   maxLives: maxLife,
-                  remainLives: remainLives,
+                  remainLives: roundHandler.remainLives,
                 ),
               ),
               QuestionInfoArea(
@@ -169,20 +204,23 @@ class _PlayScreenState extends State<PlayScreen> {
                 duration: Duration(milliseconds: millis),
                 child: CountdownWatch(
                   time: time,
-                  redTime: redTime,
+                  redTime: timeLimit - 5,
                 ),
               ),
               Container(
                 width: double.infinity,
                 height: height * 0.35,
-                child: AnswersArea(
-                  isFlag: nameOrFlag(),
-                  isAnswered: isAnswered,
-                  doRight: doRight,
-                  doWrong: doWrong,
-                  answers: qaList[index]['answer'],
-                  pressStates: pressStates,
-                  changePressState: changePressState,
+                child: FadeTransition(
+                  opacity: _controller,
+                  child: AnswersArea(
+                    isFlag: nameOrFlag(),
+                    isAnswered: isAnswered,
+                    doRight: doRight,
+                    doWrong: doWrong,
+                    answers: qaList[index]['answer'],
+                    pressStates: pressStates,
+                    changePressState: changePressState,
+                  ),
                 ),
               ),
               Container(
@@ -191,7 +229,7 @@ class _PlayScreenState extends State<PlayScreen> {
                 child: BottomBar(
                   isAnswered: isAnswered,
                   onRefresh: getNextQuestion,
-                  isOver: isOver,
+                  isOver: roundHandler.status == RoundStatus.OVER,
                   onOver: onOver,
                 ),
               ),
