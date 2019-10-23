@@ -13,32 +13,32 @@ class PlayScreenDrawer extends StatefulWidget {
 }
 
 class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
-  bool soundEnabled, musicEnabled;
+  bool soundEnabled = true;
+  bool musicEnabled = true;
 
   @override
   void initState() {
-    // read db
-    soundEnabled = true;
-    musicEnabled = true;
-
+    // get audio data
     super.initState();
   }
 
   void changeSoundStatus(bool status) {
-    //update db
+    //update audio data
     setState(() => soundEnabled = status);
   }
 
   void changeMusicStatus(bool status) {
-    // update db
+    // update audio data
     setState(() => musicEnabled = status);
   }
 
   void navigateToMenu(BuildContext context) {
+    // need confirmation
     Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
   void restart(BuildContext context) {
+    // need confirmation
     Navigator.of(context).pushReplacementNamed(
       PlayScreen.routeName,
       arguments: widget.difficulty,
@@ -94,7 +94,7 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
       title: Row(
         children: <Widget>[
           Icon(leadingIcon, size: fontSize + 5, color: color),
-          SizedBox(width: 30),
+          const SizedBox(width: 30),
           Text(title, style: TextStyle(fontSize: fontSize, color: color)),
         ],
       ),
