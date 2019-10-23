@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Quicksand',
       ),
 //      home: ResultScreen(),
-      initialRoute: PlayScreen.routeName,
+      initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
