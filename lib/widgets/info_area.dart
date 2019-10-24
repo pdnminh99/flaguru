@@ -116,7 +116,7 @@ class _InfoAreaState extends State<InfoArea> {
 
   List<String> getParagraph(String raw) {
     final sentences = raw.split('. ');
-    final len = sentences.length - 2;
+    final len = sentences.length - 1;
     for (var i = 0; i < len; i++) sentences[i] += '.';
     return sentences;
   }

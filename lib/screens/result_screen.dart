@@ -22,8 +22,7 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
 
   @override
   void initState() {
-    controller =
-        AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
+    controller = AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
 
@@ -104,7 +103,9 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
                   child: SlideTransition(
                     position: animation.historyBtnOffset,
                     child: HistoryArea(
-                        logs: widget.result.answerLogs, btnHeight: historyBtnHeight),
+                      logs: widget.result.answerLogs,
+                      btnHeight: historyBtnHeight,
+                    ),
                   ),
                 ),
               ],
@@ -134,8 +135,7 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
     return Center(
       child: Text(
         EnumString.getDifficulty(difficulty),
-        style: TextStyle(
-            fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
       ),
     );
   }
