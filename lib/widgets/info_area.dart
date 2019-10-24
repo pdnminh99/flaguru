@@ -7,8 +7,6 @@ import 'package:flutter/painting.dart';
 
 class InfoArea extends StatefulWidget {
   final Question question;
-
-//  final QuestionUI question;
   final int millis;
 
   InfoArea({
@@ -45,10 +43,9 @@ class _InfoAreaState extends State<InfoArea> {
         num fontSize = constraint.maxHeight * 0.1;
         if (widget.question.country.length >= 20)
           fontSize *= 0.6;
-        else if (widget.question.country.length >= 14)
-          fontSize *= 0.7;
+        else if (widget.question.country.length >= 14) fontSize *= 0.7;
+
         return Column(
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -61,34 +58,23 @@ class _InfoAreaState extends State<InfoArea> {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white, width: 0.5),
                           boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 3,
-                                spreadRadius: 2)
+                            BoxShadow(color: Colors.black12, blurRadius: 3, spreadRadius: 2)
                           ]),
                       width: constraint.maxHeight * 0.3,
                       height: constraint.maxHeight * 0.3 / 1.7,
-                      child: Image.asset(
-                        widget.question.imageURL,
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.asset(widget.question.imageURL, fit: BoxFit.cover),
                     ),
                   ),
                   Container(
                     height: constraint.maxHeight * 0.3 / 1.7,
-                    constraints: BoxConstraints(
-                      maxWidth: constraint.maxWidth * 0.6,
-                    ),
+                    constraints: BoxConstraints(maxWidth: constraint.maxWidth * 0.6),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
                           widget.question.country,
-                          style: TextStyle(
-                            fontSize: fontSize,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -100,16 +86,24 @@ class _InfoAreaState extends State<InfoArea> {
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 15, left: 15, right: 15),
+                margin: const EdgeInsets.only(top: 10, bottom: 15, left: 15, right: 15),
                 child: SingleChildScrollView(
-                  child: Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: constraint.maxHeight * 0.064,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.justify,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      for (var sentence in getParagraph(description)) ...[
+                        Text(
+                          sentence,
+                          style: TextStyle(
+                            fontSize: constraint.maxHeight * 0.064,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal[900],
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                        const SizedBox(height: 10),
+                      ]
+                    ],
                   ),
                 ),
               ),
@@ -118,5 +112,12 @@ class _InfoAreaState extends State<InfoArea> {
         );
       },
     );
+  }
+
+  List<String> getParagraph(String raw) {
+    final sentences = raw.split('. ');
+    final len = sentences.length - 2;
+    for (var i = 0; i < len; i++) sentences[i] += '.';
+    return sentences;
   }
 }
