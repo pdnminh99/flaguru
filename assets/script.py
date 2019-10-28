@@ -2,7 +2,7 @@ import os
 import xlrd as readxl
 import xlwt as writexl
 import wikipedia as wiki
-
+import re
 
 # def parseYMLformat():
 #     f = open('text.txt', 'w')
@@ -41,7 +41,7 @@ def search(countries):
             (percentage/len(countries))*100))
         try:
             searchresult = wiki.search(country['name'])
-            summary = wiki.summary(searchresult[0])
+            summary = wiki.summary(searchresult[0]).split('\n')[0]
             # write to excel file
             countriessheet.write(row, col, row)
             countriessheet.write(row, col + 1, searchresult[0])
@@ -79,5 +79,21 @@ def writeCountryDescriptionToText(name, description):
     textfile.close()
 
 
+def parseinsertquery():
+    wb = readxl.open_workbook('countries.xls')
+    sheet = wb.sheet_by_index(0)
+    query = ''
+    for row in range(0, 197):
+        description = sheet.cell(row, 3).value.replace('\'', '\'\'')
+        description = re.sub(r' \([^\(\)]*?\)', '', description)
+        description = re.sub(r' \([^\(\)]*?\)', '', description)
+        query += f"""
+INSERT INTO country(name, flag, ratio, description)
+VALUES ('{sheet.cell(row, 1).value}', '{sheet.cell(row, 2).value}', 100, '{description}');
+        """
+    with open('text.txt', 'w', encoding='utf-8') as f:
+        f.write(query)
+
 if __name__ == "__main__":
-    search(getcountries())
+    parseinsertquery()
+    # cutparagraphs()

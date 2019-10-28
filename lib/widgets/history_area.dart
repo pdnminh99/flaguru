@@ -1,26 +1,21 @@
 import 'dart:math';
 
 import 'package:flaguru/models/AnswerLog.dart';
-import 'package:flaguru/models/Result.dart';
 import 'package:flaguru/widgets/history_area_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HistoryArea extends StatefulWidget {
   final double btnHeight;
-  final Result result;
+  final List<AnswerLog> logs;
 
-  HistoryArea({
-    @required this.result,
-    @required this.btnHeight,
-  });
+  HistoryArea({@required this.logs, @required this.btnHeight});
 
   @override
   _HistoryAreaState createState() => _HistoryAreaState();
 }
 
-class _HistoryAreaState extends State<HistoryArea>
-    with SingleTickerProviderStateMixin {
+class _HistoryAreaState extends State<HistoryArea> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   HistoryAreaAnimation animation;
   bool isUp = false;
@@ -30,8 +25,7 @@ class _HistoryAreaState extends State<HistoryArea>
 
   @override
   void initState() {
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _controller = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = HistoryAreaAnimation(_controller);
 
     super.initState();
@@ -48,8 +42,7 @@ class _HistoryAreaState extends State<HistoryArea>
     final heightArea = MediaQuery.of(context).size.height * 0.8;
     final widthArea = MediaQuery.of(context).size.width * 0.8;
 
-    final transparent = widget.result.answerLogs.length * tileHeight >
-        heightArea - widget.btnHeight - padding;
+    final transparent = widget.logs.length * tileHeight > heightArea - widget.btnHeight - padding;
 
     final radius = 10.0;
 
@@ -58,8 +51,7 @@ class _HistoryAreaState extends State<HistoryArea>
       builder: (context, child) {
         return Container(
           width: widthArea,
-          height: widget.btnHeight +
-              animation.listAnim.value * (heightArea - widget.btnHeight),
+          height: widget.btnHeight + animation.listAnim.value * (heightArea - widget.btnHeight),
           margin: EdgeInsets.only(
             bottom: animation.bottomMarginAnim.value * heightArea * 1.25 * 0.1,
           ),
@@ -77,12 +69,10 @@ class _HistoryAreaState extends State<HistoryArea>
           ),
           child: Stack(
             children: <Widget>[
-              buildListView(
-                  widget.result.answerLogs, widthArea, heightArea, animation),
+              buildListView(widget.logs, widthArea, heightArea, animation),
               Positioned(
                 bottom: 0,
-                child: buildBackButton(transparent, widthArea, widget.btnHeight,
-                    animation.btnAnim),
+                child: buildBackButton(transparent, widthArea, widget.btnHeight, animation.btnAnim),
               ),
             ],
           ),
@@ -91,8 +81,8 @@ class _HistoryAreaState extends State<HistoryArea>
     );
   }
 
-  Widget buildListView(List<AnswerLog> logs, double width, double height,
-      HistoryAreaAnimation animation) {
+  Widget buildListView(
+      List<AnswerLog> logs, double width, double height, HistoryAreaAnimation animation) {
     return FadeTransition(
       opacity: animation.contentShowingAnim,
       child: Container(
@@ -120,8 +110,7 @@ class _HistoryAreaState extends State<HistoryArea>
         children: <Widget>[
           CircleAvatar(
               radius: realHeight * 0.35,
-              backgroundColor:
-                  log.isCorrect ? Colors.green[600] : Colors.red[600],
+              backgroundColor: log.isCorrect ? Colors.green[600] : Colors.red[600],
               child: Icon(
                 log.isCorrect ? Icons.done : Icons.clear,
                 size: realHeight * 0.5,
@@ -152,8 +141,8 @@ class _HistoryAreaState extends State<HistoryArea>
     );
   }
 
-  Widget buildBackButton(bool transparent, double width, double height,
-      Animation<double> animation) {
+  Widget buildBackButton(
+      bool transparent, double width, double height, Animation<double> animation) {
     return GestureDetector(
       onTap: () {
         isUp ? _controller.reverse() : _controller.forward();
@@ -164,8 +153,7 @@ class _HistoryAreaState extends State<HistoryArea>
         height: height,
         margin: EdgeInsets.all(animation.value * padding),
         decoration: BoxDecoration(
-          color:
-              transparent ? const Color(0x3324b6c5) : const Color(0xcc24b6c5),
+          color: transparent ? const Color(0x3324b6c5) : const Color(0xcc24b6c5),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),
