@@ -16,6 +16,7 @@ class InfoUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double _height = MediaQuery.of(context).size.height;
     return Container(
       margin: EdgeInsets.only(top: 25.0),
       decoration: BoxDecoration(
@@ -27,10 +28,10 @@ class InfoUser extends StatelessWidget {
             BoxShadow(
                 //color: Color.fromRGBO(250, 250, 250, 0.9),
                 color: Color.fromRGBO(217, 217, 217, 1),
-                offset: Offset(0, 1.0),
-                blurRadius: 1.0)
+                offset: Offset(0, 0),
+                blurRadius: 5.0)
           ]),
-      height: 300,
+      height: _height * 0.41,
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -48,7 +49,7 @@ class InfoUser extends StatelessWidget {
                 )),
             Container(
               width: double.infinity,
-              height: 200,
+              height: _height * 0.273,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,9 +60,12 @@ class InfoUser extends StatelessWidget {
                       SizedBox(
                         width: 20,
                       ),
-                      Text(
-                        name,
-                        style: TextStyle(fontSize: 16.0),
+                      Flexible(
+                        child: Text(                         
+                          name,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16.0),
+                        ),
                       )
                     ],
                   ),
