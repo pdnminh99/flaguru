@@ -16,11 +16,15 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen>
     with SingleTickerProviderStateMixin {
   var auth = Authentication();
+  UserDetail _currentuser;
   Animation animation;
   AnimationController animationController;
   @override
   void initState() {
     super.initState();
+    this.auth.getCurrentUser().then((user) {
+      _currentuser = user;
+    });
     animationController =
         AnimationController(duration: Duration(seconds: 1), vsync: this);
     animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
@@ -33,16 +37,21 @@ class _MenuScreenState extends State<MenuScreen>
     Navigator.popAndPushNamed(context, DifficultyScreen.routeName);
   }
 
-  void gotoLogin(BuildContext context) {
+  void gotoLogin() {
     this.auth.handleSignIn().then((FirebaseUser user) {
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
-    }).then((user) {
-      Navigator.popAndPushNamed(
-          context, InfoScreen.routeName);
+    }).then((user) { 
+      setState(() => {
+       this._currentuser = user    
+      });
     }).catchError((e) => print("myerr" + e));
   }
-
+  
+  void gotoProfile(BuildContext context){
+      Navigator.popAndPushNamed(
+          context, InfoScreen.routeName);
+  }
   void gotoTutorial(BuildContext context) {}
 
   void gotoSetting(BuildContext context) {}
@@ -81,8 +90,8 @@ class _MenuScreenState extends State<MenuScreen>
                         Transform(
                             transform: Matrix4.translationValues(
                                 animation.value * 700, 0, 0),
-                            child: Menu(gotoLogin, Menu_Icon.swords, "Login",
-                                "G", context)),
+                            child: _currentuser != null  ? Menu(gotoProfile, Menu_Icon.swords, "Profile", _currentuser.photoURL, context) : Menu(gotoLogin, Menu_Icon.swords, "Login",
+                                'G', context) ),
                         SizedBox(
                           height: 30,
                         ),
