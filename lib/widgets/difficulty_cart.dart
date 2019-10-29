@@ -3,6 +3,7 @@ import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
+
 class diffculty_cart extends StatelessWidget {
   String name;
   String point;
@@ -15,6 +16,7 @@ class diffculty_cart extends StatelessWidget {
   BuildContext contextparam;
   diffculty_cart(this.name, this.timer, this.point, this.routename,
       this.pointIcon, this.timerIcon);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -29,7 +31,11 @@ class diffculty_cart extends StatelessWidget {
         // Navigator.pop(context);
         Navigator.popAndPushNamed(context,this.routename);
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(
+          seconds: 2
+        ),
+        curve: Curves.easeInOutCirc,
         height: 115,
         width: 320,
         // color: Colors.white,
