@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flaguru/screens/play_screen.dart';
 import '../models/Enum.dart';
 
-class DifficultyScreen extends StatelessWidget {
+
+class DifficultyScreen extends StatefulWidget{
   static String routeName = '/difficulty_screen';
+  @override
+  _DifficultyScreenState createState() => _DifficultyScreenState();
+
+}
+class _DifficultyScreenState extends State<DifficultyScreen>{
+  
   int timerIconCode =58405;
   int poinIconCode= 57377;
   int infiniteIcon =60221;
   final List arrayofCheckPoint=['0/20','0/30','0/50',];
   @override
-  DifficultyScreen(
+  _DifficultyScreenState(
     {
       arrayofCheckPoint,
     }
