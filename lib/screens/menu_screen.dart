@@ -6,9 +6,28 @@ import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   static String routeName = '/';
+
+  @override
+  _MenuScreenState createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen>
+    with SingleTickerProviderStateMixin {
   var auth = Authentication();
+  Animation animation;
+  AnimationController animationController;
+  @override
+  void initState() {
+    super.initState();
+    animationController =
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
+    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+        parent: animationController, curve: Curves.fastOutSlowIn));
+    animationController.forward();
+  }
+
   void gotoPlayScreen(BuildContext context) {
     //Navigator.pushNamed(context, DifficultyScreen.routeName);
     Navigator.popAndPushNamed(context, DifficultyScreen.routeName);
@@ -19,8 +38,8 @@ class MenuScreen extends StatelessWidget {
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
     }).then((user) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => InfoScreen()));
+      Navigator.popAndPushNamed(
+          context, InfoScreen.routeName);
     }).catchError((e) => print("myerr" + e));
   }
 
@@ -32,45 +51,69 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 1, 157, 173),
-      body: Stack(
-        children: <Widget>[
-          Container(
-              // decoration: BoxDecoration(
-              //   image: DecorationImage(
-              //     colorFilter: ColorFilter.mode(Color.fromRGBO(245,245 , 245, 0.8), BlendMode.dstATop),
-              //     image: AssetImage("./assets/background/background_menu_screen.gif"),
-              //     fit: BoxFit.fitHeight)),
-              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Menu(gotoPlayScreen, Menu_Icon.play, "Play", null, context),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Menu(gotoLogin, Menu_Icon.swords, "Login", "G", context),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Menu(gotoTutorial, Menu_Icon.open_book, "Tutorial", null,
-                      context),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Menu(gotoSetting, Menu_Icon.settings, "Settings", null,
-                      context),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Menu(gotoAbout, Menu_Icon.info_outline, "About", null,
-                      context),
-                ],
-              )),
-        ],
-      ),
-    );
+    //final double _width = MediaQuery.of(context).size.width;
+    return AnimatedBuilder(
+        animation: animationController,
+        builder: (BuildContext context, Widget child) {
+          return Scaffold(
+            backgroundColor: Color.fromARGB(255, 1, 157, 173),
+            body: Stack(
+              children: <Widget>[
+                Container(
+                    // decoration: BoxDecoration(
+                    //   image: DecorationImage(
+                    //     colorFilter: ColorFilter.mode(Color.fromRGBO(245,245 , 245, 0.8), BlendMode.dstATop),
+                    //     image: AssetImage("./assets/background/background_menu_screen.gif"),
+                    //     fit: BoxFit.fitHeight)),
+                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Transform(
+                            transform: Matrix4.translationValues(
+                                animation.value * 600, 0, 0),
+                            child: Menu(gotoPlayScreen, Menu_Icon.play, "Play",
+                                null, context)),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Transform(
+                            transform: Matrix4.translationValues(
+                                animation.value * 700, 0, 0),
+                            child: Menu(gotoLogin, Menu_Icon.swords, "Login",
+                                "G", context)),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Transform(
+                            transform: Matrix4.translationValues(
+                                animation.value * 800, 0, 0),
+                            child: Menu(gotoTutorial, Menu_Icon.open_book,
+                                "Tutorial", null, context)),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Transform(
+                          transform: Matrix4.translationValues(
+                              animation.value * 900, 0, 0),
+                          child: Menu(gotoSetting, Menu_Icon.settings,
+                              "Settings", null, context),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Transform(
+                          transform: Matrix4.translationValues(
+                              animation.value * 1000, 0, 0),
+                          child: Menu(gotoAbout, Menu_Icon.info_outline,
+                              "About", null, context),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          );
+        });
   }
 }
