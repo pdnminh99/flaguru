@@ -10,7 +10,8 @@ class MenuScreen extends StatelessWidget {
   static String routeName = '/';
   var auth = Authentication();
   void gotoPlayScreen(BuildContext context) {
-    Navigator.pushNamed(context, DifficultyScreen.routeName);
+    //Navigator.pushNamed(context, DifficultyScreen.routeName);
+    Navigator.popAndPushNamed(context, DifficultyScreen.routeName);
   }
 
   void gotoLogin(BuildContext context) {

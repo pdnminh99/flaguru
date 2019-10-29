@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -112,10 +111,8 @@ class Authentication {
 //     return false;
 //   }
 // }
-=======
 //import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:google_sign_in/google_sign_in.dart';
->>>>>>> 7a37298e19257dcf66d46fe25674d08514d7d0be
 //
 //class UserDetail {
 //  String uid;
