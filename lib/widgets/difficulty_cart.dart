@@ -1,16 +1,21 @@
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
+
 
 class diffculty_cart extends StatelessWidget {
   String name;
   String point;
   String timer;
-  String routename;
+  Difficulty difficulty;
   Function navigator;
   int pointIcon;
   int timerIcon;
+  double iconSize=30;
   BuildContext contextparam;
-  diffculty_cart(this.name, this.timer, this.point, this.routename,
+  diffculty_cart(this.name, this.timer, this.point, this.difficulty,
       this.pointIcon, this.timerIcon);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -19,10 +24,19 @@ class diffculty_cart extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       // padding: EdgeInsets.all(1),
       onPressed: () {
-        Navigator.pushNamed(context, routename);
+        // Navigator.pushNamed(context, routename);
+        // Navigator.pop(context,MaterialPageRoute(builder: (context) => PlayScreen(difficulty: routename,)));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(difficulty: routename,)));
+        // Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, PlayScreen.routeName, arguments: difficulty);
       },
-      child: Container(
-        height: 120,
+      child: AnimatedContainer(
+        duration: Duration(
+          seconds: 2
+        ),
+        curve: Curves.easeInOutCirc,
+        height: 115,
+        width: 320,
         // color: Colors.white,
         child: Column(
           children: <Widget>[
@@ -30,7 +44,7 @@ class diffculty_cart extends StatelessWidget {
               name,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 45,
+                fontSize: 38,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -40,7 +54,7 @@ class diffculty_cart extends StatelessWidget {
               thickness: 3,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(top: 5),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -52,10 +66,10 @@ class diffculty_cart extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons')),
+                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons'),size: 25,),
                   ],
                 ),
                 SizedBox(
@@ -68,10 +82,10 @@ class diffculty_cart extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons')),
+                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons'),size: iconSize,),
                   ],
                 ),
               ],

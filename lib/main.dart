@@ -1,7 +1,6 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
-import 'package:flaguru/screens/result_screen.dart';
-import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/info_screen.dart';
@@ -16,24 +15,24 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+// class MyApp extends StatefulWidget {
+//   @override
+//   DemoScreen createState() => DemoScreen();
+// }
 
-class _MyAppState extends State<MyApp> {
-  @override
+class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flaguru',
       theme: ThemeData(fontFamily: 'Quicksand'),
-      initialRoute: PlayScreen.routeName,
+      initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
         MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
-        PlayScreen.routeName: (context) => PlayScreen(),
-        InfoScreen.routeName: (context) => InfoScreen()
+        PlayScreen.routeName: (context) =>
+            PlayScreen(ModalRoute.of(context).settings.arguments as Difficulty),
+        InfoScreen.routeName: (context) => InfoScreen(),
       },
     );
   }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/Enum.dart';
-import '../models/Question.dart';
 import '../models/RoundHandler.dart';
 import '../screens/result_screen.dart';
 import '../utils/enum_string.dart';
@@ -19,9 +18,10 @@ import '../widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
   static final routeName = '/play_screen';
-  Difficulty difficulty;
 
-  PlayScreen({this.difficulty = Difficulty.EASY});
+  final Difficulty difficulty;
+
+  PlayScreen(this.difficulty);
 
   @override
   _PlayScreenState createState() => _PlayScreenState();
@@ -49,8 +49,10 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
     var qProvider = QuestionProvider(level: widget.difficulty);
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
-        qaList =
-            qProvider.getCollections(numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
+        qaList = qProvider.getCollections(
+          numberOfQuestions: questionTotal,
+          isFirstAnswerCorrect: true,
+        );
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifeCount: maxLife,
@@ -60,7 +62,7 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
       });
     });
 
-    _controller = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -77,7 +79,7 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
       roundHandler.start();
       initData();
     });
-    Timer(Duration(milliseconds: 300), _operate);
+    Timer(const Duration(milliseconds: 300), _operate);
   }
 
   void _operate() {
@@ -143,7 +145,7 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
     final millis = 500;
 
     return Scaffold(
-      backgroundColor: Color(0xff019dad),
+      backgroundColor: const Color(0xff019dad),
       drawer: PlayScreenDrawer(difficulty: widget.difficulty),
       body: WillPopScope(
         onWillPop: () async => false,
