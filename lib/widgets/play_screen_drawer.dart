@@ -72,7 +72,7 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
   Widget buildDrawerHeader() {
     return DrawerHeader(
       child: Center(
-        child: Text(
+        child: const Text(
           'FLAGURU',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
         ),

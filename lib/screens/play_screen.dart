@@ -19,7 +19,9 @@ import '../widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
   static final routeName = '/play_screen';
-  final Difficulty difficulty = Difficulty.EASY;
+  Difficulty difficulty;
+
+  PlayScreen({this.difficulty = Difficulty.EASY});
 
   @override
   _PlayScreenState createState() => _PlayScreenState();
