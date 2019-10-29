@@ -1,5 +1,6 @@
 import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/Settings.dart';
+import 'package:flaguru/models/SharedPreference.dart';
 import 'package:flaguru/models/User.dart';
 
 class SettingsHandler {
@@ -63,78 +64,37 @@ class SettingsHandler {
     }
     return settingInstance;
   }
-  // Future<void> switchAudio() async {
-  //   this._currentSettings.isAudioON = !this.isAudioEnabled;
-  //   var databaseConn = DatabaseConnector();
-  //   await databaseConn.updateExistingSettings(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
-
-  // Future<void> switchSound() async {
-  //   this._currentSettings.isSoundON = !this.isSoundEnabled;
-  //   var databaseConn = DatabaseConnector();
-  //   await databaseConn.updateExistingSettings(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
-
-  // Future<void> finishTutorials() async {
-  //   this._currentSettings.skipTutorials = true;
-  //   var databaseConn = DatabaseConnector();
-  //   await databaseConn.updateExistingSettings(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
-
-  // /*
-  //  * NOT CALLED WITH AWAIT
-  //  */
-  // void switchAudioSync() {
-  //   this._currentSettings.isAudioON = !this.isAudioEnabled;
-  //   var databaseConn = DatabaseConnector();
-  //   databaseConn.updateExistingSettingsSync(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
-
-  // void switchSoundSync() {
-  //   this._currentSettings.isSoundON = !this.isSoundEnabled;
-  //   var databaseConn = DatabaseConnector();
-  //   databaseConn.updateExistingSettingsSync(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
-
-  // void finishTutorialsSync() {
-  //   this._currentSettings.skipTutorials = true;
-  //   var databaseConn = DatabaseConnector();
-  //   return databaseConn.updateExistingSettingsSync(
-  //       this._currentSettings.currentUser.uuid, this._currentSettings);
-  // }
 
   /*
    * OTHERs METHODS
    */
   Future<void> _queryExistingSettings() async {
-    var databaseConn = DatabaseConnector();
-    var newsettings = await databaseConn
-        .collectExistingSettings(this._currentSettings.currentUser);
-    if (newsettings != null) {
-      print("Found an existing settings $newsettings");
-      print(newsettings.toString());
-      if (newsettings.isAudioON != this.isAudioEnabled)
-        this._currentSettings.isAudioON = newsettings.isAudioON;
-      if (newsettings.isSoundON != this.isSoundEnabled)
-        this._currentSettings.isSoundON = newsettings.isSoundON;
-      if (newsettings.skipTutorials != this.skipTutorials)
-        this._currentSettings.skipTutorials = newsettings.skipTutorials;
+    var preferences = SharedPreference();
+    var newSettings = await preferences
+        .getExistingSettings(this._currentSettings.currentUser);
+    // var databaseConn = DatabaseConnector();
+    // var newsettings = await databaseConn
+    //     .collectExistingSettings(this._currentSettings.currentUser);
+    if (newSettings != null) {
+      print("Found an existing settings $newSettings");
+      print(newSettings.toString());
+      if (newSettings.isAudioON != this.isAudioEnabled)
+        this._currentSettings.isAudioON = newSettings.isAudioON;
+      if (newSettings.isSoundON != this.isSoundEnabled)
+        this._currentSettings.isSoundON = newSettings.isSoundON;
+      if (newSettings.skipTutorials != this.skipTutorials)
+        this._currentSettings.skipTutorials = newSettings.skipTutorials;
     } else {
-      print("Could not found any existing settings $newsettings");
-      await _initializeDefaultSettings();
+      print("Could not found any existing settings $newSettings");
+      preferences.initializeNewSettings(this._currentSettings);
     }
   }
 
-  Future<void> _initializeDefaultSettings() async {
-    var databaseConn = DatabaseConnector();
-    await databaseConn.saveNewSettings(
-        this._currentSettings.currentUser.uuid, this._currentSettings);
-  }
+  // Future<void> _initializeDefaultSettings() async {
+  //   var databaseConn = DatabaseConnector();
+  //   await databaseConn.saveNewSettings(
+  //       this._currentSettings.currentUser.uuid, this._currentSettings);
+  // }
 
   @override
   String toString() =>
