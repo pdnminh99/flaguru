@@ -62,7 +62,9 @@ class RoundHandler {
         answerLogs: this._logs);
     this
         ._localStorage
-        .saveResult(roundResult.score, this._level, this.remainLives > 0);
+        .saveResult(roundResult.score, this._level, this.remainLives > 0)
+        .then((_) => print('save current result to localStorage'))
+        .catchError((error) => print(error));
     return roundResult;
   }
 
@@ -134,7 +136,11 @@ class RoundHandler {
     if (this._status == RoundStatus.IDLE) {
       // round is start
       this._status = RoundStatus.PLAYING;
-      this._localStorage.newRound(this._level);
+      this
+          ._localStorage
+          .newRound(this._level)
+          .then((_) => print('New round started'))
+          .catchError((error) => print(error));
       return true;
     }
     return false;
