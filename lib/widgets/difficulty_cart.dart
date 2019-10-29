@@ -11,6 +11,7 @@ class diffculty_cart extends StatelessWidget {
   Function navigator;
   int pointIcon;
   int timerIcon;
+  double iconSize=30;
   BuildContext contextparam;
   diffculty_cart(this.name, this.timer, this.point, this.routename,
       this.pointIcon, this.timerIcon);
@@ -38,7 +39,7 @@ class diffculty_cart extends StatelessWidget {
               name,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 40,
+                fontSize: 38,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -60,10 +61,10 @@ class diffculty_cart extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons')),
+                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons'),size: 25,),
                   ],
                 ),
                 SizedBox(
@@ -76,10 +77,10 @@ class diffculty_cart extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons')),
+                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons'),size: iconSize,),
                   ],
                 ),
               ],
