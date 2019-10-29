@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>185711489467-i57tn0h6hvcdo8v4j8lac3fmrs5i60qp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.185711489467-i57tn0h6hvcdo8v4j8lac3fmrs5i60qp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>185711489467-rlkbhadkah1ouq67v6l2gfg5e4ub6rmv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBgymYkK8_uO3W_-gT04M-CLMvPLdcvo_E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>185711489467</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.myApp</string>
+	<key>PROJECT_ID</key>
+	<string>flaguru-35568</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flaguru-35568.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:185711489467:ios:8f9121fc98fb295c40549e</string>
+	<key>DATABASE_URL</key>
+	<string>https://flaguru-35568.firebaseio.com</string>
+</dict>
+</plist>
