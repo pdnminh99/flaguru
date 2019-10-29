@@ -18,7 +18,7 @@ class InfoUser extends StatelessWidget {
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.only(top: 25.0),
+      margin: EdgeInsets.only(top: 0.0),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),

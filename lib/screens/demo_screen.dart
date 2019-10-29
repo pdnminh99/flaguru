@@ -3,15 +3,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 class DemoScreen extends State<MyApp> {
-  SettingsHandler settings;
 
-  DemoScreen() {
-    SettingsHandler.getInstance().then((settings) {
-      setState(() {
-        this.settings = settings;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,38 +16,60 @@ class DemoScreen extends State<MyApp> {
   Widget state(String text, bool isTrue) =>
       isTrue ? Text("$text ON") : Text("$text OFF");
 
-  Widget parseCollectionToListView() => Scaffold(
-        appBar: AppBar(
-          title: Text("Test"),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
-            RaisedButton(
-              child: state("Audio", this.settings.isAudioEnabled),
-              onPressed: () {
-                setState(() {
-                  this.settings.isAudioEnabled = !this.settings.isAudioEnabled;
-                });
-              },
-            ),
-            RaisedButton(
-              child: state("Sound", this.settings.isSoundEnabled),
-              onPressed: () {
-                setState(() {
-                  this.settings.isSoundEnabled = !this.settings.isSoundEnabled;
-                });
-              },
-            ),
-            RaisedButton(
-              child: state("Skip tutorials", this.settings.skipTutorials),
-              onPressed: () {
-                setState(() {
-                  this.settings.skipTutorials = !this.settings.skipTutorials;
-                });
-              },
-            )
-          ],
-        ),
-      );
+  Widget parseCollectionToListView() {
+
+  }
+  // Widget parseCollectionToListView() => Scaffold(
+  //       appBar: AppBar(
+  //         title: Text("Test"),
+  //       ),
+  //       body: ListView(
+  //         padding: const EdgeInsets.all(8),
+  //         children: <Widget>[
+  //           RaisedButton(
+  //             child: Text("Queries"),
+  //             onPressed: () async {
+  //               var sharedPreferences = LocalStorage();
+  //               var newSettings =
+  //                   await sharedPreferences.getExistingSettings(null);
+  //               if (newSettings != null) {
+  //                 setState(() {
+  //                   this.settings = newSettings;
+  //                 });
+  //               }
+  //             },
+  //           ),
+  //           RaisedButton(
+  //             child: state("Audio", this.settings.isAudioON),
+  //             onPressed: () async {
+  //               setState(() {
+  //                 this.settings.isAudioON = !this.settings.isAudioON;
+  //               });
+  //               var sharedPreferences = LocalStorage();
+  //               await sharedPreferences.updateNewSettings(this.settings);
+  //             },
+  //           ),
+  //           RaisedButton(
+  //             child: state("Sound", this.settings.isSoundON),
+  //             onPressed: () async {
+  //               setState(() {
+  //                 this.settings.isSoundON = !this.settings.isSoundON;
+  //               });
+  //               var sharedPreferences = LocalStorage();
+  //               await sharedPreferences.updateNewSettings(this.settings);
+  //             },
+  //           ),
+  //           RaisedButton(
+  //             child: state("Skip tutorials", this.settings.skipTutorials),
+  //             onPressed: () async {
+  //               setState(() {
+  //                 this.settings.skipTutorials = !this.settings.skipTutorials;
+  //               });
+  //               var sharedPreferences = LocalStorage();
+  //               await sharedPreferences.updateNewSettings(this.settings);
+  //             },
+  //           )
+  //         ],
+  //       ),
+  //     );
 }

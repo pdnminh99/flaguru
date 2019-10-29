@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
@@ -16,7 +17,7 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen>
     with SingleTickerProviderStateMixin {
   var auth = Authentication();
-  UserDetail _currentuser;
+  User _currentuser;
   Animation animation;
   AnimationController animationController;
   @override
@@ -90,7 +91,7 @@ class _MenuScreenState extends State<MenuScreen>
                         Transform(
                             transform: Matrix4.translationValues(
                                 animation.value * 700, 0, 0),
-                            child: _currentuser != null  ? Menu(gotoProfile, Menu_Icon.swords, "Profile", _currentuser.photoURL, context) : Menu(gotoLogin, Menu_Icon.swords, "Login",
+                            child: _currentuser != null  ? Menu(gotoProfile, Menu_Icon.swords, "Profile", _currentuser.avatar, context) : Menu(gotoLogin, Menu_Icon.swords, "Login",
                                 'G', context) ),
                         SizedBox(
                           height: 30,
