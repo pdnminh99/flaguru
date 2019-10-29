@@ -1,5 +1,7 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class LocalStorage {
   Future<Settings> getExistingSettings() async {
@@ -24,5 +26,43 @@ class LocalStorage {
     pref.setBool("audio", newSettings.isAudioON);
     pref.setBool("sound", newSettings.isSoundON);
     pref.setBool("skipTutorials", newSettings.skipTutorials);
+  }
+
+  Future<void> newRound(Difficulty level) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var playcount = pref.getInt('${symbol}played');
+    if (playcount == null)
+      pref.setInt('${symbol}played', 1);
+    else
+      pref.setInt('${symbol}played', playcount + 1);
+  }
+
+  Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var lastHighestScore = pref.getInt('${symbol}score');
+    var winning = pref.getInt('${symbol}win');
+    if (lastHighestScore == null || lastHighestScore < newScore)
+      pref.setInt('${symbol}score', newScore);
+    if (winning == null)
+      pref.setInt('${symbol}win', 0);
+    else if (isWin) pref.setInt('${symbol}win', winning + 1);
+    pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+  }
+
+  // int getHighestScore(Difficulty level) => pref.getInt('EASYscore');
+
+  String _getSymbol(Difficulty level) {
+    switch (level) {
+      case Difficulty.EASY:
+        return 'EASY';
+      case Difficulty.NORMAL:
+        return 'NORMAL';
+      case Difficulty.HARD:
+        return 'HARD';
+      default:
+        return 'EASY';
+    }
   }
 }

@@ -1,4 +1,7 @@
+import 'package:flaguru/models/LocalStorage.dart';
+
 class ProfileProvider {
+  // var _localStorage = LocalStorage();
   ProfileProvider._internal();
 
   static ProfileProvider profileInstance;
@@ -9,4 +12,11 @@ class ProfileProvider {
     }
     return profileInstance;
   }
+
+  // Map<String, int> getData() {
+  //   return {
+  //     'HighestScore': this._localStorage.getHighestScore(),
+  //     'Played': this.
+  //   }
+  // }
 }
