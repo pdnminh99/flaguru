@@ -1,6 +1,7 @@
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class LocalStorage {
   Future<Settings> getExistingSettings() async {
@@ -49,6 +50,8 @@ class LocalStorage {
     else if (isWin) pref.setInt('${symbol}win', winning + 1);
     pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
   }
+
+  // int getHighestScore(Difficulty level) => pref.getInt('EASYscore');
 
   String _getSymbol(Difficulty level) {
     switch (level) {
