@@ -10,16 +10,32 @@ class User {
     return this._uuid;
   }
 
+  set uuid(String value) {
+    this._uuid = value;
+  }
+
   String get name {
     return this._name;
+  }
+
+  set name(String value) {
+    this._name = value;
   }
 
   String get avatar {
     return this._avatar;
   }
 
+  set avatar(String value) {
+    this._avatar = value;
+  }
+
   String get email {
     return this._email;
+  }
+
+  set email(String value) {
+    this._email = value;
   }
 
   User({
@@ -33,4 +49,7 @@ class User {
     this._avatar = avatar;
     this._email = email;
   }
+
+  @override
+  String toString() => 'User $uuid, name $name, email $email';
 }

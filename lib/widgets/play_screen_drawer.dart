@@ -45,16 +45,15 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
     );
   }
 
+  void popUpConfirmation(Function doYes) {}
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.7,
+      width: MediaQuery.of(context).size.width * 0.7,
       child: Drawer(
         child: Container(
-          color: Color(0xff019dad),
+          color: const Color(0xff019dad),
           child: ListView(
             children: <Widget>[
               buildDrawerHeader(),
