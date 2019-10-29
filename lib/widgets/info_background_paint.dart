@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MyPaint extends CustomPainter {
+class CustomPaintBackground extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.blue
+      ..color = Color.fromRGBO(34, 182, 192, 1)
       ..style = PaintingStyle.fill;
-    //..strokeWidth = 8.0;
+      //..strokeWidth = 8.0;
 
     Path path = Path();
     path.moveTo(0, size.height * 0.7);
@@ -16,7 +16,8 @@ class MyPaint extends CustomPainter {
     path.lineTo(size.width, 0);
     //print(size.width);
     path.lineTo(0, 0);
-
+    path.close();
+    canvas.drawShadow(path, Color.fromRGBO(34, 182, 192, 1), 4.0, false);
     canvas.drawPath(path, paint);
   }
 

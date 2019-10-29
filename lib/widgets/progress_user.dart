@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 class ProgressUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double _height = MediaQuery.of(context).size.height;
+    print(_height);
     return Container(
       margin: EdgeInsets.only(top: 0),
-      height: 100,
+      height: _height * 0.1367,
       width: double.infinity,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -22,25 +24,27 @@ class ProgressUser extends StatelessWidget {
             BoxShadow(
                 //color: Color.fromRGBO(250, 250, 250, 0.9),
                 color: Color.fromRGBO(217, 217, 217, 1),
-                offset: Offset(0, 1.0),
-                blurRadius: 1.0)
+                offset: Offset(0, 0),
+              
+                blurRadius: 5.0)
           ]),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
         child: Column(
           children: <Widget>[
             Container(
+              alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(bottom: 10.0),
                 child: Text(
                   'Your Progress',
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: _height * 0.0273,
                     fontWeight: FontWeight.bold,
                   ),
                 )),
             Container(
               width: double.infinity,
-              height: 25,
+              height: _height * 0.0341,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(1.0),
