@@ -30,8 +30,9 @@ class ButtonSwitchButtonLogout extends StatelessWidget {
                       switchuser();
                     },                 
                     color: Color.fromRGBO(1, 157, 173, 1),
-                    child: Text(
+                    child: Text(                     
                       'Switch Account',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: _height * 0.02, fontWeight: FontWeight.bold),
                     ),

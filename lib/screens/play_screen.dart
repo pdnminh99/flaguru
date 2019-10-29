@@ -18,7 +18,6 @@ import '../widgets/countdown_watch.dart';
 
 class PlayScreen extends StatefulWidget {
   static final routeName = '/play_screen';
-
   final Difficulty difficulty;
 
   PlayScreen(this.difficulty);
@@ -144,90 +143,92 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
     final width = MediaQuery.of(context).size.width;
     final millis = 500;
 
-    return Scaffold(
-      backgroundColor: const Color(0xff019dad),
-      drawer: PlayScreenDrawer(difficulty: widget.difficulty),
-      body: WillPopScope(
-        onWillPop: () async => false,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: height * 0.09,
-              child: TopBar(
-                difficulty: EnumString.getDifficulty(widget.difficulty),
-              ),
-            ),
-            Visibility(
-              visible: roundHandler == null,
-              child: Container(
-                width: double.infinity,
-                height: height * 0.91,
-                child: LoadingSpinner(),
-              ),
-            ),
-            Visibility(
-              visible: roundHandler != null && roundHandler.status == RoundStatus.IDLE,
-              child: Container(
-                width: double.infinity,
-                height: height * 0.91,
-                child: StartButton(onStart: startGame),
-              ),
-            ),
-            if (roundHandler != null && roundHandler.status != RoundStatus.IDLE) ...[
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xff019dad),
+        drawer: PlayScreenDrawer(difficulty: widget.difficulty),
+        body: WillPopScope(
+          onWillPop: () async => false,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
               Container(
                 width: double.infinity,
-                height: height * 0.07,
-                child: InfoBar(
-                  totalQuestions: qaList.length,
-                  currentQuestion: index + 1,
-                  maxLives: maxLife,
-                  remainLives: roundHandler.remainLives,
+                height: height * 0.09,
+                child: TopBar(
+                  difficulty: EnumString.getDifficulty(widget.difficulty),
                 ),
               ),
-              QuestionInfoArea(
-                isAnswered: isAnswered,
-                isName: nameOrFlag(),
-                height: height,
-                width: width,
-                millis: millis,
-                question: qaList[index]['question'],
+              Visibility(
+                visible: roundHandler == null,
+                child: Container(
+                  width: double.infinity,
+                  height: height * 0.91,
+                  child: LoadingSpinner(),
+                ),
               ),
-              AnimatedContainer(
-                width: (isAnswered) ? width * 0.2 : width,
-                height: (isAnswered) ? height * 0 : height * 0.09,
-                duration: Duration(milliseconds: millis),
-                child: CountdownWatch(time: time, redTime: 10),
+              Visibility(
+                visible: roundHandler != null && roundHandler.status == RoundStatus.IDLE,
+                child: Container(
+                  width: double.infinity,
+                  height: height * 0.91,
+                  child: StartButton(onStart: startGame),
+                ),
               ),
-              Container(
-                width: double.infinity,
-                height: height * 0.35,
-                child: FadeTransition(
-                  opacity: _controller,
-                  child: AnswersArea(
-                    isFlag: nameOrFlag(),
-                    isAnswered: isAnswered,
-                    doRight: doRight,
-                    doWrong: doWrong,
-                    answers: qaList[index]['answer'],
-                    pressStates: pressStates,
-                    changePressState: changePressState,
+              if (roundHandler != null && roundHandler.status != RoundStatus.IDLE) ...[
+                Container(
+                  width: double.infinity,
+                  height: height * 0.07,
+                  child: InfoBar(
+                    totalQuestions: qaList.length,
+                    currentQuestion: index + 1,
+                    maxLives: maxLife,
+                    remainLives: roundHandler.remainLives,
                   ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: height * 0.11,
-                child: BottomBar(
+                QuestionInfoArea(
                   isAnswered: isAnswered,
-                  onRefresh: getNextQuestion,
-                  isOver: roundHandler.status == RoundStatus.OVER,
-                  onOver: onOver,
+                  isName: nameOrFlag(),
+                  height: height,
+                  width: width,
+                  millis: millis,
+                  question: qaList[index]['question'],
                 ),
-              ),
+                AnimatedContainer(
+                  width: (isAnswered) ? width * 0.2 : width,
+                  height: (isAnswered) ? height * 0 : height * 0.09,
+                  duration: Duration(milliseconds: millis),
+                  child: CountdownWatch(time: time, redTime: 10),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: height * 0.35,
+                  child: FadeTransition(
+                    opacity: _controller,
+                    child: AnswersArea(
+                      isFlag: nameOrFlag(),
+                      isAnswered: isAnswered,
+                      doRight: doRight,
+                      doWrong: doWrong,
+                      answers: qaList[index]['answer'],
+                      pressStates: pressStates,
+                      changePressState: changePressState,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: height * 0.11,
+                  child: BottomBar(
+                    isAnswered: isAnswered,
+                    onRefresh: getNextQuestion,
+                    isOver: roundHandler.status == RoundStatus.OVER,
+                    onOver: onOver,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

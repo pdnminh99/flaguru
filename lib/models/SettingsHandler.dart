@@ -1,8 +1,9 @@
 import 'package:flaguru/models/Settings.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'LocalStorage.dart';
 
-class SettingsHandler {
+class SettingsHandler with ChangeNotifier {
   Settings _currentSettings;
   var _localStorage = LocalStorage();
 
@@ -12,9 +13,8 @@ class SettingsHandler {
 
   set isSoundEnabled(bool newState) {
     this._currentSettings.isSoundON = newState;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   bool get isAudioEnabled {
@@ -23,9 +23,8 @@ class SettingsHandler {
 
   set isAudioEnabled(bool newState) {
     this._currentSettings.isAudioON = newState;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   bool get skipTutorials {
@@ -33,11 +32,9 @@ class SettingsHandler {
   }
 
   set skipTutorials(bool newState) {
-    this._currentSettings.skipTutorials = newState
-    ;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    this._currentSettings.skipTutorials = newState;
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   SettingsHandler._internal();
@@ -47,8 +44,7 @@ class SettingsHandler {
   static Future<SettingsHandler> getInstance() async {
     if (settingInstance == null) {
       settingInstance = SettingsHandler._internal();
-      settingInstance._currentSettings =
-          await settingInstance._localStorage.getExistingSettings();
+      settingInstance._currentSettings = await settingInstance._localStorage.getExistingSettings();
     }
     return settingInstance;
   }
