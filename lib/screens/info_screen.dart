@@ -61,18 +61,32 @@ class _InfoScreenState extends State<InfoScreen> {
                 height: _height * 0.232,
                 child: Stack(
                   overflow: Overflow.visible,
-                  children: <Widget>[ 
+                  children: <Widget>[
                     BackgroundInfo(),
                     Align(
-                      alignment: Alignment(0, 1),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          this._currentUser.photoURL,
-                          height: _height * 0.125,
-                          width: _height * 0.125,
-                          repeat: ImageRepeat.noRepeat,
-                          fit: BoxFit.cover,
+                      alignment: Alignment(0,1),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 50),
+                        height: 130,
+                        child: Column(
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                this._currentUser.photoURL,
+                                height: _height * 0.12,
+                                width: _height * 0.12,
+                                repeat: ImageRepeat.noRepeat,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(height: 5,),
+                            Text(_currentUser.name,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700
+                            ),)
+                          ],
                         ),
                       ),
                     ),
@@ -83,7 +97,7 @@ class _InfoScreenState extends State<InfoScreen> {
               padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
               child: Column(
                 children: <Widget>[
-                  ProgressUser(),
+                  //ProgressUser(),
                   InfoUser(
                     name: _currentUser.name,
                     email: _currentUser.email,
@@ -100,5 +114,45 @@ class _InfoScreenState extends State<InfoScreen> {
         ),
       ),
     );
+  }
+
+  Widget getScoreSmall(String rounds) {
+    return (Container(
+      child: Column(
+        children: <Widget>[Text(rounds), Text('rounds')],
+      ),
+    ));
+  }
+
+  Widget getScoreHight(String score) {
+    return (Container(
+      child: Column(
+        children: <Widget>[
+          Text(score),
+          Text('High Score'),
+        ],
+      ),
+    ));
+  }
+
+  Widget getScroreUserCard(
+      String diff, String rounds, String highest_score, String wins) {
+    return (Container(
+      child: Column(
+        children: <Widget>[
+          //name
+          Text(diff),
+          //Text('EASY'),
+          // score
+          Row(
+            children: <Widget>[
+              getScoreSmall(rounds),
+              getScoreHight(highest_score),
+              getScoreSmall(rounds),
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }
