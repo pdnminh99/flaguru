@@ -29,7 +29,8 @@ class _MenuScreenState extends State<MenuScreen>
   }
 
   void gotoPlayScreen(BuildContext context) {
-    Navigator.pushNamed(context, DifficultyScreen.routeName);
+    //Navigator.pushNamed(context, DifficultyScreen.routeName);
+    Navigator.popAndPushNamed(context, DifficultyScreen.routeName);
   }
 
   void gotoLogin(BuildContext context) {

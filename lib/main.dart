@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/screens/result_screen.dart';
@@ -30,10 +31,13 @@ class _MyAppState extends State<MyApp> {
       initialRoute: PlayScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
+        '/playscreen/easy': (context) => PlayScreen(difficulty: Difficulty.EASY,),
+        '/playscreen/normal': (context) => PlayScreen(difficulty: Difficulty.NORMAL,),
+        '/playscreen/hard': (context) => PlayScreen(difficulty: Difficulty.HARD,),
         MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),
-        InfoScreen.routeName: (context) => InfoScreen()
+        InfoScreen.routeName: (context) => InfoScreen(),
       },
     );
   }
