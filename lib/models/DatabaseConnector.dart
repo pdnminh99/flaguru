@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flaguru/models/Country.dart';
-import 'package:flaguru/models/Settings.dart';
-import 'package:flaguru/models/User.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

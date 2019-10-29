@@ -1,4 +1,5 @@
 import 'package:flaguru/models/Answer.dart';
+import 'package:flaguru/models/LocalStorage.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flaguru/models/Result.dart';
 import 'package:flaguru/models/AnswerLog.dart';
@@ -7,7 +8,7 @@ import 'package:flaguru/models/Enum.dart';
 
 class RoundHandler {
   Difficulty _level = Difficulty.EASY;
-
+  var _localStorage = LocalStorage();
   // Life props
   int _lifeCount = 0;
   int _remainLives = 0;
@@ -50,7 +51,7 @@ class RoundHandler {
 
   Result get result {
     if (this._status != RoundStatus.OVER) return null;
-    return new Result(
+    var roundResult = Result(
         level: this._level,
         totalTimeElapsed: this._totalTimeElapsed,
         totalTimeLeftRightAnswers: this._totalTimeLeftRightAnswers,
@@ -59,6 +60,10 @@ class RoundHandler {
         remainLives: this.remainLives,
         totalLives: this._lifeCount,
         answerLogs: this._logs);
+    this
+        ._localStorage
+        .saveResult(roundResult.score, this._level, this.remainLives > 0);
+    return roundResult;
   }
 
   int _totalTimeElapsed = 0;
@@ -80,7 +85,8 @@ class RoundHandler {
     @required int questions,
     @required int timeLimit,
   }) {
-    if (lifeCount < 1) throw Exception("Life count per round should be greater than 0");
+    if (lifeCount < 1)
+      throw Exception("Life count per round should be greater than 0");
     if (timeLimit < 1) throw Exception("countdown time should be at least 1");
     if (questions < 1) throw Exception("There should be at least one question");
     this._level = level;
@@ -100,7 +106,8 @@ class RoundHandler {
     if (this.status != RoundStatus.PLAYING)
       throw Exception("Round status is yet started or is over");
     if (this._timeLimit < timeLeft)
-      throw Exception("Why would countdown remain greater than countdown time?");
+      throw Exception(
+          "Why would countdown remain greater than countdown time?");
 
     final timeElapsed = _timeLimit - timeLeft;
 
@@ -127,6 +134,7 @@ class RoundHandler {
     if (this._status == RoundStatus.IDLE) {
       // round is start
       this._status = RoundStatus.PLAYING;
+      this._localStorage.newRound(this._level);
       return true;
     }
     return false;
