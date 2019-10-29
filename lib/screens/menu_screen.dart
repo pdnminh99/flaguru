@@ -19,7 +19,8 @@ class MenuScreen extends StatelessWidget {
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
     }).then((user) {
-      Navigator.pushNamed(context, InfoScreen.routeName);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => InfoScreen()));
     }).catchError((e) => print("myerr" + e));
   }
 

@@ -7,33 +7,24 @@ import 'package:flaguru/widgets/info_user.dart';
 import 'package:flaguru/widgets/progress_info.dart';
 import 'package:flutter/material.dart';
 
-class InfoScreen extends StatelessWidget {
-  static String routeName = "/InfoScreen";
+class InfoScreen extends StatefulWidget {
+  static String routeName = "/info_screen";
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: InfoMain(),
-    );
-  }
+  _InfoScreenState createState() => _InfoScreenState();
 }
 
-class InfoMain extends StatefulWidget {
-  @override
-  _InfoMainState createState() => _InfoMainState();
-}
-
-class _InfoMainState extends State<InfoMain> {
+class _InfoScreenState extends State<InfoScreen> {
   //pro
   var auth = Authentication();
   UserDetail _currentUser;
 
   //ctor
-  _InfoMainState() {
+  _InfoScreenState() {
     this.auth.getCurrentUser().then((user) {
       setState(() {
         this._currentUser = user;
+        this._currentUser.email =
+            user.email[0].toUpperCase() + user.email.substring(1);
       });
     });
   }
@@ -41,14 +32,8 @@ class _InfoMainState extends State<InfoMain> {
   void signout(BuildContext context) {
     // Navigator.pushNamed(context, MenuScreen.routeName);
     // Navigator.pop(context);
-    // this.auth.signOut().then((_) {
-    //   Navigator.of(context).pop();
-    //   Navigator.pushNamed(context, MenuScreen.routeName);
-    //   // }).then((user) {
-    //   //   setState(() {
-    //   //     this._currentUser = user;
-    //   //   });
-    // }).catchError((err) => print(err));
+    this.auth.signOut().then((_) {}).catchError((err) => print(err));
+    Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
 
   void switchuser() {

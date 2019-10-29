@@ -23,14 +23,14 @@ class PlayScreen extends StatefulWidget {
   PlayScreen(
     {
       this.difficulty
+      
     }
   );
   @override
   _PlayScreenState createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends State<PlayScreen>
-    with SingleTickerProviderStateMixin {
+class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateMixin {
   final questionTotal = 20;
   final timeLimit = 20;
   final maxLife = 5;
@@ -52,8 +52,8 @@ class _PlayScreenState extends State<PlayScreen>
     var qProvider = QuestionProvider(level: widget.difficulty);
     qProvider.initializeQuestionsProvider().then((_) {
       setState(() {
-        qaList = qProvider.getCollections(
-            numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
+        qaList =
+            qProvider.getCollections(numberOfQuestions: questionTotal, isFirstAnswerCorrect: true);
         roundHandler = RoundHandler(
           level: widget.difficulty,
           lifeCount: maxLife,
@@ -63,8 +63,7 @@ class _PlayScreenState extends State<PlayScreen>
       });
     });
 
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _controller = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -112,9 +111,7 @@ class _PlayScreenState extends State<PlayScreen>
     _timer.cancel();
     setState(() {
       roundHandler.getAnswer(
-          isCorrect: isRightAnswer,
-          question: qaList[index]['question'],
-          timeLeft: time);
+          isCorrect: isRightAnswer, question: qaList[index]['question'], timeLeft: time);
       isAnswered = true;
     });
   }
@@ -130,9 +127,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   void onOver() {
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ResultScreen(roundHandler.result)));
+        context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.result)));
   }
 
   Timer getTimer() {
@@ -174,16 +169,14 @@ class _PlayScreenState extends State<PlayScreen>
               ),
             ),
             Visibility(
-              visible: roundHandler != null &&
-                  roundHandler.status == RoundStatus.IDLE,
+              visible: roundHandler != null && roundHandler.status == RoundStatus.IDLE,
               child: Container(
                 width: double.infinity,
                 height: height * 0.91,
                 child: StartButton(onStart: startGame),
               ),
             ),
-            if (roundHandler != null &&
-                roundHandler.status != RoundStatus.IDLE) ...[
+            if (roundHandler != null && roundHandler.status != RoundStatus.IDLE) ...[
               Container(
                 width: double.infinity,
                 height: height * 0.07,

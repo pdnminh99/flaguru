@@ -37,10 +37,9 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
-    final double historyBtnHeight = 50;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final historyBtnHeight = 50.0;
 
     return SafeArea(
       bottom: false,
@@ -103,7 +102,10 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
                   alignment: Alignment.bottomCenter,
                   child: SlideTransition(
                     position: animation.historyBtnOffset,
-                    child: HistoryArea(result: widget.result, btnHeight: historyBtnHeight),
+                    child: HistoryArea(
+                      logs: widget.result.answerLogs,
+                      btnHeight: historyBtnHeight,
+                    ),
                   ),
                 ),
               ],
@@ -133,11 +135,7 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
     return Center(
       child: Text(
         EnumString.getDifficulty(difficulty),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-          fontSize: 20,
-        ),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
       ),
     );
   }

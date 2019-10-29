@@ -1,12 +1,13 @@
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 
 class diffculty_cart extends StatelessWidget {
   String name;
   String point;
   String timer;
-  Difficulty routename;
+  String routename;
   Function navigator;
   int pointIcon;
   int timerIcon;
@@ -22,10 +23,14 @@ class diffculty_cart extends StatelessWidget {
       // padding: EdgeInsets.all(1),
       onPressed: () {
         // Navigator.pushNamed(context, routename);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(difficulty: routename,)));
+        // Navigator.pop(context,MaterialPageRoute(builder: (context) => PlayScreen(difficulty: routename,)));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(difficulty: routename,)));
+        // Navigator.pop(context);
+        Navigator.popAndPushNamed(context,this.routename);
       },
       child: Container(
-        height: 120,
+        height: 115,
+        width: 320,
         // color: Colors.white,
         child: Column(
           children: <Widget>[
@@ -43,7 +48,7 @@ class diffculty_cart extends StatelessWidget {
               thickness: 3,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(top: 5),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

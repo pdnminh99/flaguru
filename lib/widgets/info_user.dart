@@ -6,19 +6,14 @@ import 'package:flutter/material.dart';
 // }
 
 // class _InfoUserState extends State<InfoUser> {
-class InfoUser extends StatelessWidget{
+class InfoUser extends StatelessWidget {
   final String name;
   final String email;
   final String score;
 
-  const InfoUser({
-     @required this.name, 
-     @required this.email, 
-     @required this.score
-     });
-     
+  const InfoUser(
+      {@required this.name, @required this.email, @required this.score});
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,15 +37,15 @@ class InfoUser extends StatelessWidget{
         child: Column(
           children: <Widget>[
             Container(
-              alignment: Alignment.topLeft,
-              margin: EdgeInsets.only(bottom: 10.0),
-              child: Text('Information', style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-              )
-              ),
-
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.only(bottom: 10.0),
+                child: Text(
+                  'Information',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
             Container(
               width: double.infinity,
               height: 200,
@@ -58,27 +53,54 @@ class InfoUser extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text('Name:', style: TextStyle(fontSize: 18.0)),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        name,
+                        style: TextStyle(fontSize: 16.0),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Row(children: <Widget>[
-                    Text('Name', style: TextStyle(fontSize: 18.0)),
-                    SizedBox(width: 20,),
-                    Text( name ,style: TextStyle(fontSize: 16.0),)
-                  ],),
-                SizedBox(height: 30,),
-              Row(children: <Widget>[
-                Text('Email', style: TextStyle(fontSize: 18.0)),
-                SizedBox(width: 20,),
-                Flexible( child: Text(
-                  email,
-                  overflow: TextOverflow.ellipsis, 
-                  style: TextStyle(fontSize: 16.0,),)
-                  )]),
-              SizedBox(height: 30,),
-              Row(children: <Widget>[
-                Text('Scrore',style: TextStyle(fontSize: 18.0),),
-                SizedBox(width: 20,),
-                Text(score,style: TextStyle(fontSize: 16.0),) 
-              ],)
-              ],
+                    Text('Email: ', style: TextStyle(fontSize: 18.0)),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Flexible(
+                        child: Text(
+                      email,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ))
+                  ]),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Score: ',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        score,
+                        style: TextStyle(fontSize: 16.0),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
           ],
