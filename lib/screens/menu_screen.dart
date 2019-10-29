@@ -38,8 +38,7 @@ class _MenuScreenState extends State<MenuScreen>
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
     }).then((user) {
-      Navigator.popAndPushNamed(
-          context, InfoScreen.routeName);
+      Navigator.popAndPushNamed(context, InfoScreen.routeName);
     }).catchError((e) => print("myerr" + e));
   }
 

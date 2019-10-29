@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
@@ -16,7 +17,7 @@ class InfoScreen extends StatefulWidget {
 class _InfoScreenState extends State<InfoScreen> {
   //pro
   var auth = Authentication();
-  UserDetail _currentUser;
+  User _currentUser;
   //ctor
   _InfoScreenState() {
     this.auth.getCurrentUser().then((user) {
@@ -68,7 +69,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          this._currentUser.photoURL,
+                          this._currentUser.avatar,
                           height: _height * 0.125,
                           width: _height * 0.125,
                           repeat: ImageRepeat.noRepeat,
