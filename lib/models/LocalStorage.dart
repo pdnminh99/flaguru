@@ -56,12 +56,16 @@ class LocalStorage {
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
     var winning = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
     if (lastHighestScore == null || lastHighestScore < newScore)
       pref.setInt('${symbol}score', newScore);
-    if (winning == null)
-      pref.setInt('${symbol}win', 0);
-    else if (isWin) pref.setInt('${symbol}win', winning + 1);
-    pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+    // if (winning == null)
+    //   pref.setInt('${symbol}win', 0);
+    // else if (isWin) pref.setInt('${symbol}win', winning + 1);
+    pref.setInt(
+        '${symbol}win', winning == null ? 0 : isWin ? winning + 1 : winning);
+    pref.setInt(
+        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
   // // uncomment this if the other func not working
   // Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
