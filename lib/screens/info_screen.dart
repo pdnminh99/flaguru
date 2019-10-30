@@ -1,13 +1,11 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/LocalStorage.dart';
+import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
-import 'package:flaguru/widgets/info_user.dart';
-import 'package:flaguru/widgets/progress_user.dart';
 import 'package:flutter/material.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -17,6 +15,12 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  var easyDetails = RoundDetails(level: Difficulty.EASY);
+  var normalDetails = RoundDetails(level: Difficulty.NORMAL);
+  var hardDetails = RoundDetails(level: Difficulty.HARD);
+  String totalScore = '0';
+  var localStorage = LocalStorage();
+
   //pro
   var auth = Authentication();
   User _currentUser;
@@ -28,6 +32,34 @@ class _InfoScreenState extends State<InfoScreen> {
         this._currentUser.email =
             user.email[0].toUpperCase() + user.email.substring(1);
       });
+      this.localStorage.getLocalResult(Difficulty.EASY).then((result) {
+        setState(() {
+          this.easyDetails = RoundDetails(
+              level: Difficulty.EASY,
+              highestScore: result['highestScore'],
+              winningCount: result['winningCount'],
+              playedCount: result['playedCount']);
+        });
+        this.totalScore = result['totalScore'].toString();
+      });
+      this.localStorage.getLocalResult(Difficulty.NORMAL).then((result) {
+        setState(() {
+          this.normalDetails = RoundDetails(
+              level: Difficulty.NORMAL,
+              highestScore: result['highestScore'],
+              winningCount: result['winningCount'],
+              playedCount: result['playedCount']);
+        });
+      });
+      this.localStorage.getLocalResult(Difficulty.HARD).then((result) {
+        setState(() {
+          this.hardDetails = RoundDetails(
+              level: Difficulty.HARD,
+              highestScore: result['highestScore'],
+              winningCount: result['winningCount'],
+              playedCount: result['playedCount']);
+        });
+      });
     });
   }
   //meth
@@ -38,10 +70,10 @@ class _InfoScreenState extends State<InfoScreen> {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
 
-  void backMenuScreen ()
-  {
+  void backMenuScreen() {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
+
   void switchuser() {
     this.auth.switchUser().then((_) {
       return this.auth.getCurrentUser();
@@ -79,7 +111,9 @@ class _InfoScreenState extends State<InfoScreen> {
                             Icons.arrow_back_ios,
                           ),
                           color: Color.fromARGB(255, 255, 255, 255),
-                          onPressed: (){ backMenuScreen(); },
+                          onPressed: () {
+                            backMenuScreen();
+                          },
                         ),
                       ),
                       Align(
@@ -125,15 +159,59 @@ class _InfoScreenState extends State<InfoScreen> {
                     //   email: _currentUser.email,
                     //   score: '100',
                     // ),
-                    getTotalScore(),
+                    getTotalScore(this.totalScore),
                     SizedBox(height: _height * 0.0273),
-                    getScroreUserCard('Easy', '100', '100', '100', _height),
+                    getScroreUserCard(
+                        'Easy',
+                        this.easyDetails.playedCount != null
+                            ? this.easyDetails.playedCount.toString()
+                            : '0',
+                        this.easyDetails.highestScore != null
+                            ? this.easyDetails.highestScore.toString()
+                            : '0',
+                        this.easyDetails.winningCount != null
+                            ? this.easyDetails.winningCount.toString()
+                            : '0',
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Medium', '200', '200', '200', _height),
+                    getScroreUserCard(
+                        'Medium',
+                        this.normalDetails.playedCount != null
+                            ? this.normalDetails.playedCount.toString()
+                            : '0',
+                        this.normalDetails.highestScore != null
+                            ? this.normalDetails.highestScore.toString()
+                            : '0',
+                        this.normalDetails.winningCount != null
+                            ? this.normalDetails.winningCount.toString()
+                            : '0',
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Hard', '300', '300', '300', _height),
+                    getScroreUserCard(
+                        'Hard',
+                        this.hardDetails.winningCount != null
+                            ? this.hardDetails.playedCount.toString()
+                            : '0',
+                        this.hardDetails.winningCount != null
+                            ? this.hardDetails.highestScore.toString()
+                            : '0',
+                        this.hardDetails.winningCount != null
+                            ? this.hardDetails.winningCount.toString()
+                            : '0',
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Enless', '400', '400', '400', _height),
+                    getScroreUserCard(
+                        'Enless',
+                        this.easyDetails.playedCount != null
+                            ? this.easyDetails.playedCount.toString()
+                            : '0',
+                        this.easyDetails.highestScore != null
+                            ? this.easyDetails.highestScore.toString()
+                            : '0',
+                        this.easyDetails.winningCount != null
+                            ? this.easyDetails.winningCount.toString()
+                            : '0',
+                        _height),
                     ButtonSwitchButtonLogout(
                         signout: signout,
                         switchuser: switchuser,
@@ -148,24 +226,26 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Widget getTotalScore ()
-  {
+  Widget getTotalScore(String score) {
     return Container(
-      child: Row(children: <Widget>[
-        Text('Total Score: ',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w700,
-        ),
-        ),
-        Text('769',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w700
-        ),)
-      ],) ,
+      child: Row(
+        children: <Widget>[
+          Text(
+            'Total Score: ',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            score,
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+          )
+        ],
+      ),
     );
   }
+
   Widget getScoreSmall(String value, double _height, String name) {
     return (Container(
       height: _height * 0.1,
@@ -252,7 +332,6 @@ class _InfoScreenState extends State<InfoScreen> {
           //Text('EASY'),
           // score
           Row(
-            
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               getScoreSmall(rounds, _height, 'rounds'),

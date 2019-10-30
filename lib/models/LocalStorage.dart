@@ -1,7 +1,6 @@
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 class LocalStorage {
   Future<Settings> getExistingSettings() async {
@@ -57,14 +56,17 @@ class LocalStorage {
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
     var winning = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
     if (lastHighestScore == null || lastHighestScore < newScore)
       pref.setInt('${symbol}score', newScore);
-    if (winning == null)
-      pref.setInt('${symbol}win', 0);
-    else if (isWin) pref.setInt('${symbol}win', winning + 1);
-    pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+    // if (winning == null)
+    //   pref.setInt('${symbol}win', 0);
+    // else if (isWin) pref.setInt('${symbol}win', winning + 1);
+    pref.setInt(
+        '${symbol}win', winning == null ? 0 : isWin ? winning + 1 : winning);
+    pref.setInt(
+        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
-
   // // uncomment this if the other func not working
   // Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
   //   var symbol = _getSymbol(level);
@@ -81,6 +83,21 @@ class LocalStorage {
   // }
 
   // int getHighestScore(Difficulty level) => pref.getInt('EASYscore');
+
+  Future<Map<String, int>> getLocalResult(Difficulty level) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var highestScore = pref.getInt('${symbol}score');
+    var playedCount = pref.getInt('${symbol}played');
+    var winningCount = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
+    return {
+      'highestScore': highestScore == null ? 0 : highestScore,
+      'playedCount': playedCount == null ? 0 : playedCount,
+      'winningCount': winningCount == null ? 0 : winningCount,
+      'totalScore': totalScore == null ? 0 : totalScore,
+    };
+  }
 
   String _getSymbol(Difficulty level) {
     switch (level) {
