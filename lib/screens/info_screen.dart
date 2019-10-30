@@ -38,6 +38,10 @@ class _InfoScreenState extends State<InfoScreen> {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
 
+  void backMenuScreen ()
+  {
+    Navigator.popAndPushNamed(context, MenuScreen.routeName);
+  }
   void switchuser() {
     this.auth.switchUser().then((_) {
       return this.auth.getCurrentUser();
@@ -67,6 +71,17 @@ class _InfoScreenState extends State<InfoScreen> {
                     overflow: Overflow.visible,
                     children: <Widget>[
                       BackgroundInfo(),
+                      Positioned(
+                        top: _height * 0.03,
+                        left: _height * 0.02,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                          ),
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          onPressed: (){ backMenuScreen(); },
+                        ),
+                      ),
                       Align(
                         alignment: Alignment(0, 1),
                         child: Container(
@@ -151,7 +166,7 @@ class _InfoScreenState extends State<InfoScreen> {
       ],) ,
     );
   }
-  Widget getScoreSmall(String rounds, double _height) {
+  Widget getScoreSmall(String value, double _height, String name) {
     return (Container(
       height: _height * 0.1,
       child: Column(
@@ -160,7 +175,7 @@ class _InfoScreenState extends State<InfoScreen> {
             padding: EdgeInsets.only(top: _height * 0.005),
             child: Container(
               child: Text(
-                rounds,
+                value,
                 style: TextStyle(
                     fontSize: _height * 0.039, fontWeight: FontWeight.w700),
               ),
@@ -170,7 +185,7 @@ class _InfoScreenState extends State<InfoScreen> {
             height: 8.8,
           ),
           Text(
-            'rounds',
+            name,
             style: TextStyle(
                 fontSize: _height * 0.025, fontWeight: FontWeight.w700),
           )
@@ -240,15 +255,15 @@ class _InfoScreenState extends State<InfoScreen> {
             
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              getScoreSmall(rounds, _height),
+              getScoreSmall(rounds, _height, 'rounds'),
               SizedBox(
                 width: _height * 0.0068,
               ),
               getScoreHight(highestScore, _height),
               SizedBox(
-                width: _height * 0.0068,
+                width: _height * 0.0060,
               ),
-              getScoreSmall(rounds, _height),
+              getScoreSmall(rounds, _height, 'wins'),
             ],
           )
         ],
