@@ -84,13 +84,15 @@ class LocalStorage {
 
   // int getHighestScore(Difficulty level) => pref.getInt('EASYscore');
 
-  void getResult() {
-    SharedPreferences.getInstance().then((pref) {
-      print('Score is ${pref.getInt('EASYscore')}');
-      print('total score is ${pref.getInt('totalscore')}');
-      print('winning time is ${pref.getInt('EASYwin')}');
-      print('total rounds played is ${pref.getInt('EASYplayed')}');
-    });
+  Future<Map<String, int>> getLocalResult(Difficulty level) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    return {
+      'highestScore': pref.getInt('${symbol}score'),
+      'playedCount': pref.getInt('${symbol}played'),
+      'winningCount': pref.getInt('${symbol}win'),
+      'totalScore': pref.getInt('totalscore'),
+    };
   }
 
   String _getSymbol(Difficulty level) {

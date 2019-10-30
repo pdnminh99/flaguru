@@ -98,7 +98,6 @@ class RoundHandler {
     this._remainQuestions = questions;
     this._timeLimit = timeLimit;
     this._status = RoundStatus.IDLE;
-    this._localStorage.getResult();
   }
 
   void getAnswer(
