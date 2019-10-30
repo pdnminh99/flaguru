@@ -27,13 +27,11 @@ class _DifficultyScreenState extends State<DifficultyScreen> with SingleTickerPr
   @override 
   void initState(){
     super.initState();
-    // print(this.animated);
-    super.initState();
     _animatedContainer = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 700),
       vsync: this,
     );
-    _animation = Tween(begin: 90.0,end: 0.0).animate(_animatedContainer)
+    _animation = Tween(begin: 60.0,end: 0.0).animate(_animatedContainer)
     ..addListener((){
       setState(() {
       });
@@ -58,10 +56,10 @@ class _DifficultyScreenState extends State<DifficultyScreen> with SingleTickerPr
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  diffculty_cart("Easy","150",this.arrayofCheckPoint[0],'/playscreen/easy',poinIconCode,timerIconCode),
-                  diffculty_cart("Normal","120", this.arrayofCheckPoint[1], '/playscreen/normal',poinIconCode,timerIconCode),
-                  diffculty_cart("Hard","100", this.arrayofCheckPoint[2],'/playscreen/hard',poinIconCode,timerIconCode),
-                  diffculty_cart("Enless","", "","",infiniteIcon,infiniteIcon),
+                  diffculty_cart("Easy","150",this.arrayofCheckPoint[0],Difficulty.EASY,poinIconCode,timerIconCode),
+                  diffculty_cart("Normal","120", this.arrayofCheckPoint[1], Difficulty.NORMAL,poinIconCode,timerIconCode),
+                  diffculty_cart("Hard","100", this.arrayofCheckPoint[2],Difficulty.HARD,poinIconCode,timerIconCode),
+                  diffculty_cart("Enless","", "",Difficulty.HARD,infiniteIcon,infiniteIcon),
                   
                 ]),
             // ),
@@ -75,6 +73,4 @@ class _DifficultyScreenState extends State<DifficultyScreen> with SingleTickerPr
       }));
   }
   }
-
-
 

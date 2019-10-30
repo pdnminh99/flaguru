@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';

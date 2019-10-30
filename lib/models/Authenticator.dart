@@ -1,19 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flaguru/models/User.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-class UserDetail {
-  String uid;
-  String name;
-  String photoURL;
-  String email;
-
-  UserDetail({String uuid, String name, String photoURL, String email}) {
-    this.uid = uuid;
-    this.name = name;
-    this.photoURL = photoURL;
-    this.email = email;
-  }
-}
 
 class Authentication {
   String signInState;
@@ -33,15 +20,15 @@ class Authentication {
     return user;
   }
 
-  Future<UserDetail> getCurrentUser() async {
+  Future<User> getCurrentUser() async {
     var currentUser = await _auth.currentUser();
     print(currentUser);
     return currentUser == null
         ? null
-        : UserDetail(
+        : User(
             uuid: currentUser.uid,
             name: currentUser.displayName,
-            photoURL: currentUser.photoUrl,
+            avatar: currentUser.photoUrl,
             email: currentUser.email);
   }
 
