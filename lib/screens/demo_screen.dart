@@ -1,24 +1,24 @@
-import 'package:flaguru/models/SettingsHandler.dart';
-import 'package:flutter/material.dart';
-import '../main.dart';
-
-class DemoScreen extends State<MyApp> {
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light(),
-      home: parseCollectionToListView(),
-    );
-  }
-
-  Widget state(String text, bool isTrue) =>
-      isTrue ? Text("$text ON") : Text("$text OFF");
-
-  Widget parseCollectionToListView() {
-
-  }
+//import 'package:flaguru/models/SettingsHandler.dart';
+//import 'package:flutter/material.dart';
+//import '../main.dart';
+//
+//class DemoScreen extends State<MyApp> {
+//
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      theme: ThemeData.light(),
+//      home: parseCollectionToListView(),
+//    );
+//  }
+//
+//  Widget state(String text, bool isTrue) =>
+//      isTrue ? Text("$text ON") : Text("$text OFF");
+//
+//  Widget parseCollectionToListView() {
+//
+//  }
   // Widget parseCollectionToListView() => Scaffold(
   //       appBar: AppBar(
   //         title: Text("Test"),
@@ -72,4 +72,4 @@ class DemoScreen extends State<MyApp> {
   //         ],
   //       ),
   //     );
-}
+//}

@@ -23,7 +23,7 @@ class AnswersArea extends StatelessWidget {
     @required this.changePressState,
   });
 
-  Widget getButton(int index, num width) {
+  Widget buildButton(int index, num width) {
     if (isFlag)
       return FlagButton(
         width: width,
@@ -61,18 +61,18 @@ class AnswersArea extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getButton(0, halfWidth),
+              buildButton(0, halfWidth),
               spacingWidget,
-              getButton(1, halfWidth),
+              buildButton(1, halfWidth),
             ],
           ),
           spacingWidget,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getButton(2, halfWidth),
+              buildButton(2, halfWidth),
               spacingWidget,
-              getButton(3, halfWidth),
+              buildButton(3, halfWidth),
             ],
           )
         ],

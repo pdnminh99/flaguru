@@ -1,8 +1,9 @@
 import 'package:flaguru/models/Settings.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'LocalStorage.dart';
 
-class SettingsHandler {
+class SettingsHandler with ChangeNotifier {
   Settings _currentSettings;
   var _localStorage = LocalStorage();
 
@@ -10,33 +11,30 @@ class SettingsHandler {
     return this._currentSettings.isSoundON;
   }
 
-  set isSoundEnabled(bool newstate) {
-    this._currentSettings.isSoundON = newstate;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+  set isSoundEnabled(bool newState) {
+    this._currentSettings.isSoundON = newState;
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   bool get isAudioEnabled {
     return this._currentSettings.isAudioON;
   }
 
-  set isAudioEnabled(bool newstate) {
-    this._currentSettings.isAudioON = newstate;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+  set isAudioEnabled(bool newState) {
+    this._currentSettings.isAudioON = newState;
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   bool get skipTutorials {
     return this._currentSettings.skipTutorials;
   }
 
-  set skipTutorials(bool newstate) {
-    this._currentSettings.skipTutorials = newstate;
-    _localStorage
-        .updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+  set skipTutorials(bool newState) {
+    this._currentSettings.skipTutorials = newState;
+    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    notifyListeners();
   }
 
   SettingsHandler._internal();
@@ -46,8 +44,7 @@ class SettingsHandler {
   static Future<SettingsHandler> getInstance() async {
     if (settingInstance == null) {
       settingInstance = SettingsHandler._internal();
-      settingInstance._currentSettings =
-          await settingInstance._localStorage.getExistingSettings();
+      settingInstance._currentSettings = await settingInstance._localStorage.getExistingSettings();
     }
     return settingInstance;
   }
