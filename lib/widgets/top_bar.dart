@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 class TopBar extends StatelessWidget {
   final String difficulty;
 
-  TopBar({
-    @required this.difficulty,
-  });
+  TopBar({@required this.difficulty});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraint) {
+        final height = constraint.maxHeight;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
@@ -20,28 +19,21 @@ class TopBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  difficulty.toUpperCase(),
+                  difficulty,
                   style: TextStyle(
-                    fontSize: constraint.maxHeight * 0.4,
+                    fontSize: height * 0.4,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
               SizedBox(
-                height: constraint.maxHeight * 0.8,
-                width: constraint.maxHeight * 1.1,
+                height: height * 0.8,
+                width: height * 1.1,
                 child: FlatButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  child: Icon(
-                    Icons.more_horiz,
-                    size: constraint.maxHeight * 0.5,
-                    color: Colors.white,
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  child: Icon(Icons.more_horiz, size: height * 0.5, color: Colors.white),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
               ),
             ],

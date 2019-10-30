@@ -129,7 +129,7 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
   }
 
   Timer getTimer() {
-    return Timer.periodic(Duration(seconds: 1), (_) {
+    return Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() => time--);
       if (time == 0) doWrong();
     });
