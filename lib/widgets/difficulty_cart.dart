@@ -30,11 +30,11 @@ class diffculty_cart extends StatelessWidget {
         // Navigator.pop(context);
         Navigator.pushReplacementNamed(context, PlayScreen.routeName, arguments: difficulty);
       },
-      child: AnimatedContainer(
-        duration: Duration(
-          seconds: 2
-        ),
-        curve: Curves.easeInOutCirc,
+      child: Container(
+        // duration: Duration(
+        //   seconds: 2
+        // ),
+        // curve: Curves.easeInOutCirc,
         height: 115,
         width: 320,
         // color: Colors.white,
