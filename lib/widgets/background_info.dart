@@ -8,7 +8,7 @@ class BackgroundInfo extends StatelessWidget {
     // TODO: implement build
     return CustomPaint(
       child: Container(
-        height: _height *0.205,
+        height: _height *0.18,
       ),
       painter: CustomPaintBackground(),
     );

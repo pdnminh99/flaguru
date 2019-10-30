@@ -42,13 +42,13 @@ class _MenuScreenState extends State<MenuScreen>
     this.auth.handleSignIn().then((FirebaseUser user) {
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
-    }).then((user) {
+    }).then((user) { 
       setState(() => {
-       this._currentuser = user
+       this._currentuser = user    
       });
     }).catchError((e) => print("myerr" + e));
   }
-
+  
   void gotoProfile(BuildContext context){
       Navigator.popAndPushNamed(
           context, InfoScreen.routeName);
