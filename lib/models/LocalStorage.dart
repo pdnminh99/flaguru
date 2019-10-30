@@ -87,11 +87,15 @@ class LocalStorage {
   Future<Map<String, int>> getLocalResult(Difficulty level) async {
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
+    var highestScore = pref.getInt('${symbol}score');
+    var playedCount = pref.getInt('${symbol}played');
+    var winningCount = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
     return {
-      'highestScore': pref.getInt('${symbol}score'),
-      'playedCount': pref.getInt('${symbol}played'),
-      'winningCount': pref.getInt('${symbol}win'),
-      'totalScore': pref.getInt('totalscore'),
+      'highestScore': highestScore == null ? 0 : highestScore,
+      'playedCount': playedCount == null ? 0 : playedCount,
+      'winningCount': winningCount == null ? 0 : winningCount,
+      'totalScore': totalScore == null ? 0 : totalScore,
     };
   }
 
