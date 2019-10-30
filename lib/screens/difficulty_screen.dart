@@ -1,6 +1,5 @@
 import 'package:flaguru/widgets/difficulty_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:flaguru/screens/play_screen.dart';
 import '../models/Enum.dart';
 
 class DifficultyScreen extends StatelessWidget {
@@ -27,10 +26,10 @@ class DifficultyScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                diffculty_cart("Easy","150",this.arrayofCheckPoint[0],'/playscreen/easy',poinIconCode,timerIconCode),
-                diffculty_cart("Normal","120", this.arrayofCheckPoint[1], '/playscreen/normal',poinIconCode,timerIconCode),
-                diffculty_cart("Hard","100", this.arrayofCheckPoint[2],'/playscreen/hard',poinIconCode,timerIconCode),
-                diffculty_cart("Enless","", "","",infiniteIcon,infiniteIcon),
+                diffculty_cart("Easy","150",this.arrayofCheckPoint[0],Difficulty.EASY,poinIconCode,timerIconCode),
+                diffculty_cart("Normal","120", this.arrayofCheckPoint[1], Difficulty.NORMAL,poinIconCode,timerIconCode),
+                diffculty_cart("Hard","100", this.arrayofCheckPoint[2],Difficulty.HARD,poinIconCode,timerIconCode),
+                diffculty_cart("Enless","", "",Difficulty.EASY,infiniteIcon,infiniteIcon),
               ]),
           // ),
         // ),

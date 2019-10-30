@@ -1,36 +1,14 @@
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/SettingsHandler.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class PlayScreenDrawer extends StatefulWidget {
+class PlayScreenDrawer extends StatelessWidget {
   final Difficulty difficulty;
 
   PlayScreenDrawer({@required this.difficulty});
-
-  @override
-  _PlayScreenDrawerState createState() => _PlayScreenDrawerState();
-}
-
-class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
-  bool soundEnabled = true;
-  bool musicEnabled = true;
-
-  @override
-  void initState() {
-    // get audio data
-    super.initState();
-  }
-
-  void changeSoundStatus(bool status) {
-    //update audio data
-    setState(() => soundEnabled = status);
-  }
-
-  void changeMusicStatus(bool status) {
-    // update audio data
-    setState(() => musicEnabled = status);
-  }
 
   void navigateToMenu(BuildContext context) {
     // need confirmation
@@ -41,7 +19,7 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
     // need confirmation
     Navigator.of(context).pushReplacementNamed(
       PlayScreen.routeName,
-      arguments: widget.difficulty,
+      arguments: difficulty,
     );
   }
 
@@ -49,6 +27,8 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<SettingsHandler>(context);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.7,
       child: Drawer(
@@ -60,8 +40,18 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
               buildListTile('Restart', Icons.refresh, () => restart(context)),
               buildListTile('Main Menu', Icons.menu, () => navigateToMenu(context)),
               const SizedBox(height: 30),
-              buildSwitchTile('Sound', Icons.music_note, soundEnabled, changeSoundStatus),
-              buildSwitchTile('Music', Icons.music_video, musicEnabled, changeMusicStatus),
+              buildSwitchTile(
+                'Sound',
+                Icons.music_note,
+                settings.isSoundEnabled,
+                (status) => settings.isSoundEnabled = status,
+              ),
+              buildSwitchTile(
+                'Music',
+                Icons.music_video,
+                settings.isAudioEnabled,
+                (status) => settings.isAudioEnabled = status,
+              ),
             ],
           ),
         ),
@@ -72,9 +62,9 @@ class _PlayScreenDrawerState extends State<PlayScreenDrawer> {
   Widget buildDrawerHeader() {
     return DrawerHeader(
       child: Center(
-        child: Text(
+        child: const Text(
           'FLAGURU',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
     );

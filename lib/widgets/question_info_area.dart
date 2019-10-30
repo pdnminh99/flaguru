@@ -1,4 +1,3 @@
-import 'package:flaguru/models/Answer.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Question.dart';
@@ -12,7 +11,6 @@ class QuestionInfoArea extends StatelessWidget {
   final num height;
   final int millis;
   final Question question;
-//  final QuestionUI question;
 
   QuestionInfoArea({
     @required this.isAnswered,
@@ -30,21 +28,12 @@ class QuestionInfoArea extends StatelessWidget {
       height: (isAnswered) ? height * 0.38 : height * 0.29,
       duration: Duration(milliseconds: millis),
       decoration: BoxDecoration(
-        color: (isAnswered)
-            ? Colors.white.withOpacity(0.6)
-            : Colors.white.withOpacity(0.3),
-        borderRadius:
-            (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
+        color: (isAnswered) ? Colors.white.withOpacity(0.6) : Colors.white.withOpacity(0.3),
+        borderRadius: (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
       ),
       child: (isAnswered)
-          ? InfoArea(
-              question: question,
-              millis: millis,
-            )
-          : QuestionArea(
-              isName: isName,
-              question: question,
-            ),
+          ? InfoArea(question: question, millis: millis)
+          : QuestionArea(isName: isName, question: question),
     );
   }
 }
