@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/User.dart';
@@ -36,6 +38,10 @@ class _InfoScreenState extends State<InfoScreen> {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
 
+  void backMenuScreen ()
+  {
+    Navigator.popAndPushNamed(context, MenuScreen.routeName);
+  }
   void switchuser() {
     this.auth.switchUser().then((_) {
       return this.auth.getCurrentUser();
@@ -56,50 +62,212 @@ class _InfoScreenState extends State<InfoScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-        body: Column(
-          children: <Widget>[
-            Container(
-                height: _height * 0.232,
-                child: Stack(
-                  overflow: Overflow.visible,
-                  children: <Widget>[ 
-                    BackgroundInfo(),
-                    Align(
-                      alignment: Alignment(0, 1),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          this._currentUser.avatar,
-                          height: _height * 0.125,
-                          width: _height * 0.125,
-                          repeat: ImageRepeat.noRepeat,
-                          fit: BoxFit.cover,
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  height: _height * 0.232,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      BackgroundInfo(),
+                      Positioned(
+                        top: _height * 0.03,
+                        left: _height * 0.02,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                          ),
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          onPressed: (){ backMenuScreen(); },
                         ),
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment(0, 1),
+                        child: Container(
+                          //margin: EdgeInsets.only(top: 50),
+                          height: _height * 0.1709,
+                          child: Column(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  this._currentUser.avatar,
+                                  height: _height * 0.12,
+                                  width: _height * 0.12,
+                                  repeat: ImageRepeat.noRepeat,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                _currentUser.name,
+                                style: TextStyle(
+                                    fontSize: _height * 0.0273,
+                                    fontWeight: FontWeight.w700),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+              Padding(
+                // double paddingvl = _height*0.04;
+                padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+                child: Column(
+                  children: <Widget>[
+                    //ProgressUser(),
+                    // InfoUser(
+                    //   name: _currentUser.name,
+                    //   email: _currentUser.email,
+                    //   score: '100',
+                    // ),
+                    getTotalScore(),
+                    SizedBox(height: _height * 0.0273),
+                    getScroreUserCard('Easy', '100', '100', '100', _height),
+                    SizedBox(height: _height * 0.02),
+                    getScroreUserCard('Medium', '200', '200', '200', _height),
+                    SizedBox(height: _height * 0.02),
+                    getScroreUserCard('Hard', '300', '300', '300', _height),
+                    SizedBox(height: _height * 0.02),
+                    getScroreUserCard('Enless', '400', '400', '400', _height),
+                    ButtonSwitchButtonLogout(
+                        signout: signout,
+                        switchuser: switchuser,
+                        paramcontext: context),
                   ],
-                )),
-            Padding(
-              // double paddingvl = _height*0.04;
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
-              child: Column(
-                children: <Widget>[
-                  ProgressUser(),
-                  InfoUser(
-                    name: _currentUser.name,
-                    email: _currentUser.email,
-                    score: '100',
-                  ),
-                  ButtonSwitchButtonLogout(
-                      signout: signout,
-                      switchuser: switchuser,
-                      paramcontext: context),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget getTotalScore ()
+  {
+    return Container(
+      child: Row(children: <Widget>[
+        Text('Total Score: ',
+        style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.w700,
+        ),
+        ),
+        Text('769',
+        style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.w700
+        ),)
+      ],) ,
+    );
+  }
+  Widget getScoreSmall(String value, double _height, String name) {
+    return (Container(
+      height: _height * 0.1,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: _height * 0.005),
+            child: Container(
+              child: Text(
+                value,
+                style: TextStyle(
+                    fontSize: _height * 0.039, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 8.8,
+          ),
+          Text(
+            name,
+            style: TextStyle(
+                fontSize: _height * 0.025, fontWeight: FontWeight.w700),
+          )
+        ],
+      ),
+    ));
+  }
+
+  Widget getScoreHight(String score, _height) {
+    return (Container(
+      child: Column(
+        children: <Widget>[
+          Text(
+            score,
+            style: TextStyle(
+                fontSize: _height * 0.047, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Text(
+            'High Score',
+            style: TextStyle(
+                fontSize: _height * 0.03, fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget getScroreUserCard(String diff, String rounds, String highestScore,
+      String wins, double _height) {
+    return (Container(
+      height: _height * 0.205,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          //color: Color.fromRGBO(34, 182, 192, 1),
+          color: Colors.white,
+          border: Border.all(
+            color: Color.fromRGBO(217, 217, 217, 1),
+          ),
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(217, 217, 217, 1),
+              blurRadius: 3.0,
+              offset: Offset(0, 0),
+            )
+          ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          //name
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 6),
+            alignment: Alignment.center,
+            width: double.infinity,
+            child: Text(
+              diff,
+              style: TextStyle(
+                  fontSize: _height * 0.038, fontWeight: FontWeight.w700),
+            ),
+          ),
+          //Text('EASY'),
+          // score
+          Row(
+            
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              getScoreSmall(rounds, _height, 'rounds'),
+              SizedBox(
+                width: _height * 0.0068,
+              ),
+              getScoreHight(highestScore, _height),
+              SizedBox(
+                width: _height * 0.0060,
+              ),
+              getScoreSmall(rounds, _height, 'wins'),
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }
