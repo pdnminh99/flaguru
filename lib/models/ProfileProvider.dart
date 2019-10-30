@@ -1,5 +1,3 @@
-import 'package:flaguru/models/LocalStorage.dart';
-
 class ProfileProvider {
   // var _localStorage = LocalStorage();
   ProfileProvider._internal();
