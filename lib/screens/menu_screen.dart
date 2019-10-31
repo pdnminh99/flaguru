@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
@@ -83,19 +82,13 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: btnFlyInController,
-      builder: (BuildContext context, Widget child) {
-        return Scaffold(
-          backgroundColor: const Color.fromARGB(255, 1, 157, 173),
-          body: Stack(
-            children: <Widget>[
-              BackgroundSlider(),
-              buildMenuButtons(),
-            ],
-          ),
-        );
-      },
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          BackgroundSlider(),
+          buildMenuButtons(),
+        ],
+      ),
     );
   }
 
@@ -106,13 +99,12 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          buildMenuButtonWrapper(600, gotoTutorial, Menu_Icon.play, "Tutorial", 0, 0.2),
+          buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2),
           sizedBox,
           _currentUser != null
               ? buildMenuButtonWrapper(700, gotoProfile, Icons.face, "Profile", 0.15, 0.35,
                   rightIcon: _currentUser.avatar)
-              : buildMenuButtonWrapper(
-                  700, gotoProfile, Icons.person_outline, "Profile", 0.15, 0.35,
+              : buildMenuButtonWrapper(700, gotoLogin, Icons.person_outline, "Login", 0.15, 0.35,
                   rightIcon: 'G'),
           sizedBox,
           buildMenuButtonWrapper(800, gotoTutorial, Icons.bookmark_border, "Tutorial", 0.3, 0.5),
@@ -128,10 +120,16 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   Widget buildMenuButtonWrapper(
       int offsetX, Function onPress, IconData leftIcon, String title, double begin, double end,
       {String rightIcon}) {
-    return Transform.translate(
-      offset: Offset(btnFlyInAnim.value * offsetX, 0),
+    return AnimatedBuilder(
+      animation: btnFlyInAnim,
       child: MenuButton(onPress, leftIcon, title, btnRotationController,
           begin: begin, end: end, rightIcon: rightIcon),
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(btnFlyInAnim.value * offsetX, 0),
+          child: child,
+        );
+      },
     );
   }
 }
