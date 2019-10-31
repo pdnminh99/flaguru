@@ -1,6 +1,5 @@
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/LocalStorage.dart';
 import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
@@ -19,7 +18,6 @@ class _InfoScreenState extends State<InfoScreen> {
   var normalDetails = RoundDetails(level: Difficulty.NORMAL);
   var hardDetails = RoundDetails(level: Difficulty.HARD);
   String totalScore = '0';
-  var localStorage = LocalStorage();
 
   //pro
   var auth = Authentication();
@@ -31,34 +29,6 @@ class _InfoScreenState extends State<InfoScreen> {
         this._currentUser = user;
         this._currentUser.email =
             user.email[0].toUpperCase() + user.email.substring(1);
-      });
-      this.localStorage.getLocalResult(Difficulty.EASY).then((result) {
-        setState(() {
-          this.easyDetails = RoundDetails(
-              level: Difficulty.EASY,
-              highestScore: result['highestScore'],
-              winningCount: result['winningCount'],
-              playedCount: result['playedCount']);
-        });
-        this.totalScore = result['totalScore'].toString();
-      });
-      this.localStorage.getLocalResult(Difficulty.NORMAL).then((result) {
-        setState(() {
-          this.normalDetails = RoundDetails(
-              level: Difficulty.NORMAL,
-              highestScore: result['highestScore'],
-              winningCount: result['winningCount'],
-              playedCount: result['playedCount']);
-        });
-      });
-      this.localStorage.getLocalResult(Difficulty.HARD).then((result) {
-        setState(() {
-          this.hardDetails = RoundDetails(
-              level: Difficulty.HARD,
-              highestScore: result['highestScore'],
-              winningCount: result['winningCount'],
-              playedCount: result['playedCount']);
-        });
       });
     });
   }
@@ -163,54 +133,30 @@ class _InfoScreenState extends State<InfoScreen> {
                     SizedBox(height: _height * 0.0273),
                     getScroreUserCard(
                         'Easy',
-                        this.easyDetails.playedCount != null
-                            ? this.easyDetails.playedCount.toString()
-                            : '0',
-                        this.easyDetails.highestScore != null
-                            ? this.easyDetails.highestScore.toString()
-                            : '0',
-                        this.easyDetails.winningCount != null
-                            ? this.easyDetails.winningCount.toString()
-                            : '0',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
                         _height),
                     SizedBox(height: _height * 0.02),
                     getScroreUserCard(
                         'Medium',
-                        this.normalDetails.playedCount != null
-                            ? this.normalDetails.playedCount.toString()
-                            : '0',
-                        this.normalDetails.highestScore != null
-                            ? this.normalDetails.highestScore.toString()
-                            : '0',
-                        this.normalDetails.winningCount != null
-                            ? this.normalDetails.winningCount.toString()
-                            : '0',
+                        this.normalDetails.playedCount.toString(),
+                        this.normalDetails.highestScore.toString(),
+                        this.normalDetails.winningCount.toString(),
                         _height),
                     SizedBox(height: _height * 0.02),
                     getScroreUserCard(
                         'Hard',
-                        this.hardDetails.winningCount != null
-                            ? this.hardDetails.playedCount.toString()
-                            : '0',
-                        this.hardDetails.winningCount != null
-                            ? this.hardDetails.highestScore.toString()
-                            : '0',
-                        this.hardDetails.winningCount != null
-                            ? this.hardDetails.winningCount.toString()
-                            : '0',
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
                         _height),
                     SizedBox(height: _height * 0.02),
                     getScroreUserCard(
                         'Enless',
-                        this.easyDetails.playedCount != null
-                            ? this.easyDetails.playedCount.toString()
-                            : '0',
-                        this.easyDetails.highestScore != null
-                            ? this.easyDetails.highestScore.toString()
-                            : '0',
-                        this.easyDetails.winningCount != null
-                            ? this.easyDetails.winningCount.toString()
-                            : '0',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
                         _height),
                     ButtonSwitchButtonLogout(
                         signout: signout,
