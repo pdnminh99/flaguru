@@ -139,7 +139,7 @@ class RoundHandler {
       this
           ._localStorage
           .newRound(this._level)
-          .then((_) => print('New round started'))
+          .then((_) => print('New round is started'))
           .catchError((error) => print(error));
       return true;
     }
