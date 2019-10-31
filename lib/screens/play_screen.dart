@@ -26,7 +26,8 @@ class PlayScreen extends StatefulWidget {
   _PlayScreenState createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateMixin {
+class _PlayScreenState extends State<PlayScreen>
+    with SingleTickerProviderStateMixin {
   final questionTotal = 20;
   final timeLimit = 20;
   final maxLife = 5;
@@ -45,8 +46,8 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    var qProvider = QuestionProvider(level: widget.difficulty);
-    qProvider.initializeQuestionsProvider().then((_) {
+    QuestionProvider.initializeQuestionsProvider(level: widget.difficulty)
+        .then((qProvider) {
       setState(() {
         qaList = qProvider.getCollections(
           numberOfQuestions: questionTotal,
@@ -61,7 +62,8 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
       });
     });
 
-    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -109,7 +111,9 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
     _timer.cancel();
     setState(() {
       roundHandler.getAnswer(
-          isCorrect: isRightAnswer, question: qaList[index]['question'], timeLeft: time);
+          isCorrect: isRightAnswer,
+          question: qaList[index]['question'],
+          timeLeft: time);
       isAnswered = true;
     });
   }
@@ -125,7 +129,9 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
 
   void onOver() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.result)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreen(roundHandler.result)));
   }
 
   Timer getTimer() {
@@ -168,14 +174,16 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
                 ),
               ),
               Visibility(
-                visible: roundHandler != null && roundHandler.status == RoundStatus.IDLE,
+                visible: roundHandler != null &&
+                    roundHandler.status == RoundStatus.IDLE,
                 child: Container(
                   width: double.infinity,
                   height: height * 0.91,
                   child: StartButton(onStart: startGame),
                 ),
               ),
-              if (roundHandler != null && roundHandler.status != RoundStatus.IDLE) ...[
+              if (roundHandler != null &&
+                  roundHandler.status != RoundStatus.IDLE) ...[
                 Container(
                   width: double.infinity,
                   height: height * 0.07,
