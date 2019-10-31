@@ -25,13 +25,13 @@ class Menu extends StatelessWidget {
       height: 60,
       width: 350,
       child: RaisedButton(
-          elevation: 7,
+          elevation: 10,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           onPressed: () {
             _name_button == "Login" ? onpress() : onpress(context_param);
           },
-          color: Colors.white.withOpacity(0.85),
+          color: Colors.white.withOpacity(0.9),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -54,13 +54,14 @@ class Menu extends StatelessWidget {
                 child: icon_G == null
                     ? const SizedBox(width: 30)
                     : Container(
+                        height: double.infinity,
                         decoration: BoxDecoration(
                             border:
                                 const Border(left: BorderSide(color: Colors.black54, width: 1))),
                         child: Container(
-                          margin: const EdgeInsets.all(16.0),
+                          margin: const EdgeInsets.all(14.0),
                           child: icon_G == 'G'
-                              ? Image.asset("./assets/icon/search.png", fit: BoxFit.fill)
+                              ? Image.asset("./assets/icon/search.png", fit: BoxFit.scaleDown)
                               : CircleAvatar(backgroundImage: NetworkImage(icon_G)),
                         ),
                       ),
