@@ -40,7 +40,7 @@ class diffculty_cart extends StatelessWidget {
             Text(
               name,
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.black87,
                 fontSize: _height*0.055,
                 fontWeight: FontWeight.w600,
               ),

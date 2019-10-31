@@ -20,6 +20,8 @@ class _DifficultyScreenState extends State<DifficultyScreen>
   AnimationController _animatedContainer;
   Difficulty_screen_animation _difficulty_screen_animation;
 
+
+  //TODO Making dynamic increment number to playcheckpoint
   final List arrayofCheckPoint = [
     '0/20',
     '0/30',
