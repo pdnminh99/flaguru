@@ -12,5 +12,9 @@ class RoundDetails {
     this.highestScore,
     this.winningCount,
     this.playedCount,
-  });
+  }) {
+    if (this.highestScore == null) this.highestScore = 0;
+    if (this.winningCount == null) this.winningCount = 0;
+    if (this.playedCount == null) this.playedCount = 0;
+  }
 }
