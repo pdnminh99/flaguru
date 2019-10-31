@@ -4,6 +4,7 @@ import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
+import 'package:flaguru/widgets/background_slider.dart';
 import 'package:flaguru/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 
@@ -14,22 +15,21 @@ class MenuScreen extends StatefulWidget {
   _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen>
-    with SingleTickerProviderStateMixin {
+class _MenuScreenState extends State<MenuScreen> with SingleTickerProviderStateMixin {
   var auth = Authentication();
   User _currentuser;
   Animation animation;
   AnimationController animationController;
+
   @override
   void initState() {
     super.initState();
     this.auth.getCurrentUser().then((user) {
       _currentuser = user;
     });
-    animationController =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
-    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.fastOutSlowIn));
+    animationController = AnimationController(duration: Duration(seconds: 1), vsync: this);
+    animation = Tween(begin: -1.0, end: 0.0)
+        .animate(CurvedAnimation(parent: animationController, curve: Curves.fastOutSlowIn));
     animationController.forward();
   }
 
@@ -42,17 +42,15 @@ class _MenuScreenState extends State<MenuScreen>
     this.auth.handleSignIn().then((FirebaseUser user) {
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
-    }).then((user) { 
-      setState(() => {
-       this._currentuser = user    
-      });
+    }).then((user) {
+      setState(() => {this._currentuser = user});
     }).catchError((e) => print("myerr" + e));
   }
-  
-  void gotoProfile(BuildContext context){
-      Navigator.popAndPushNamed(
-          context, InfoScreen.routeName);
+
+  void gotoProfile(BuildContext context) {
+    Navigator.popAndPushNamed(context, InfoScreen.routeName);
   }
+
   void gotoTutorial(BuildContext context) {}
 
   void gotoSetting(BuildContext context) {}
@@ -69,6 +67,7 @@ class _MenuScreenState extends State<MenuScreen>
             backgroundColor: Color.fromARGB(255, 1, 157, 173),
             body: Stack(
               children: <Widget>[
+                BackgroundSlider(),
                 Container(
                     // decoration: BoxDecoration(
                     //   image: DecorationImage(
@@ -81,43 +80,29 @@ class _MenuScreenState extends State<MenuScreen>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Transform(
-                            transform: Matrix4.translationValues(
-                                animation.value * 600, 0, 0),
-                            child: Menu(gotoPlayScreen, Menu_Icon.play, "Play",
-                                null, context)),
-                        SizedBox(
-                          height: 30,
-                        ),
+                            transform: Matrix4.translationValues(animation.value * 600, 0, 0),
+                            child: Menu(gotoPlayScreen, Menu_Icon.play, "Play", null, context)),
+                        SizedBox(height: 30),
                         Transform(
-                            transform: Matrix4.translationValues(
-                                animation.value * 700, 0, 0),
-                            child: _currentuser != null  ? Menu(gotoProfile, Menu_Icon.swords, "Profile", _currentuser.avatar, context) : Menu(gotoLogin, Menu_Icon.swords, "Login",
-                                'G', context) ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                            transform: Matrix4.translationValues(animation.value * 700, 0, 0),
+                            child: _currentuser != null
+                                ? Menu(gotoProfile, Icons.face, "Profile",
+                                    _currentuser.avatar, context)
+                                : Menu(gotoLogin, Icons.person_outline, "Login", 'G', context)),
+                        SizedBox(height: 30),
                         Transform(
-                            transform: Matrix4.translationValues(
-                                animation.value * 800, 0, 0),
-                            child: Menu(gotoTutorial, Menu_Icon.open_book,
-                                "Tutorial", null, context)),
-                        SizedBox(
-                          height: 30,
-                        ),
+                            transform: Matrix4.translationValues(animation.value * 800, 0, 0),
+                            child:
+                                Menu(gotoTutorial, Icons.bookmark_border, "Tutorial", null, context)),
+                        SizedBox(height: 30),
                         Transform(
-                          transform: Matrix4.translationValues(
-                              animation.value * 900, 0, 0),
-                          child: Menu(gotoSetting, Menu_Icon.settings,
-                              "Settings", null, context),
+                          transform: Matrix4.translationValues(animation.value * 900, 0, 0),
+                          child: Menu(gotoSetting, Menu_Icon.settings, "Settings", null, context),
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                        SizedBox(height: 30),
                         Transform(
-                          transform: Matrix4.translationValues(
-                              animation.value * 1000, 0, 0),
-                          child: Menu(gotoAbout, Menu_Icon.info_outline,
-                              "About", null, context),
+                          transform: Matrix4.translationValues(animation.value * 1000, 0, 0),
+                          child: Menu(gotoAbout, Menu_Icon.info_outline, "About", null, context),
                         ),
                       ],
                     )),

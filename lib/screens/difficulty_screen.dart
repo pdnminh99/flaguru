@@ -59,7 +59,7 @@ class _DifficultyScreenState extends State<DifficultyScreen> with SingleTickerPr
                   diffculty_cart("Easy","150",this.arrayofCheckPoint[0],Difficulty.EASY,poinIconCode,timerIconCode),
                   diffculty_cart("Normal","120", this.arrayofCheckPoint[1], Difficulty.NORMAL,poinIconCode,timerIconCode),
                   diffculty_cart("Hard","100", this.arrayofCheckPoint[2],Difficulty.HARD,poinIconCode,timerIconCode),
-                  diffculty_cart("Enless","", "",Difficulty.HARD,infiniteIcon,infiniteIcon),
+                  diffculty_cart("Endless","", "",Difficulty.HARD,infiniteIcon,infiniteIcon),
                   
                 ]),
             // ),
