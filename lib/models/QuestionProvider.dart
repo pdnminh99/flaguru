@@ -25,7 +25,7 @@ class QuestionProvider {
 
   static QuestionProvider questionProviderInstance;
 
-  static Future<QuestionProvider> initializeQuestionsProvider(
+  static Future<QuestionProvider> getInstance(
       {Difficulty level: Difficulty.EASY}) async {
     if (questionProviderInstance == null) {
       print('Found no instance of questionProvider, initialize new one');

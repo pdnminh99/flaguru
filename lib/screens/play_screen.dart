@@ -46,7 +46,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   @override
   void initState() {
-    QuestionProvider.initializeQuestionsProvider(level: widget.difficulty)
+    QuestionProvider.getInstance(level: widget.difficulty)
         .then((qProvider) {
       setState(() {
         qaList = qProvider.getCollections(
