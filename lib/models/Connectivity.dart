@@ -1,6 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 
-class Connectivi {
+class Connection {
   var subscription;
   void connectivityListen(Function func) {
     print("true");
