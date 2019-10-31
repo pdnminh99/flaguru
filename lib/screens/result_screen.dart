@@ -15,7 +15,7 @@ class ResultScreen extends StatefulWidget {
   _ResultScreenState createState() => _ResultScreenState();
 }
 
-class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMixin {
+class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
   AnimationController controller;
   ResultScreenAnimation animation;
 
@@ -116,7 +116,7 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
       alignment: Alignment.bottomCenter,
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.white,
           fontSize: 35,
@@ -132,7 +132,7 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
     return Center(
       child: Text(
         EnumString.getDifficulty(difficulty),
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
       ),
     );
   }

@@ -98,7 +98,6 @@ class RoundHandler {
     this._remainQuestions = questions;
     this._timeLimit = timeLimit;
     this._status = RoundStatus.IDLE;
-    this._localStorage.getResult();
   }
 
   void getAnswer(
@@ -140,7 +139,7 @@ class RoundHandler {
       this
           ._localStorage
           .newRound(this._level)
-          .then((_) => print('New round started'))
+          .then((_) => print('New round is started'))
           .catchError((error) => print(error));
       return true;
     }
