@@ -34,9 +34,15 @@ class _MyAppState extends State<MyApp> {
       initialRoute: MenuScreen.routeName,
       routes: {
         '/': (context) => MenuScreen(),
-        '/playscreen/easy': (context) => PlayScreen(difficulty: Difficulty.EASY,),
-        '/playscreen/normal': (context) => PlayScreen(difficulty: Difficulty.NORMAL,),
-        '/playscreen/hard': (context) => PlayScreen(difficulty: Difficulty.HARD,),
+        '/playscreen/easy': (context) => PlayScreen(
+              difficulty: Difficulty.EASY,
+            ),
+        '/playscreen/normal': (context) => PlayScreen(
+              difficulty: Difficulty.NORMAL,
+            ),
+        '/playscreen/hard': (context) => PlayScreen(
+              difficulty: Difficulty.HARD,
+            ),
         MenuScreen.routeName: (context) => MenuScreen(),
         DifficultyScreen.routeName: (context) => DifficultyScreen(),
         PlayScreen.routeName: (context) => PlayScreen(),

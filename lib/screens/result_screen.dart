@@ -6,7 +6,6 @@ import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flaguru/models/ProfileProvider.dart';
 class ResultScreen extends StatefulWidget {
   final Result result;
 
@@ -130,12 +129,6 @@ class _ResultScreenState extends State<ResultScreen> with TickerProviderStateMix
   }
 
   Widget buildDifficultyText(Difficulty difficulty) {
-        try{
-          print(ProfileProvider.profileInstance.getData(Difficulty.EASY));
-        }catch(e)
-        {
-          return e;
-        }
     return Center(
       child: Text(
         EnumString.getDifficulty(difficulty),

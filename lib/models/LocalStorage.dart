@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 class LocalStorage {
   Future<Settings> getExistingSettings() async {
@@ -54,33 +53,37 @@ class LocalStorage {
   }
 
   // comment this if this func is not working
-  // Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
-  //   var symbol = _getSymbol(level);
-  //   var pref = await SharedPreferences.getInstance();
-  //   var lastHighestScore = pref.getInt('${symbol}score');
-  //   var winning = pref.getInt('${symbol}win');
-  //   if (lastHighestScore == null || lastHighestScore < newScore)
-  //     pref.setInt('${symbol}score', newScore);
-  //   if (winning == null)
-  //     pref.setInt('${symbol}win', 0);
-  //   else if (isWin) pref.setInt('${symbol}win', winning + 1);
-  //   pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
-  // }
+  Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var lastHighestScore = pref.getInt('${symbol}score');
+    var winning = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
+    if (lastHighestScore == null || lastHighestScore < newScore)
+      pref.setInt('${symbol}score', newScore);
+    // if (winning == null)
+    //   pref.setInt('${symbol}win', 0);
+    // else if (isWin) pref.setInt('${symbol}win', winning + 1);
+    pref.setInt(
+        '${symbol}win', winning == null ? 0 : isWin ? winning + 1 : winning);
+    pref.setInt(
+        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
+  }
 
   // // uncomment this if the other func not working
-  Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
-    var symbol = _getSymbol(level);
-    return SharedPreferences.getInstance().then((pref) {
-      var lastHighestScore = pref.getInt('${symbol}score');
-      var winning = pref.getInt('${symbol}win');
-      if (lastHighestScore == null || lastHighestScore < newScore)
-        pref.setInt('${symbol}score', newScore);
-      if (winning == null)
-        pref.setInt('${symbol}win', 0);
-      else if (isWin) pref.setInt('${symbol}win', winning + 1);
-      pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
-    });
-  }
+  // Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
+  //   var symbol = _getSymbol(level);
+  //   return SharedPreferences.getInstance().then((pref) {
+  //     var lastHighestScore = pref.getInt('${symbol}score');
+  //     var winning = pref.getInt('${symbol}win');
+  //     if (lastHighestScore == null || lastHighestScore < newScore)
+  //       pref.setInt('${symbol}score', newScore);
+  //     if (winning == null)
+  //       pref.setInt('${symbol}win', 0);
+  //     else if (isWin) pref.setInt('${symbol}win', winning + 1);
+  //     pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+  //   });
+  // }
 
   Future<int> getHighestScore(Difficulty level) async{
     var symbol = _getSymbol(level);
@@ -93,11 +96,35 @@ class LocalStorage {
     var pref = await SharedPreferences.getInstance();
     return pref.getInt('${symbol}win');
   }
+    
+  // // uncomment this if the other func not working
+  // Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
+  //   var symbol = _getSymbol(level);
+  //   return SharedPreferences.getInstance().then((pref) {
+  //     var lastHighestScore = pref.getInt('${symbol}score');
+  //     var winning = pref.getInt('${symbol}win');
+  //     if (lastHighestScore == null || lastHighestScore < newScore)
+  //       pref.setInt('${symbol}score', newScore);
+  //     if (winning == null)
+  //       pref.setInt('${symbol}win', 0);
+  //     else if (isWin) pref.setInt('${symbol}win', winning + 1);
+  //     pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+  //   });
+  // }
 
   Future<int> getPlayed(Difficulty level) async{
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     return pref.getInt('${symbol}played');
+  }
+
+  void getResult() {
+    SharedPreferences.getInstance().then((pref) {
+      print('Score is ${pref.getInt('EASYscore')}');
+      print('total score is ${pref.getInt('totalscore')}');
+      print('winning time is ${pref.getInt('EASYwin')}');
+      print('total rounds played is ${pref.getInt('EASYplayed')}');
+    });
   }
 
   String _getSymbol(Difficulty level) {
