@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/User.dart';
@@ -5,7 +8,7 @@ import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/background_slider.dart';
-import 'package:flaguru/widgets/menu_card.dart';
+import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -15,26 +18,47 @@ class MenuScreen extends StatefulWidget {
   _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> with SingleTickerProviderStateMixin {
+class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   var auth = Authentication();
-  User _currentuser;
-  Animation animation;
-  AnimationController animationController;
+  User _currentUser;
+
+  Animation<double> btnFlyInAnim;
+  AnimationController btnFlyInController;
+
+  AnimationController btnRotationController;
 
   @override
   void initState() {
-    super.initState();
     this.auth.getCurrentUser().then((user) {
-      _currentuser = user;
+      _currentUser = user;
     });
-    animationController = AnimationController(duration: Duration(seconds: 1), vsync: this);
-    animation = Tween(begin: -1.0, end: 0.0)
-        .animate(CurvedAnimation(parent: animationController, curve: Curves.fastOutSlowIn));
-    animationController.forward();
+
+    btnFlyInController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    btnFlyInAnim = Tween(begin: -1.0, end: 0.0)
+        .animate(CurvedAnimation(parent: btnFlyInController, curve: Curves.fastOutSlowIn));
+    btnFlyInController.forward();
+
+    btnRotationController = AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    setBtnRotationTimer();
+
+    super.initState();
   }
 
-  void gotoPlayScreen(BuildContext context) {
-    //Navigator.pushNamed(context, DifficultyScreen.routeName);
+  @override
+  void dispose() {
+    btnFlyInController.dispose();
+    btnRotationController.dispose();
+    super.dispose();
+  }
+
+  setBtnRotationTimer() {
+    Timer.periodic(const Duration(seconds: 4), (_) {
+      btnRotationController.value = 0;
+      btnRotationController.forward();
+    });
+  }
+
+  void gotoDiffScreen(BuildContext context) {
     Navigator.pushNamed(context, DifficultyScreen.routeName);
   }
 
@@ -43,7 +67,7 @@ class _MenuScreenState extends State<MenuScreen> with SingleTickerProviderStateM
       print(this.auth.getCurrentUser());
       return this.auth.getCurrentUser();
     }).then((user) {
-      setState(() => {this._currentuser = user});
+      setState(() => {this._currentUser = user});
     }).catchError((e) => print("myerr" + e));
   }
 
@@ -59,56 +83,55 @@ class _MenuScreenState extends State<MenuScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    //final double _width = MediaQuery.of(context).size.width;
     return AnimatedBuilder(
-        animation: animationController,
-        builder: (BuildContext context, Widget child) {
-          return Scaffold(
-            backgroundColor: Color.fromARGB(255, 1, 157, 173),
-            body: Stack(
-              children: <Widget>[
-                BackgroundSlider(),
-                Container(
-                    // decoration: BoxDecoration(
-                    //   image: DecorationImage(
-                    //     colorFilter: ColorFilter.mode(Color.fromRGBO(245,245 , 245, 0.8), BlendMode.dstATop),
-                    //     image: AssetImage("./assets/background/background_menu_screen.gif"),
-                    //     fit: BoxFit.fitHeight)),
-                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Transform(
-                            transform: Matrix4.translationValues(animation.value * 600, 0, 0),
-                            child: Menu(gotoPlayScreen, Menu_Icon.play, "Play", null, context)),
-                        SizedBox(height: 30),
-                        Transform(
-                            transform: Matrix4.translationValues(animation.value * 700, 0, 0),
-                            child: _currentuser != null
-                                ? Menu(gotoProfile, Icons.face, "Profile",
-                                    _currentuser.avatar, context)
-                                : Menu(gotoLogin, Icons.person_outline, "Login", 'G', context)),
-                        SizedBox(height: 30),
-                        Transform(
-                            transform: Matrix4.translationValues(animation.value * 800, 0, 0),
-                            child:
-                                Menu(gotoTutorial, Icons.bookmark_border, "Tutorial", null, context)),
-                        SizedBox(height: 30),
-                        Transform(
-                          transform: Matrix4.translationValues(animation.value * 900, 0, 0),
-                          child: Menu(gotoSetting, Menu_Icon.settings, "Settings", null, context),
-                        ),
-                        SizedBox(height: 30),
-                        Transform(
-                          transform: Matrix4.translationValues(animation.value * 1000, 0, 0),
-                          child: Menu(gotoAbout, Menu_Icon.info_outline, "About", null, context),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          );
-        });
+      animation: btnFlyInController,
+      builder: (BuildContext context, Widget child) {
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 1, 157, 173),
+          body: Stack(
+            children: <Widget>[
+              BackgroundSlider(),
+              buildMenuButtons(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildMenuButtons() {
+    final sizedBox = SizedBox(height: 30);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          buildMenuButtonWrapper(600, gotoTutorial, Menu_Icon.play, "Tutorial", 0, 0.2),
+          sizedBox,
+          _currentUser != null
+              ? buildMenuButtonWrapper(700, gotoProfile, Icons.face, "Profile", 0.15, 0.35,
+                  rightIcon: _currentUser.avatar)
+              : buildMenuButtonWrapper(
+                  700, gotoProfile, Icons.person_outline, "Profile", 0.15, 0.35,
+                  rightIcon: 'G'),
+          sizedBox,
+          buildMenuButtonWrapper(800, gotoTutorial, Icons.bookmark_border, "Tutorial", 0.3, 0.5),
+          sizedBox,
+          buildMenuButtonWrapper(900, gotoSetting, Menu_Icon.settings, "Settings", 0.45, 0.65),
+          sizedBox,
+          buildMenuButtonWrapper(1000, gotoAbout, Menu_Icon.info_outline, "About", 0.6, 0.8),
+        ],
+      ),
+    );
+  }
+
+  Widget buildMenuButtonWrapper(
+      int offsetX, Function onPress, IconData leftIcon, String title, double begin, double end,
+      {String rightIcon}) {
+    return Transform.translate(
+      offset: Offset(btnFlyInAnim.value * offsetX, 0),
+      child: MenuButton(onPress, leftIcon, title, btnRotationController,
+          begin: begin, end: end, rightIcon: rightIcon),
+    );
   }
 }

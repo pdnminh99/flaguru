@@ -17,6 +17,12 @@ class _BackgroundSliderState extends State<BackgroundSlider> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   void startSlider(int interval) {
     Timer(const Duration(seconds: 1), () {
       toNextPage(interval);
