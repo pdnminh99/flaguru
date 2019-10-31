@@ -10,17 +10,33 @@ import 'Country.dart';
 import 'Question.dart';
 
 class QuestionProvider {
-  Difficulty level;
+  Difficulty _level;
+
+  set level(Difficulty newLevel) {
+    this._level = _level;
+  }
+
+  Difficulty get level => this._level;
+
   var _countries = List<Country>();
   var _rand = Random();
 
-  QuestionProvider({Difficulty level: Difficulty.EASY}) {
-    this.level = level;
-  }
+  QuestionProvider._internal();
 
-  Future<void> initializeQuestionsProvider() async {
-    var database = DatabaseConnector();
-    this._countries = await database.collectCountries();
+  static QuestionProvider questionProviderInstance;
+
+  static Future<QuestionProvider> getInstance(
+      {Difficulty level: Difficulty.EASY}) async {
+    if (questionProviderInstance == null) {
+      print('Found no instance of questionProvider, initialize new one');
+      questionProviderInstance = QuestionProvider._internal();
+      var database = DatabaseConnector();
+      questionProviderInstance.level = level;
+      questionProviderInstance._countries = await database.collectCountries();
+    } else {
+      print('Found an instance of questionProvider.');
+    }
+    return questionProviderInstance;
   }
 
   ///

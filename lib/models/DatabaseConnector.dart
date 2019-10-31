@@ -48,11 +48,12 @@ class DatabaseConnector {
     return countries;
   }
 
-  Future<void> deleteCountries() async {
-    var database = await this._connectSQLite();
-    await database.rawDelete("DELETE FROM country");
-    await database.close();
+  void countryCalled(Country country) {
+    this._connectSQLite().then((database) {
+      // database.rawQuery('SELECT')
+    }).catchError((error) {
+      print(error);
+      // TODO send error message to firebase
+    });
   }
-
-  
 }
