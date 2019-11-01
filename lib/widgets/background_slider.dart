@@ -10,23 +10,28 @@ class BackgroundSlider extends StatefulWidget {
 class _BackgroundSliderState extends State<BackgroundSlider> {
   PageController controller;
 
+  Timer timer1;
+  Timer timer2;
+
   @override
   void initState() {
     controller = PageController();
-    startSlider(7);
+    startSlider(6);
     super.initState();
   }
 
   @override
   void dispose() {
+    timer1?.cancel();
+    timer2?.cancel();
     controller.dispose();
     super.dispose();
   }
 
   void startSlider(int interval) {
-    Timer(const Duration(seconds: 1), () {
+    timer1 = Timer(const Duration(seconds: 1), () {
       toNextPage(interval);
-      Timer.periodic(Duration(seconds: interval), (_) => toNextPage(interval));
+      timer2 = Timer.periodic(Duration(seconds: interval), (_) => toNextPage(interval));
     });
   }
 

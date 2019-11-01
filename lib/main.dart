@@ -1,5 +1,6 @@
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
+import 'package:flaguru/utils/global_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

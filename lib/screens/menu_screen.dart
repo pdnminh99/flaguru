@@ -10,6 +10,8 @@ import 'package:flaguru/widgets/background_slider.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/global_audio_player.dart' show audioPlayer;
+
 class MenuScreen extends StatefulWidget {
   static String routeName = '/';
 
@@ -26,8 +28,13 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   AnimationController btnRotationController;
 
+  Timer timer1;
+  Timer timer2;
+
   @override
   void initState() {
+    audioPlayer.playMusic();
+
     this.auth.getCurrentUser().then((user) {
       _currentUser = user;
     });
@@ -45,20 +52,26 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    audioPlayer.stop();
+    timer1?.cancel();
+    timer2?.cancel();
     btnFlyInController.dispose();
     btnRotationController.dispose();
     super.dispose();
   }
 
   setBtnRotationTimer() {
-    Timer.periodic(const Duration(seconds: 4), (_) {
-      btnRotationController.value = 0;
+    timer1 = Timer(const Duration(seconds: 2), () {
       btnRotationController.forward();
+      timer2 = Timer.periodic(const Duration(seconds: 4), (_) {
+        btnRotationController.value = 0;
+        btnRotationController.forward();
+      });
     });
   }
 
   void gotoDiffScreen(BuildContext context) {
-    Navigator.pushNamed(context, DifficultyScreen.routeName);
+    Navigator.pushReplacementNamed(context, DifficultyScreen.routeName);
   }
 
   void gotoLogin() {
@@ -93,7 +106,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   }
 
   Widget buildMenuButtons() {
-    final sizedBox = SizedBox(height: 30);
+    final sizedBox = const SizedBox(height: 30);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
