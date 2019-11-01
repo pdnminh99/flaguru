@@ -1,7 +1,8 @@
-import 'package:flaguru/models/Result.dart';
-import 'package:flaguru/widgets/result_row.dart';
-import 'package:flaguru/widgets/result_area_animation.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/result_area_animation.dart';
+import '../widgets/result_row.dart';
+import '../models/Result.dart';
 
 class ResultArea extends AnimatedWidget {
   final Result result;
@@ -30,9 +31,7 @@ class ResultArea extends AnimatedWidget {
         decoration: BoxDecoration(
             color: const Color(0xff24b6c5),
             borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 3)
-            ]),
+            boxShadow: [const BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 3)]),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final height = constraints.maxHeight - bottomMargin;
@@ -110,8 +109,7 @@ class ResultArea extends AnimatedWidget {
   }
 
   Widget buildBestRow(double height, String score) {
-    final style = TextStyle(
-        fontSize: height * 0.08, fontWeight: FontWeight.bold, color: rowColor);
+    final style = TextStyle(fontSize: height * 0.08, fontWeight: FontWeight.bold, color: rowColor);
 
     return Container(
       height: height * 0.1,
@@ -133,8 +131,8 @@ class ResultArea extends AnimatedWidget {
   }
 
   String getTime(num time) {
-    var m = time ~/ 60;
-    var s = time % 60;
+    final m = time ~/ 60;
+    final s = time % 60;
     return '${m.toString().padLeft(2, '0')} : ${s.toInt().toString().padLeft(2, '0')}';
   }
 }

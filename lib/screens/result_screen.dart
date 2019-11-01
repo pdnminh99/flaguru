@@ -1,11 +1,13 @@
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Result.dart';
 import 'package:flaguru/utils/enum_string.dart';
+import 'package:flaguru/utils/global_audio_player.dart';
 import 'package:flaguru/widgets/history_area.dart';
 import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
+
 class ResultScreen extends StatefulWidget {
   final Result result;
 
@@ -21,14 +23,16 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    controller = AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
+    audioPlayer?.pauseMusic();
+    controller = AnimationController(duration: Duration(milliseconds: 6000), vsync: this);
     animation = ResultScreenAnimation(controller);
-    controller.forward();  
+    controller.forward();
     super.initState();
   }
 
   @override
   void dispose() {
+    audioPlayer?.playMusic();
     controller.dispose();
     super.dispose();
   }

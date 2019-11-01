@@ -49,8 +49,8 @@ class PlayScreenDrawer extends StatelessWidget {
               buildSwitchTile(
                 'Music',
                 Icons.music_video,
-                settings.isAudioEnabled,
-                (status) => settings.isAudioEnabled = status,
+                settings.isMusicEnabled,
+                (status) => settings.isMusicEnabled = status,
               ),
             ],
           ),

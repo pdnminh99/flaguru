@@ -42,8 +42,8 @@ class _BackgroundSliderState extends State<BackgroundSlider> {
   Widget build(BuildContext context) {
     final images = [
       'assets/background/World-Map-0201.png',
-      'assets/background/World-Map-0202.png',
       'assets/background/World-Map-0203.png',
+      'assets/background/World-Map-0202.png',
     ];
 
     return Container(
@@ -52,6 +52,7 @@ class _BackgroundSliderState extends State<BackgroundSlider> {
         children: <Widget>[
           PageView.builder(
             controller: controller,
+            reverse: true,
             itemBuilder: (context, index) {
               return Image.asset(images[index % images.length], fit: BoxFit.fitWidth);
             },

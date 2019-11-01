@@ -10,8 +10,6 @@ import 'package:flaguru/widgets/background_slider.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/global_audio_player.dart' show audioPlayer;
-
 class MenuScreen extends StatefulWidget {
   static String routeName = '/';
 
@@ -33,8 +31,6 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-//    audioPlayer.playMusic();
-
     this.auth.getCurrentUser().then((user) {
       _currentUser = user;
     });
@@ -52,7 +48,6 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    audioPlayer?.stop();
     timer1?.cancel();
     timer2?.cancel();
     btnFlyInController.dispose();

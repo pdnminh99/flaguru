@@ -15,6 +15,7 @@ import '../models/QuestionProvider.dart';
 import '../widgets/answers_area.dart';
 import '../widgets/bottom_bar.dart';
 import '../widgets/countdown_watch.dart';
+import '../utils/global_audio_player.dart';
 
 class PlayScreen extends StatefulWidget {
   static final routeName = '/play_screen';
@@ -26,8 +27,7 @@ class PlayScreen extends StatefulWidget {
   _PlayScreenState createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends State<PlayScreen>
-    with SingleTickerProviderStateMixin {
+class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateMixin {
   final questionTotal = 20;
   final timeLimit = 20;
   final maxLife = 5;
@@ -46,8 +46,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   @override
   void initState() {
-    QuestionProvider.getInstance(level: widget.difficulty)
-        .then((qProvider) {
+    QuestionProvider.getInstance(level: widget.difficulty).then((qProvider) {
       setState(() {
         qaList = qProvider.getCollections(
           numberOfQuestions: questionTotal,
@@ -62,8 +61,7 @@ class _PlayScreenState extends State<PlayScreen>
       });
     });
 
-    _controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
     super.initState();
   }
@@ -99,21 +97,19 @@ class _PlayScreenState extends State<PlayScreen>
 
   void doRight() {
     processAfterAnswered(true);
-    // play sound
+    audioPlayer?.playSoundRight();
   }
 
   void doWrong() {
     processAfterAnswered(false);
-    // play sound
+    audioPlayer?.playSoundWrong();
   }
 
   void processAfterAnswered(bool isRightAnswer) {
     _timer.cancel();
     setState(() {
       roundHandler.getAnswer(
-          isCorrect: isRightAnswer,
-          question: qaList[index]['question'],
-          timeLeft: time);
+          isCorrect: isRightAnswer, question: qaList[index]['question'], timeLeft: time);
       isAnswered = true;
     });
   }
@@ -129,9 +125,7 @@ class _PlayScreenState extends State<PlayScreen>
 
   void onOver() {
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ResultScreen(roundHandler.result)));
+        context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.result)));
   }
 
   Timer getTimer() {
@@ -174,16 +168,14 @@ class _PlayScreenState extends State<PlayScreen>
                 ),
               ),
               Visibility(
-                visible: roundHandler != null &&
-                    roundHandler.status == RoundStatus.IDLE,
+                visible: roundHandler != null && roundHandler.status == RoundStatus.IDLE,
                 child: Container(
                   width: double.infinity,
                   height: height * 0.91,
                   child: StartButton(onStart: startGame),
                 ),
               ),
-              if (roundHandler != null &&
-                  roundHandler.status != RoundStatus.IDLE) ...[
+              if (roundHandler != null && roundHandler.status != RoundStatus.IDLE) ...[
                 Container(
                   width: double.infinity,
                   height: height * 0.07,
