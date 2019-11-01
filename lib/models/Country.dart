@@ -11,9 +11,15 @@ class Country {
   String flag;
   double ratio;
   String description;
+  int chances = 0;
 
   Country(
-      {@required this.id, this.name, this.flag, this.ratio, this.description});
+      {@required this.id,
+      this.name,
+      this.flag,
+      this.ratio,
+      this.description,
+      this.chances});
 
   Answer toAnswer({isCorrect: false}) {
     return Answer(
@@ -26,6 +32,13 @@ class Country {
 
   Question toQuestion() {
     return Question(this);
+  }
+
+  void call() {
+    if (this.chances == 0)
+      this.chances = 2;
+    else
+      this.chances -= 1;
   }
 
   @override

@@ -8,7 +8,6 @@ class diffculty_cart extends StatelessWidget {
   String point;
   String timer;
   Difficulty difficulty;
-  Function navigator;
   int pointIcon;
   int timerIcon;
   double iconSize=30;
@@ -18,8 +17,11 @@ class diffculty_cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double _height = MediaQuery.of(context).size.height;
+    double _width = MediaQuery.of(context).size.width;
     // TODO: implement build
     return FlatButton(
+      
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       // padding: EdgeInsets.all(1),
@@ -31,20 +33,15 @@ class diffculty_cart extends StatelessWidget {
         Navigator.pushReplacementNamed(context, PlayScreen.routeName, arguments: difficulty);
       },
       child: Container(
-        // duration: Duration(
-        //   seconds: 2
-        // ),
-        // curve: Curves.easeInOutCirc,
-        height: 115,
-        width: 320,
-        // color: Colors.white,
+        height: _height*0.164,
+        width: _width*0.78,
         child: Column(
           children: <Widget>[
             Text(
               name,
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 38,
+                color: Colors.black87,
+                fontSize: _height*0.055,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -65,11 +62,11 @@ class diffculty_cart extends StatelessWidget {
                       point,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 30,
+                        fontSize: _height*0.044,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons'),size: 25,),
+                    Icon(IconData(pointIcon, fontFamily: 'MaterialIcons'),size: _height*0.044,),
                   ],
                 ),
                 SizedBox(
@@ -81,18 +78,18 @@ class diffculty_cart extends StatelessWidget {
                       timer,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 30,
+                        fontSize: _height*0.044,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons'),size: iconSize,),
+                    Icon(IconData(timerIcon, fontFamily: 'MaterialIcons'),size: _height*0.044,),
                   ],
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 5),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(bottom: 5),
+            // ),
           ],
         ),
       ),

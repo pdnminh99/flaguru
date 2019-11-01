@@ -17,7 +17,7 @@ class CustomPaintBackground extends CustomPainter {
     //print(size.width);
     path.lineTo(0, 0);
     path.close();
-    canvas.drawShadow(path, Color.fromRGBO(34, 182, 192, 1), 4.0, false);
+    canvas.drawShadow(path, Color.fromRGBO(34, 182, 192, 1), 1.0, false);
     canvas.drawPath(path, paint);
   }
 

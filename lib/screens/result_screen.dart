@@ -6,7 +6,6 @@ import 'package:flaguru/widgets/result_area.dart';
 import 'package:flaguru/widgets/result_button_area.dart';
 import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
-
 class ResultScreen extends StatefulWidget {
   final Result result;
 
@@ -24,8 +23,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   void initState() {
     controller = AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
-    controller.forward();
-
+    controller.forward();  
     super.initState();
   }
 
@@ -40,7 +38,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final historyBtnHeight = 50.0;
-
     return SafeArea(
       bottom: false,
       child: Scaffold(
