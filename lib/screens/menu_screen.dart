@@ -52,7 +52,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    audioPlayer.stop();
+    audioPlayer?.stop();
     timer1?.cancel();
     timer2?.cancel();
     btnFlyInController.dispose();
