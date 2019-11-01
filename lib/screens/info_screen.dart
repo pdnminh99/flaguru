@@ -1,13 +1,10 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
-import 'package:flaguru/widgets/info_user.dart';
-import 'package:flaguru/widgets/progress_user.dart';
 import 'package:flutter/material.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -17,6 +14,11 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  var easyDetails = RoundDetails(level: Difficulty.EASY);
+  var normalDetails = RoundDetails(level: Difficulty.NORMAL);
+  var hardDetails = RoundDetails(level: Difficulty.HARD);
+  String totalScore = '0';
+
   //pro
   var auth = Authentication();
   User _currentUser;
@@ -38,10 +40,10 @@ class _InfoScreenState extends State<InfoScreen> {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
 
-  void backMenuScreen ()
-  {
+  void backMenuScreen() {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
+
   void switchuser() {
     this.auth.switchUser().then((_) {
       return this.auth.getCurrentUser();
@@ -79,7 +81,9 @@ class _InfoScreenState extends State<InfoScreen> {
                             Icons.arrow_back_ios,
                           ),
                           color: Color.fromARGB(255, 255, 255, 255),
-                          onPressed: (){ backMenuScreen(); },
+                          onPressed: () {
+                            backMenuScreen();
+                          },
                         ),
                       ),
                       Align(
@@ -125,15 +129,35 @@ class _InfoScreenState extends State<InfoScreen> {
                     //   email: _currentUser.email,
                     //   score: '100',
                     // ),
-                    getTotalScore(),
+                    getTotalScore(this.totalScore),
                     SizedBox(height: _height * 0.0273),
-                    getScroreUserCard('Easy', '100', '100', '100', _height),
+                    getScroreUserCard(
+                        'Easy',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Medium', '200', '200', '200', _height),
+                    getScroreUserCard(
+                        'Medium',
+                        this.normalDetails.playedCount.toString(),
+                        this.normalDetails.highestScore.toString(),
+                        this.normalDetails.winningCount.toString(),
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Hard', '300', '300', '300', _height),
+                    getScroreUserCard(
+                        'Hard',
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
+                        _height),
                     SizedBox(height: _height * 0.02),
-                    getScroreUserCard('Enless', '400', '400', '400', _height),
+                    getScroreUserCard(
+                        'Enless',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
+                        _height),
                     ButtonSwitchButtonLogout(
                         signout: signout,
                         switchuser: switchuser,
@@ -148,24 +172,26 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Widget getTotalScore ()
-  {
+  Widget getTotalScore(String score) {
     return Container(
-      child: Row(children: <Widget>[
-        Text('Total Score: ',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w700,
-        ),
-        ),
-        Text('769',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w700
-        ),)
-      ],) ,
+      child: Row(
+        children: <Widget>[
+          Text(
+            'Total Score: ',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            score,
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+          )
+        ],
+      ),
     );
   }
+
   Widget getScoreSmall(String value, double _height, String name) {
     return (Container(
       height: _height * 0.1,
@@ -252,7 +278,6 @@ class _InfoScreenState extends State<InfoScreen> {
           //Text('EASY'),
           // score
           Row(
-            
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               getScoreSmall(rounds, _height, 'rounds'),

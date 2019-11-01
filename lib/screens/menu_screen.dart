@@ -33,7 +33,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    audioPlayer.playMusic();
+//    audioPlayer.playMusic();
 
     this.auth.getCurrentUser().then((user) {
       _currentUser = user;
