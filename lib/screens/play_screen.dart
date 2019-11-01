@@ -29,7 +29,7 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateMixin {
   final questionTotal = 20;
-  final timeLimit = 20;
+  final timeLimit = 15;
   final maxLife = 5;
   RoundHandler roundHandler;
 

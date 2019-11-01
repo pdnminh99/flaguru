@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   MyApp(this.settings);
 
   Widget build(BuildContext context) {
-//    audioPlayer = GlobalAudioPlayer(this.settings);
+    audioPlayer = GlobalAudioPlayer(this.settings);
 //    audioPlayer.playMusic();
 
     return ChangeNotifierProvider(

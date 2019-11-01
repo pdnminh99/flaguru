@@ -31,28 +31,28 @@ class ResultAreaAnimation {
   }
 
   void playSoundRight() {
-    if (_controller.value > 0.23) {
+    if (_controller.value > 0.05) {
       audioPlayer?.playSoundResult();
       _controller.removeListener(playSoundRight);
     }
   }
 
   void playSoundLife() {
-    if (_controller.value > 0.38) {
+    if (_controller.value > 0.25) {
       audioPlayer?.playSoundResult();
       _controller.removeListener(playSoundLife);
     }
   }
 
   void playSoundTime() {
-    if (_controller.value > 0.58) {
+    if (_controller.value > 0.4) {
       audioPlayer?.playSoundResult();
       _controller.removeListener(playSoundTime);
     }
   }
 
   void playSoundScore() {
-    if (_controller.value > 0.93) {
+    if (_controller.value > 0.7) {
       audioPlayer?.playSoundScore();
       _controller.removeListener(playSoundScore);
     }

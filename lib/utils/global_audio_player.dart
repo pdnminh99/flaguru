@@ -7,6 +7,7 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   AudioCache _cache = AudioCache(prefix: 'audio/');
   AudioPlayer _musicPlayer;
   AudioPlayer _soundPlayer;
+  AudioPlayer _timerPlayer;
 
   SettingsHandler _settings;
 
@@ -32,8 +33,7 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
 
   Future playSoundRight() async {
     if (!_settings.isSoundEnabled) return;
-    _soundPlayer = await _cache.play('right.m4a')
-      ..setVolume(0.5);
+    _soundPlayer = await _cache.play('right.m4a')..setVolume(0.8);
   }
 
   Future playSoundWrong() async {
@@ -41,16 +41,21 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
     _soundPlayer = await _cache.play('wrong.mp3');
   }
 
-  Future playSoundScore() async {
-    if (!_settings.isSoundEnabled) return;
-    _soundPlayer = await _cache.play('score.mp3')
-      ..setVolume(0.8);
-  }
-
   Future playSoundResult() async {
     if (!_settings.isSoundEnabled) return;
-    _soundPlayer = await _cache.play('score.mp3')
+    _soundPlayer = await _cache.play('result.mp3')
       ..setVolume(0.5);
+  }
+
+  Future playSoundScore() async {
+    if (!_settings.isSoundEnabled) return;
+    _soundPlayer = await _cache.play('result.mp3');
+  }
+
+  Future playSoundTick() async {
+    if (!_settings.isSoundEnabled) return;
+    _soundPlayer = await _cache.play('tick.mp3')
+      ..setVolume(0.7);
   }
 
   void pauseMusic() {
@@ -61,9 +66,14 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
     _soundPlayer?.pause();
   }
 
+  void pauseTimer() {
+    _timerPlayer?.pause();
+  }
+
   void stopAll() {
     _soundPlayer?.stop();
     _musicPlayer?.stop();
+    _timerPlayer?.stop();
   }
 
   @override
@@ -71,12 +81,14 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive) {
       pauseMusic();
       pauseSound();
+      pauseTimer();
     } else if (_settings.isMusicEnabled && state == AppLifecycleState.resumed) {
       _musicPlayer?.resume();
     } else if (_settings.isMusicEnabled &&
         _soundPlayer.state == AudioPlayerState.PAUSED &&
         state == AppLifecycleState.resumed) {
       _soundPlayer?.resume();
+      _timerPlayer?.resume();
     }
 
     super.didChangeAppLifecycleState(state);

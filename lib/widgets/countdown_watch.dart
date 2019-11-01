@@ -1,3 +1,4 @@
+import 'package:flaguru/utils/global_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -14,6 +15,8 @@ class CountdownWatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isLastSeconds && time > 0) audioPlayer.playSoundTick();
+
     Color color = isLastSeconds ? Colors.red[700] : Colors.black;
 
     return LayoutBuilder(
