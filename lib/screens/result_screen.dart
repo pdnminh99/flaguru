@@ -23,8 +23,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    audioPlayer?.pauseMusic();
-    controller = AnimationController(duration: Duration(milliseconds: 6000), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 6000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
     super.initState();
@@ -32,7 +31,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    audioPlayer?.playMusic();
     controller.dispose();
     super.dispose();
   }
@@ -42,6 +40,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final historyBtnHeight = 50.0;
+
     return SafeArea(
       bottom: false,
       child: Scaffold(
@@ -125,7 +124,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
           color: Colors.white,
           fontSize: 35,
           shadows: <Shadow>[
-            Shadow(offset: Offset(2, 2), blurRadius: 5, color: Colors.black26),
+            const Shadow(offset: Offset(2, 2), blurRadius: 5, color: Colors.black26),
           ],
         ),
       ),
