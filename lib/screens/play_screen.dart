@@ -63,6 +63,8 @@ class _PlayScreenState extends State<PlayScreen> with SingleTickerProviderStateM
 
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
+    audioPlayer.playSoundLetsGo();
+
     super.initState();
   }
 

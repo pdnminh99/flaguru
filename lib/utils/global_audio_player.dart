@@ -1,7 +1,8 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flaguru/models/SettingsHandler.dart';
 import 'package:flutter/material.dart';
+
+import '../models/SettingsHandler.dart';
 
 class GlobalAudioPlayer with WidgetsBindingObserver {
   AudioCache _cache = AudioCache(prefix: 'audio/');
@@ -16,7 +17,7 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   }
 
 //  final _musicNames = ['elevate.mp3'];
-//  final _soundNames = ['right.m4a', 'wrong.mp3', 'score.mp3'];
+//  final _soundNames = ['right.m4a', 'wrong.mp3', ];
 //
 //  Future loadAllAudio() async {
 //    await _cache.loadAll([..._musicNames, ..._soundNames]);
@@ -33,7 +34,8 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
 
   Future playSoundRight() async {
     if (!_settings.isSoundEnabled) return;
-    _soundPlayer = await _cache.play('right.m4a')..setVolume(0.8);
+    _soundPlayer = await _cache.play('right.m4a')
+      ..setVolume(0.8);
   }
 
   Future playSoundWrong() async {
@@ -52,10 +54,15 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
     _soundPlayer = await _cache.play('result.mp3');
   }
 
+  Future playSoundLetsGo() async {
+    if (!_settings.isSoundEnabled) return;
+    _soundPlayer = await _cache.play('okletsgo.mp3');
+  }
+
   Future playSoundTick() async {
     if (!_settings.isSoundEnabled) return;
     _soundPlayer = await _cache.play('tick.mp3')
-      ..setVolume(0.7);
+      ..setVolume(0.6);
   }
 
   void pauseMusic() {
