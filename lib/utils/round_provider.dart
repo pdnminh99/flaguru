@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +6,7 @@ import '../screens/result_screen.dart';
 import '../models/QuestionProvider.dart';
 import '../models/RoundHandler.dart';
 import 'global_audio_player.dart';
+import 'watch_provider.dart';
 
 class RoundProvider with ChangeNotifier {
   final qtnTotal = 20;
@@ -18,18 +18,17 @@ class RoundProvider with ChangeNotifier {
   bool isAnswered;
   List<bool> pressStates;
 
-  int time;
-  Timer _timer;
+  WatchProvider timer;
 
   List<Map<String, Object>> qaList = [];
 
   RoundProvider(level) {
     QuestionProvider.getInstance(level: level).then(setQaList);
+    timer = WatchProvider();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -47,7 +46,7 @@ class RoundProvider with ChangeNotifier {
 
   void startGame() {
     roundHandler.start();
-    Timer(const Duration(milliseconds: 300), () => _timer = getTimer());
+    setTimer();
     notifyListeners();
   }
 
@@ -72,15 +71,15 @@ class RoundProvider with ChangeNotifier {
   }
 
   void processAfterAnswered(bool isCorrect) {
-    _timer.cancel();
+    timer.cancel();
     roundHandler.getAnswer(
-        isCorrect: isCorrect, question: qaList[index]['question'], timeLeft: time);
+        isCorrect: isCorrect, question: qaList[index]['question'], timeLeft: timer.time);
     isAnswered = true;
     notifyListeners();
   }
 
   void getNextQuestion() {
-    _timer = getTimer();
+    setTimer();
     index++;
     setDataAfterAnswered();
     notifyListeners();
@@ -89,21 +88,19 @@ class RoundProvider with ChangeNotifier {
   void setDataAfterAnswered() {
     isAnswered = false;
     pressStates = [false, false, false, false];
-    time = timeLimit;
   }
 
-  Timer getTimer() {
-    return Timer.periodic(const Duration(seconds: 1), (_) {
-      time--;
-      notifyListeners();
-      if (time < 10 && time > 0) audioPlayer.playSoundTick();
-      if (time == 0) doWrong();
+  void setTimer() {
+    timer.periodic(timeLimit, 1, () {
+      if (timer.time < 10 && timer.time > 0) audioPlayer.playSoundTick();
+      if (timer.time == 0) doWrong();
     });
   }
 
   void onOver(BuildContext context) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.result)));
+    print('remain: ${roundHandler.remainQuestions}  ${roundHandler.remainLives}');
   }
 
   bool get nameOrFlag => index % 2 == 1;

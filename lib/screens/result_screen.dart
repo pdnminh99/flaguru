@@ -1,12 +1,12 @@
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/Result.dart';
-import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/utils/global_audio_player.dart';
-import 'package:flaguru/widgets/history_area.dart';
-import 'package:flaguru/widgets/result_area.dart';
-import 'package:flaguru/widgets/result_button_area.dart';
-import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
+
+import '../models/Enum.dart';
+import '../models/Result.dart';
+import '../utils/enum_string.dart';
+import '../widgets/history_area.dart';
+import '../widgets/result_area.dart';
+import '../widgets/result_button_area.dart';
+import '../widgets/result_screen_animation.dart';
 
 class ResultScreen extends StatefulWidget {
   final Result result;

@@ -38,12 +38,12 @@ class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStat
     final round = Provider.of<RoundProvider>(context);
     final isFlag = round.nameOrFlag;
 
-    if (!isAnim && !round.isAnswered) {
+    if (!round.isAnswered) {
       _controller.value = 0;
       _controller.forward();
-      isAnim = true;
+//      isAnim = true;
     }
-    if (round.isAnswered) isAnim = false;
+//    if (round.isAnswered) isAnim = false;
 
     return LayoutBuilder(
       builder: (context, constraint) {

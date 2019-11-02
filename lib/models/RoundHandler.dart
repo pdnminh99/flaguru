@@ -122,11 +122,11 @@ class RoundHandler {
     this._setLogs = AnswerLog(question, answer, isCorrect, timeElapsed);
   }
 
-//  void reset() {
-//    this._status = RoundStatus.IDLE;
-//    this._setRemainLife = lifeTotal;
-//    this._setRemainQuestions = numOfQtn;
-//  }
+  void reset() {
+    this._status = RoundStatus.IDLE;
+    this._setRemainLife = lifeTotal;
+    this._setRemainQuestions = numOfQtn;
+  }
 
   bool start() {
     if (this._status == RoundStatus.IDLE) {

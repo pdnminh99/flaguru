@@ -13,7 +13,7 @@ class QuestionProvider {
   Difficulty _level;
 
   set level(Difficulty newLevel) {
-    this._level = _level;
+    this._level = newLevel;
   }
 
   Difficulty get level => this._level;
