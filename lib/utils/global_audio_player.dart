@@ -11,7 +11,8 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
 
   SettingsHandler _settings;
 
-  bool isActive = true;
+  bool _isResumed = true;
+  bool _isPlaying = false;
 
   GlobalAudioPlayer(this._settings) {
     WidgetsBinding.instance.addObserver(this);
@@ -34,37 +35,40 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   }
 
   Future playSoundRight() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
+    if (soundMuted) return;
     _soundPlayer = await _cache.play('right.m4a')
       ..setVolume(0.8);
   }
 
   Future playSoundWrong() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
+    if (soundMuted) return;
     _soundPlayer = await _cache.play('wrong.mp3');
   }
 
   Future playSoundResult() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
+    if (soundMuted) return;
     _soundPlayer = await _cache.play('result.mp3')
       ..setVolume(0.5);
   }
 
   Future playSoundScore() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
+    if (soundMuted) return;
     _soundPlayer = await _cache.play('result.mp3');
   }
 
   Future playSoundLetsGo() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
-    _soundPlayer = await _cache.play('okletsgo.mp3')..setVolume(0.7);
+    if (soundMuted) return;
+    _soundPlayer = await _cache.play('okletsgo.mp3')
+      ..setVolume(0.6);
   }
 
   Future playSoundTick() async {
-    if (!_settings.isSoundEnabled || !isActive) return;
+    if (soundMuted) return;
     _soundPlayer = await _cache.play('tick.mp3')
       ..setVolume(0.6);
   }
+
+  bool get soundMuted => !_settings.isSoundEnabled || !_isResumed;
 
   void pauseMusic() {
     _musicPlayer?.pause();
@@ -81,17 +85,21 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
+    if (state != AppLifecycleState.resumed) {
       pauseMusic();
       pauseSound();
-      isActive = false;
-    } else if (_settings.isMusicEnabled && state == AppLifecycleState.resumed) {
-      _musicPlayer?.resume();
-    } else if (_settings.isMusicEnabled &&
-        _soundPlayer.state == AudioPlayerState.PAUSED &&
-        state == AppLifecycleState.resumed) {
-      isActive = true;
-      _soundPlayer?.resume();
+      _isResumed = false;
+      if (_soundPlayer.state == AudioPlayerState.PLAYING) _isPlaying = true;
+//      print(_soundPlayer.state);
+    } else {
+      _isResumed = true;
+      if (_settings.isMusicEnabled) {
+        _musicPlayer?.resume();
+      }
+      if (_settings.isSoundEnabled && _isPlaying) {
+        _soundPlayer?.resume();
+        _isPlaying = false;
+      }
     }
 
     super.didChangeAppLifecycleState(state);
