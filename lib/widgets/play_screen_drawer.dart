@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class PlayScreenDrawer extends StatelessWidget {
   final Difficulty difficulty;
 
-  PlayScreenDrawer({@required this.difficulty});
+  PlayScreenDrawer(this.difficulty);
 
   void navigateToMenu(BuildContext context) {
     // need confirmation

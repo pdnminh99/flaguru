@@ -1,39 +1,33 @@
+import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../models/Question.dart';
 import 'question_area.dart';
 import 'info_area.dart';
 
 class QuestionInfoArea extends StatelessWidget {
-  final bool isAnswered;
-  final bool isName;
-  final num width;
-  final num height;
   final int millis;
-  final Question question;
+  final double height;
+  final double width;
 
-  QuestionInfoArea({
-    @required this.isAnswered,
-    @required this.isName,
-    @required this.width,
-    @required this.height,
-    @required this.millis,
-    @required this.question,
-  });
+  QuestionInfoArea({@required this.millis, @required this.height, @required this.width});
 
   @override
   Widget build(BuildContext context) {
+    final round = Provider.of<RoundProvider>(context);
+    final isAnswered = round.isAnswered;
+
     return AnimatedContainer(
-      width: (isAnswered) ? width * 0.9 : width,
-      height: (isAnswered) ? height * 0.38 : height * 0.29,
+      width: isAnswered ? width * 0.9 : width,
+      height: isAnswered ? height : height * 0.8,
       duration: Duration(milliseconds: millis),
       decoration: BoxDecoration(
         color: (isAnswered) ? Colors.white.withOpacity(0.6) : Colors.white.withOpacity(0.3),
         borderRadius: (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
       ),
       child: (isAnswered)
-          ? InfoArea(question: question, millis: millis)
-          : QuestionArea(isName: isName, question: question),
+          ? InfoArea(question: round.question , millis: millis)
+          : QuestionArea(),
     );
   }
 }

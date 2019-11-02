@@ -39,10 +39,10 @@ class _InfoAreaState extends State<InfoArea> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraint) {
-        num fontSize = constraint.maxHeight * 0.1;
+        num fontSize = constraint.maxHeight * 0.08;
         if (widget.question.country.length >= 20)
-          fontSize *= 0.6;
-        else if (widget.question.country.length >= 14) fontSize *= 0.7;
+          fontSize *= 0.7;
+        else if (widget.question.country.length >= 14) fontSize *= 0.8;
 
         return Column(
           children: <Widget>[
@@ -94,7 +94,7 @@ class _InfoAreaState extends State<InfoArea> {
                         Text(
                           sentence,
                           style: TextStyle(
-                            fontSize: constraint.maxHeight * 0.064,
+                            fontSize: constraint.maxHeight * 0.06,
                             fontWeight: FontWeight.bold,
                             color: Colors.teal[900],
                           ),

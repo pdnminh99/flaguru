@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class BackgroundSlider extends StatefulWidget {
+class BackgroundCarousel extends StatefulWidget {
   @override
-  _BackgroundSliderState createState() => _BackgroundSliderState();
+  _BackgroundCarouselState createState() => _BackgroundCarouselState();
 }
 
-class _BackgroundSliderState extends State<BackgroundSlider> {
+class _BackgroundCarouselState extends State<BackgroundCarousel> {
   PageController controller;
 
   Timer timer1;

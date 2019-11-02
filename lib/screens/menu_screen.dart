@@ -6,7 +6,7 @@ import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
-import 'package:flaguru/widgets/background_slider.dart';
+import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
@@ -93,7 +93,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          BackgroundSlider(),
+          BackgroundCarousel(),
           buildMenuButtons(),
         ],
       ),

@@ -1,17 +1,43 @@
+import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfoBar extends StatelessWidget {
-  final int totalQuestions;
-  final int currentQuestion;
-  final int maxLives;
-  final int remainLives;
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<RoundProvider>(context);
+    final round = provider.roundHandler;
 
-  InfoBar({
-    @required this.totalQuestions,
-    @required this.currentQuestion,
-    @required this.maxLives,
-    @required this.remainLives,
-  });
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  for (var i = 0; i < round.remainLives; i++)
+                    getRemainLifeDot(constraint.maxHeight * 0.4),
+                  for (var i = 0, left = round.lifeTotal - round.remainLives; i < left; i++)
+                    getLostLifeDot(constraint.maxHeight * 0.4),
+                ],
+              ),
+              Text(
+                '${provider.index + 1} of ${provider.qtnTotal}',
+                style: TextStyle(
+                  fontSize: constraint.maxHeight * 0.5,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget getRemainLifeDot(height) {
     var borderRadius = BorderRadius.circular(height / 2);
@@ -42,40 +68,6 @@ class InfoBar extends StatelessWidget {
         color: Colors.teal[200].withOpacity(0.7),
         borderRadius: borderRadius,
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraint) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  for (var i = 0; i < remainLives; i++)
-                    getRemainLifeDot(constraint.maxHeight * 0.4),
-                  for (var i = 0, left = maxLives - remainLives; i < left; i++)
-                    getLostLifeDot(constraint.maxHeight * 0.4),
-                ],
-              ),
-              Text(
-                '$currentQuestion of $totalQuestions',
-                style: TextStyle(
-                  fontSize: constraint.maxHeight * 0.5,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
