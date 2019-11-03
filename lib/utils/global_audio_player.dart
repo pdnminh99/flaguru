@@ -36,12 +36,14 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
 
   Future playSoundRight() async {
     if (soundMuted) return;
+    _soundPlayer?.stop();
     _soundPlayer = await _cache.play('right.m4a')
       ..setVolume(0.8);
   }
 
   Future playSoundWrong() async {
     if (soundMuted) return;
+    _soundPlayer?.stop();
     _soundPlayer = await _cache.play('wrong.mp3');
   }
 

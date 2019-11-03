@@ -125,7 +125,7 @@ class _InfoAreaState extends State<InfoArea> {
     return Visibility(
       visible: description.isNotEmpty,
       child: Container(
-        height: 40,
+        height: 20,
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

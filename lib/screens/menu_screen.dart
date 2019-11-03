@@ -23,11 +23,12 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
-
   AnimationController btnRotationController;
 
   Timer timer1;
   Timer timer2;
+
+  bool shouldQuit;
 
   @override
   void initState() {
@@ -88,14 +89,32 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   void gotoAbout(BuildContext context) {}
 
+  bool confirmQuit(BuildContext context) {
+    final status = shouldQuit;
+    if (!shouldQuit) {
+      shouldQuit = true;
+      Timer(const Duration(seconds: 2), () => shouldQuit = false);
+      Scaffold.of(context).showSnackBar(buildSnackBar(2));
+    }
+    return status;
+  }
+
   @override
   Widget build(BuildContext context) {
+    shouldQuit = false;
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          BackgroundCarousel(),
-          buildMenuButtons(),
-        ],
+      body: Builder(
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async => confirmQuit(context),
+            child: Stack(
+              children: <Widget>[
+                BackgroundCarousel(),
+                buildMenuButtons(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -138,6 +157,19 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
           child: child,
         );
       },
+    );
+  }
+
+  Widget buildSnackBar(int duration) {
+    return SnackBar(
+      elevation: 0,
+      duration: Duration(seconds: duration),
+      backgroundColor: Colors.black38,
+      content: Text(
+        'Press again to quit',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 17),
+      ),
     );
   }
 }

@@ -54,33 +54,36 @@ class _DifficultyScreenState extends State<DifficultyScreen> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 1, 157, 173),
-        body: Container(
-            child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                FadeTransition(
-                  opacity: _difficulty_screen_animation.popUp,
-                  child: diffculty_cart("Easy", "150", this.arrayofCheckPoint[0], Difficulty.EASY,
-                      poinIconCode, timerIconCode),
-                ),
-                FadeTransition(
-                  opacity: _difficulty_screen_animation.popUp,
-                  child: diffculty_cart("Normal", "120", this.arrayofCheckPoint[1],
-                      Difficulty.NORMAL, poinIconCode, timerIconCode),
-                ),
-                FadeTransition(
-                  opacity: _difficulty_screen_animation.popUp,
-                  child: diffculty_cart("Hard", "100", this.arrayofCheckPoint[2], Difficulty.HARD,
-                      poinIconCode, timerIconCode),
-                ),
-                FadeTransition(
-                  opacity: _difficulty_screen_animation.popUp,
-                  child: diffculty_cart(
-                      "Endless", "", "", Difficulty.HARD, infiniteIcon, infiniteIcon),
-                ),
-              ]),
-        )));
+        body: WillPopScope(
+          onWillPop: () async => false,
+          child: Container(
+              child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  FadeTransition(
+                    opacity: _difficulty_screen_animation.popUp,
+                    child: diffculty_cart("Easy", "150", this.arrayofCheckPoint[0], Difficulty.EASY,
+                        poinIconCode, timerIconCode),
+                  ),
+                  FadeTransition(
+                    opacity: _difficulty_screen_animation.popUp,
+                    child: diffculty_cart("Normal", "120", this.arrayofCheckPoint[1],
+                        Difficulty.NORMAL, poinIconCode, timerIconCode),
+                  ),
+                  FadeTransition(
+                    opacity: _difficulty_screen_animation.popUp,
+                    child: diffculty_cart("Hard", "100", this.arrayofCheckPoint[2], Difficulty.HARD,
+                        poinIconCode, timerIconCode),
+                  ),
+                  FadeTransition(
+                    opacity: _difficulty_screen_animation.popUp,
+                    child: diffculty_cart(
+                        "Endless", "", "", Difficulty.HARD, infiniteIcon, infiniteIcon),
+                  ),
+                ]),
+          )),
+        ));
   }
 }
