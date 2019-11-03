@@ -89,7 +89,7 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
       pauseMusic();
       pauseSound();
       _isResumed = false;
-      if (_soundPlayer.state == AudioPlayerState.PLAYING) _isPlaying = true;
+      if (_soundPlayer?.state == AudioPlayerState.PLAYING) _isPlaying = true;
 //      print(_soundPlayer.state);
     } else {
       _isResumed = true;

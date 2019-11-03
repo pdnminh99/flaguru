@@ -29,6 +29,7 @@ class RoundProvider with ChangeNotifier {
 
   @override
   void dispose() {
+    timer.cancel();
     super.dispose();
   }
 

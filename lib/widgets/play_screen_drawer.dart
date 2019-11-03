@@ -12,7 +12,7 @@ class PlayScreenDrawer extends StatelessWidget {
 
   void navigateToMenu(BuildContext context) {
     // need confirmation
-    Navigator.of(context).popAndPushNamed(MenuScreen.routeName);
+    Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
   void restart(BuildContext context) {
