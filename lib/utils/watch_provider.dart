@@ -3,12 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class WatchProvider with ChangeNotifier {
-  static final WatchProvider _singleton = WatchProvider._internal();
-
-  factory WatchProvider() => _singleton;
-
-  WatchProvider._internal();
-
   Timer _timer;
   int _time;
 

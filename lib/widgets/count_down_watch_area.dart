@@ -20,8 +20,8 @@ class CountDownWatchArea extends StatelessWidget {
       width: isAnswered ? width * 0.2 : width,
       height: isAnswered ? height * 0 : height * 0.2,
       duration: Duration(milliseconds: millis),
-      child: ChangeNotifierProvider.value(
-        value: round.timer,
+      child: ChangeNotifierProvider(
+        builder: (_) => round.timer,
         child: CountdownWatch(redTime: 10),
       ),
     );

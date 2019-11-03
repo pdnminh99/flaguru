@@ -21,14 +21,11 @@ class PlayScreen extends StatelessWidget {
         drawer: PlayScreenDrawer(difficulty),
         body: WillPopScope(
           onWillPop: () async => false,
-          child: ChangeNotifierProvider(
-            builder: (context) => RoundProvider(difficulty),
-            child: Column(
-              children: <Widget>[
-                TopBar(difficulty),
-                Expanded(child: RoundArea()),
-              ],
-            ),
+          child: Column(
+            children: <Widget>[
+              TopBar(difficulty),
+              Expanded(child: RoundArea(difficulty)),
+            ],
           ),
         ),
       ),

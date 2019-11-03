@@ -53,7 +53,7 @@ class ResultButtonArea extends AnimatedWidget {
   }
 
   void navigateToMenu(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
+    Navigator.of(context).popAndPushNamed(MenuScreen.routeName);
   }
 
   void restart(BuildContext context, Difficulty difficulty) {
