@@ -22,7 +22,7 @@ class QuestionInfoArea extends StatelessWidget {
       height: isAnswered ? height : height * 0.8,
       duration: Duration(milliseconds: millis),
       decoration: BoxDecoration(
-        color: (isAnswered) ? Colors.white.withOpacity(0.6) : Colors.white.withOpacity(0.3),
+        color: (isAnswered) ? Colors.teal[100] : Colors.white.withOpacity(0.3),
         borderRadius: (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
       ),
       child: (isAnswered)

@@ -40,24 +40,29 @@ class _InfoAreaState extends State<InfoArea> {
     return LayoutBuilder(
       builder: (context, constraint) {
         final height = constraint.maxHeight;
-        final width = constraint.maxHeight;
+        final width = constraint.maxWidth;
 
-        num fontSize = height * 0.08;
-        if (widget.question.country.length >= 20)
-          fontSize *= 0.7;
-        else if (widget.question.country.length >= 14) fontSize *= 0.8;
-
-        return ListView(
+        return Stack(
           children: <Widget>[
-            buildTitle(height, width, fontSize),
-            buildDescription(),
+            ListView(
+              children: <Widget>[
+                buildTitle(height, width),
+                buildDescription(),
+              ],
+            ),
+            Positioned(bottom: 0, child: buildBottomBlur(width))
           ],
         );
       },
     );
   }
 
-  Widget buildTitle(double height, double width, double fontSize) {
+  Widget buildTitle(double height, double width) {
+    num fontSize = height * 0.08;
+    if (widget.question.country.length >= 20)
+      fontSize *= 0.7;
+    else if (widget.question.country.length >= 14) fontSize *= 0.8;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Row(
@@ -112,8 +117,30 @@ class _InfoAreaState extends State<InfoArea> {
               textAlign: TextAlign.justify,
             ),
             const SizedBox(height: 10),
-          ]
+          ],
+          const SizedBox(height: 10),
         ],
+      ),
+    );
+  }
+
+  Widget buildBottomBlur(double width) {
+    return Visibility(
+      visible: description.isNotEmpty,
+      child: Container(
+        height: 40,
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.teal[100].withOpacity(0),
+              Colors.teal[100],
+            ],
+          ),
+        ),
       ),
     );
   }
