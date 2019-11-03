@@ -1,7 +1,7 @@
-import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/round_provider.dart';
 import 'question_area.dart';
 import 'info_area.dart';
 
@@ -22,12 +22,10 @@ class QuestionInfoArea extends StatelessWidget {
       height: isAnswered ? height : height * 0.8,
       duration: Duration(milliseconds: millis),
       decoration: BoxDecoration(
-        color: (isAnswered) ? Colors.teal[100] : Colors.white.withOpacity(0.3),
+        color: (isAnswered) ? const Color(0xff99d8df) : Colors.white.withOpacity(0.3),
         borderRadius: (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
       ),
-      child: (isAnswered)
-          ? InfoArea(question: round.question , millis: millis)
-          : QuestionArea(),
+      child: isAnswered ? InfoArea(round.question, millis) : QuestionArea(),
     );
   }
 }

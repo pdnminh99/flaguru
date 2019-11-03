@@ -8,10 +8,7 @@ class InfoArea extends StatefulWidget {
   final Question question;
   final int millis;
 
-  InfoArea({
-    @required this.question,
-    @required this.millis,
-  });
+  InfoArea(this.question, this.millis);
 
   @override
   _InfoAreaState createState() => _InfoAreaState();
@@ -135,10 +132,7 @@ class _InfoAreaState extends State<InfoArea> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.teal[100].withOpacity(0),
-              Colors.teal[100],
-            ],
+            colors: [const Color(0x0099d8df), const Color(0xee99d8df)],
           ),
         ),
       ),
