@@ -15,7 +15,7 @@ class AnswersArea extends StatefulWidget {
 class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> animation;
-  bool isAnim = false;
+  bool isAnimated = false;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStat
     animation = Tween(begin: pi / 2, end: 0.0).animate(_controller);
 
     _controller.forward();
-    isAnim = true;
+    isAnimated = true;
     super.initState();
   }
 
@@ -38,12 +38,12 @@ class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStat
     final round = Provider.of<RoundProvider>(context);
     final isFlag = round.nameOrFlag;
 
-    if (!round.isAnswered) {
+    if (!round.isAnswered && !isAnimated) {
       _controller.value = 0;
       _controller.forward();
-//      isAnim = true;
+      isAnimated = true;
     }
-//    if (round.isAnswered) isAnim = false;
+    if (round.isAnswered) isAnimated = false;
 
     return LayoutBuilder(
       builder: (context, constraint) {

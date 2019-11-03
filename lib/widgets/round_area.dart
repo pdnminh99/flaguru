@@ -7,34 +7,15 @@ import '../widgets/loading_spinner.dart';
 import '../widgets/play_area.dart';
 import '../widgets/start_area.dart';
 
-class RoundArea extends StatefulWidget {
+class RoundArea extends StatelessWidget {
   final Difficulty difficulty;
 
   RoundArea(this.difficulty);
 
   @override
-  _RoundAreaState createState() => _RoundAreaState();
-}
-
-class _RoundAreaState extends State<RoundArea> {
-  RoundProvider round;
-
-  @override
-  void initState() {
-    round = RoundProvider(widget.difficulty);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-//    round.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => round,
+      builder: (context) => RoundProvider(difficulty),
       child: Builder(builder: (context) {
         return buildArea(context);
       }),

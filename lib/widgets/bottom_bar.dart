@@ -16,7 +16,7 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
 
   @override
   void initState() {
-    _controller = AnimationController(duration: const Duration(milliseconds: 350), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
     animation = Tween(begin: pi / 2, end: 0.0).animate(_controller);
 
     super.initState();
@@ -71,7 +71,7 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
               ),
               builder: (context, child) {
                 return Transform(
-                  transform: Matrix4.rotationY(animation.value),
+                  transform: Matrix4.rotationX(animation.value),
                   alignment: FractionalOffset.center,
                   child: child,
                 );

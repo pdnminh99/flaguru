@@ -39,77 +39,82 @@ class _InfoAreaState extends State<InfoArea> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraint) {
-        num fontSize = constraint.maxHeight * 0.08;
+        final height = constraint.maxHeight;
+        final width = constraint.maxHeight;
+
+        num fontSize = height * 0.08;
         if (widget.question.country.length >= 20)
           fontSize *= 0.7;
         else if (widget.question.country.length >= 14) fontSize *= 0.8;
 
-        return Column(
+        return ListView(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 0.5),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 3, spreadRadius: 2)
-                          ]),
-                      width: constraint.maxHeight * 0.3,
-                      height: constraint.maxHeight * 0.3 / 1.7,
-                      child: Image.asset(widget.question.imageURL, fit: BoxFit.cover),
-                    ),
-                  ),
-                  Container(
-                    height: constraint.maxHeight * 0.3 / 1.7,
-                    constraints: BoxConstraints(maxWidth: constraint.maxWidth * 0.6),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          widget.question.country,
-                          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 10, bottom: 15, left: 15, right: 15),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      for (var sentence in getParagraph(description)) ...[
-                        Text(
-                          sentence,
-                          style: TextStyle(
-                            fontSize: constraint.maxHeight * 0.06,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.teal[900],
-                          ),
-                          textAlign: TextAlign.justify,
-                        ),
-                        const SizedBox(height: 10),
-                      ]
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            buildTitle(height, width, fontSize),
+            buildDescription(),
           ],
         );
       },
+    );
+  }
+
+  Widget buildTitle(double height, double width, double fontSize) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Material(
+              elevation: 5,
+              child: Container(
+                width: height * 0.3,
+                height: height * 0.3 / 1.7,
+                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 0.5)),
+                child: Image.asset(widget.question.imageURL, fit: BoxFit.cover),
+              ),
+            ),
+          ),
+          Container(
+            height: height * 0.3 / 1.7,
+            constraints: BoxConstraints(maxWidth: width * 0.6),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  widget.question.country,
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDescription() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          for (var sentence in getParagraph(description)) ...[
+            Text(
+              sentence,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal[900],
+              ),
+              textAlign: TextAlign.justify,
+            ),
+            const SizedBox(height: 10),
+          ]
+        ],
+      ),
     );
   }
 
