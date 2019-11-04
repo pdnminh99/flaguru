@@ -161,7 +161,6 @@ class RoundHandler {
           if (this._easyCursor > this._lastIndex) this._easyCursor = 0;
         }
         this.question = this._countriesChain[this._easyCursor].getQuestion();
-        if (isFirstAnswerAlwaysRight) this.answers[0] = question.toAnswer();
         break;
       case Difficulty.NORMAL:
       case Difficulty.HARD:
@@ -170,11 +169,14 @@ class RoundHandler {
           if (this._hardCursor < 0) this._hardCursor = this._lastIndex;
         }
         this.question = this._countriesChain[this._hardCursor].getQuestion();
-        if (isFirstAnswerAlwaysRight) answers[0] = this.question.toAnswer();
         break;
       default:
         throw Exception('Unknown difficulty');
     }
+    if (isFirstAnswerAlwaysRight)
+      this.answers[0] = question.toAnswer();
+    else
+      this.answers[this._rand.nextInt(5)] = question.toAnswer();
   }
 
   bool verifyAnswer({@required int timeLeft, @required Answer answer}) {
