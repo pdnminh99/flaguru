@@ -9,30 +9,33 @@ class Country {
   int id;
   String name;
   String flag;
-  double ratio;
+  double _ratio;
+
+  double get ratio => this._ratio;
   String description;
   int chances = 0;
+  int callCounter = 0;
+  int correctCounter = 0;
 
   Country(
       {@required this.id,
       this.name,
       this.flag,
-      this.ratio,
       this.description,
-      this.chances});
-
-  Answer toAnswer({isCorrect: false}) {
-    return Answer(
-        countryID: this.id,
-        country: this.name,
-        imageUrl: this.flag,
-        isRight: isCorrect,
-        description: this.description);
+      this.chances,
+      this.callCounter,
+      this.correctCounter}) {
+    this._ratio = this.correctCounter / this.callCounter;
   }
 
-  Question toQuestion() {
-    return Question(this);
-  }
+  Answer toAnswer() => Answer(
+      countryID: this.id,
+      country: this.name,
+      imageUrl: this.flag,
+//        isRight: isCorrect,
+      description: this.description);
+
+  Question toQuestion() => Question(this);
 
   void call() {
     if (this.chances == 0)

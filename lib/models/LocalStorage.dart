@@ -1,11 +1,12 @@
 import 'dart:ffi';
 
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
-  Future<Settings> getExistingSettings() async {
+  static Future<Settings> getExistingSettings() async {
     var localSettings = await SharedPreferences.getInstance();
     var audio = localSettings.getBool("audio");
     var sound = localSettings.getBool("sound");
@@ -22,15 +23,15 @@ class LocalStorage {
     );
   }
 
-  Future<void> updateNewSettings(Settings newSettings) async {
+  static Future<void> updateNewSettings(Settings newSettings) async {
     var pref = await SharedPreferences.getInstance();
     pref.setBool("audio", newSettings.isAudioON);
     pref.setBool("sound", newSettings.isSoundON);
     pref.setBool("skipTutorials", newSettings.skipTutorials);
   }
 
-  Future<void> newRound(Difficulty level) async {
-    var symbol = getSymbol(level);
+  static Future<void> newRound(Difficulty level) async {
+    var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var playcount = pref.getInt('${symbol}played');
     if (playcount == null)
@@ -39,8 +40,9 @@ class LocalStorage {
       pref.setInt('${symbol}played', playcount + 1);
   }
 
-  Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
-    var symbol = getSymbol(level);
+  static Future<void> saveResult(
+      int newScore, Difficulty level, bool isWin) async {
+    var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
     var winning = pref.getInt('${symbol}win');
@@ -54,7 +56,20 @@ class LocalStorage {
         'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
 
-  String getSymbol(Difficulty level) {
+  static Future<RoundDetails> getLocalResult(Difficulty level) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var highestScore = pref.getInt('${symbol}score');
+    var playedCount = pref.getInt('${symbol}played');
+    var winningCount = pref.getInt('${symbol}win');
+    return RoundDetails(
+        highestScore: highestScore,
+        winningCount: winningCount,
+        playedCount: playedCount,
+        level: level);
+  }
+
+  static String _getSymbol(Difficulty level) {
     switch (level) {
       case Difficulty.EASY:
         return 'EASY';

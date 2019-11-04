@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Country.dart';
 
 class Question {
@@ -17,4 +18,10 @@ class Question {
     this.imageURL = country.flag;
     this.description = country.description;
   }
+
+  Answer toAnswer() => Answer(
+      country: country,
+      countryID: countryID,
+      imageUrl: imageURL,
+      description: description);
 }

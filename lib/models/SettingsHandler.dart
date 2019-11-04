@@ -5,7 +5,6 @@ import 'LocalStorage.dart';
 
 class SettingsHandler with ChangeNotifier {
   Settings _currentSettings;
-  var _localStorage = LocalStorage();
 
   bool get isSoundEnabled {
     return this._currentSettings.isSoundON;
@@ -13,7 +12,8 @@ class SettingsHandler with ChangeNotifier {
 
   set isSoundEnabled(bool newState) {
     this._currentSettings.isSoundON = newState;
-    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings)
+        .catchError((error) => print(error));
     notifyListeners();
   }
 
@@ -23,7 +23,8 @@ class SettingsHandler with ChangeNotifier {
 
   set isAudioEnabled(bool newState) {
     this._currentSettings.isAudioON = newState;
-    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings)
+        .catchError((error) => print(error));
     notifyListeners();
   }
 
@@ -33,7 +34,8 @@ class SettingsHandler with ChangeNotifier {
 
   set skipTutorials(bool newState) {
     this._currentSettings.skipTutorials = newState;
-    _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings)
+        .catchError((error) => print(error));
     notifyListeners();
   }
 
@@ -44,7 +46,8 @@ class SettingsHandler with ChangeNotifier {
   static Future<SettingsHandler> getInstance() async {
     if (settingInstance == null) {
       settingInstance = SettingsHandler._internal();
-      settingInstance._currentSettings = await settingInstance._localStorage.getExistingSettings();
+      settingInstance._currentSettings =
+          await LocalStorage.getExistingSettings();
     }
     return settingInstance;
   }
@@ -53,6 +56,6 @@ class SettingsHandler with ChangeNotifier {
     this._currentSettings.isAudioON = true;
     this._currentSettings.isSoundON = true;
     this._currentSettings.skipTutorials = false;
-    this._localStorage.updateNewSettings(this._currentSettings);
+    LocalStorage.updateNewSettings(this._currentSettings);
   }
 }
