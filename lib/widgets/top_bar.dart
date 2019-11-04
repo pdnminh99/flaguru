@@ -1,45 +1,47 @@
 import 'package:flutter/material.dart';
 
-class TopBar extends StatelessWidget {
-  final String difficulty;
+import '../models/Enum.dart';
+import '../utils/enum_string.dart';
 
-  TopBar({@required this.difficulty});
+class TopBar extends StatelessWidget {
+  final Difficulty difficulty;
+
+  TopBar(this.difficulty);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraint) {
-        final height = constraint.maxHeight;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  difficulty,
-                  style: TextStyle(
-                    fontSize: height * 0.4,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: height * 0.8,
-                width: height * 1.1,
-                child: FlatButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  child: Icon(Icons.more_horiz, size: height * 0.5, color: Colors.white),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+    return Container(
+      height: 55.0,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          buildDifficultyText(),
+          buildDrawerButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDifficultyText() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Text(
+        EnumString.getDifficulty(difficulty),
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget buildDrawerButton(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      width: 66,
+      child: FlatButton(
+        onPressed: () => Scaffold.of(context).openDrawer(),
+        child: const Icon(Icons.more_horiz, size: 30, color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
     );
   }
 }

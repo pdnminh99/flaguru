@@ -1,14 +1,10 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
-import 'package:flaguru/widgets/background_slider.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
-import 'package:flaguru/widgets/info_user.dart';
-import 'package:flaguru/widgets/progress_user.dart';
 import 'package:flutter/material.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -17,8 +13,12 @@ class InfoScreen extends StatefulWidget {
   _InfoScreenState createState() => _InfoScreenState();
 }
 
-class _InfoScreenState extends State<InfoScreen>
-    with SingleTickerProviderStateMixin {
+class _InfoScreenState extends State<InfoScreen> {
+  var easyDetails = RoundDetails(level: Difficulty.EASY);
+  var normalDetails = RoundDetails(level: Difficulty.NORMAL);
+  var hardDetails = RoundDetails(level: Difficulty.HARD);
+  String totalScore = '0';
+
   //pro
   var auth = Authentication();
   User _currentUser;

@@ -1,7 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 class LocalStorage {
   Future<Settings> getExistingSettings() async {
@@ -28,7 +30,6 @@ class LocalStorage {
     pref.setBool("skipTutorials", newSettings.skipTutorials);
   }
 
-  // comment this if this func not working
   Future<void> newRound(Difficulty level) async {
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
@@ -39,48 +40,33 @@ class LocalStorage {
       pref.setInt('${symbol}played', playcount + 1);
   }
 
-  // uncomment this if the other func not working
-  // Future<void> newRound(Difficulty level) {
-  //   var symbol = _getSymbol(level);
-  //   return SharedPreferences.getInstance().then((pref) {
-  //     var playcount = pref.getInt('${symbol}played');
-  //     if (playcount == null)
-  //       pref.setInt('${symbol}played', 1);
-  //     else
-  //       pref.setInt('${symbol}played', playcount + 1);
-  //   });
-  // }
-
-  // comment this if this func is not working
   Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
     var winning = pref.getInt('${symbol}win');
+    var totalScore = pref.getInt('totalscore');
     if (lastHighestScore == null || lastHighestScore < newScore)
       pref.setInt('${symbol}score', newScore);
     if (winning == null)
       pref.setInt('${symbol}win', 0);
     else if (isWin) pref.setInt('${symbol}win', winning + 1);
-    pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
+    pref.setInt(
+        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
 
-  // // uncomment this if the other func not working
-  // Future<void> saveResult(int newScore, Difficulty level, bool isWin) {
-  //   var symbol = _getSymbol(level);
-  //   return SharedPreferences.getInstance().then((pref) {
-  //     var lastHighestScore = pref.getInt('${symbol}score');
-  //     var winning = pref.getInt('${symbol}win');
-  //     if (lastHighestScore == null || lastHighestScore < newScore)
-  //       pref.setInt('${symbol}score', newScore);
-  //     if (winning == null)
-  //       pref.setInt('${symbol}win', 0);
-  //     else if (isWin) pref.setInt('${symbol}win', winning + 1);
-  //     pref.setInt('totalscore', pref.getInt('totalscore') + newScore);
-  //   });
-  // }
-
-  // int getHighestScore(Difficulty level) => pref.getInt('EASYscore');
+  Future<RoundDetails> getLocalResult(Difficulty level) async {
+    var symbol = _getSymbol(level);
+    var pref = await SharedPreferences.getInstance();
+    var highestScore = pref.getInt('${symbol}score');
+    var playedCount = pref.getInt('${symbol}played');
+    var winningCount = pref.getInt('${symbol}win');
+    return RoundDetails(
+        highestScore: highestScore,
+        winningCount: winningCount,
+        playedCount: playedCount,
+        level: level);
+  }
 
   String _getSymbol(Difficulty level) {
     switch (level) {

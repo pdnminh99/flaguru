@@ -1,11 +1,12 @@
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/Result.dart';
-import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/widgets/history_area.dart';
-import 'package:flaguru/widgets/result_area.dart';
-import 'package:flaguru/widgets/result_button_area.dart';
-import 'package:flaguru/widgets/result_screen_animation.dart';
 import 'package:flutter/material.dart';
+
+import '../models/Enum.dart';
+import '../models/Result.dart';
+import '../utils/enum_string.dart';
+import '../widgets/history_area.dart';
+import '../widgets/result_area.dart';
+import '../widgets/result_button_area.dart';
+import '../widgets/result_screen_animation.dart';
 
 class ResultScreen extends StatefulWidget {
   final Result result;
@@ -22,10 +23,9 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    controller = AnimationController(duration: Duration(milliseconds: 5000), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 6000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
-
     super.initState();
   }
 
@@ -124,7 +124,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
           color: Colors.white,
           fontSize: 35,
           shadows: <Shadow>[
-            Shadow(offset: Offset(2, 2), blurRadius: 5, color: Colors.black26),
+            const Shadow(offset: Offset(2, 2), blurRadius: 5, color: Colors.black26),
           ],
         ),
       ),

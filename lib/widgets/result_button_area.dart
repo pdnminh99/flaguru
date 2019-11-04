@@ -6,18 +6,14 @@ import 'package:flutter/material.dart';
 class ResultButtonArea extends AnimatedWidget {
   final Difficulty difficulty;
 
-  ResultButtonArea({
-    @required this.difficulty,
-    Animation<double> controller,
-  }) : super(listenable: controller);
+  ResultButtonArea({@required this.difficulty, Animation<double> controller})
+      : super(listenable: controller);
 
   @override
   Widget build(BuildContext context) {
     final controller = listenable as Animation<double>;
-    final animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.bounceOut,
-    ));
+    final animation = Tween(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: controller, curve: Curves.easeOutCirc));
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -25,14 +21,13 @@ class ResultButtonArea extends AnimatedWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              getButton(animation.value * constraints.maxHeight * 0.8,
-                  Icons.menu, () => navigateToMenu(context)),
+              getButton(animation.value * constraints.maxHeight * 0.8, Icons.menu,
+                  () => navigateToMenu(context)),
               const SizedBox(width: 15),
-              getButton(animation.value * constraints.maxHeight * 0.9,
-                  Icons.refresh, () => restart(context, difficulty)),
+              getButton(animation.value * constraints.maxHeight * 0.9, Icons.refresh,
+                  () => restart(context, difficulty)),
               const SizedBox(width: 15),
-              getButton(animation.value * constraints.maxHeight * 0.8,
-                  Icons.share, () {}),
+              getButton(animation.value * constraints.maxHeight * 0.8, Icons.share, () {}),
             ],
           ),
         );
@@ -62,7 +57,6 @@ class ResultButtonArea extends AnimatedWidget {
   }
 
   void restart(BuildContext context, Difficulty difficulty) {
-    Navigator.of(context)
-        .pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
+    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
   }
 }

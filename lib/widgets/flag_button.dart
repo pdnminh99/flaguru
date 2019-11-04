@@ -1,55 +1,22 @@
-import 'package:flaguru/models/Answer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/round_provider.dart';
 
 class FlagButton extends StatelessWidget {
-  final Answer answer;
+  final int answerIndex;
   final num width;
-  final Function doRight;
-  final Function doWrong;
-  final bool isAnswered;
-  final bool isPressed;
-  final Function changePressState;
 
-  FlagButton({
-    @required this.answer,
-    @required this.width,
-    @required this.doRight,
-    @required this.doWrong,
-    @required this.isAnswered,
-    @required this.isPressed,
-    @required this.changePressState,
-  });
+  FlagButton({@required this.answerIndex, @required this.width});
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(5);
+    final round = Provider.of<RoundProvider>(context);
+    final isAnswered = round.isAnswered;
+    final isPressed = round.pressStates[answerIndex];
+    final answer = round.answerSet[answerIndex];
 
-    List<Widget> dotAnnotator(Color color) => [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 4,
-            right: 4,
-            child: Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: color,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(7),
-              ),
-            ),
-          ),
-        ];
+    final borderRadius = BorderRadius.circular(5);
 
     return Stack(
       children: <Widget>[
@@ -79,8 +46,8 @@ class FlagButton extends StatelessWidget {
             child: InkWell(
               borderRadius: borderRadius,
               onTap: () {
-                answer.isRight ? doRight() : doWrong();
-                changePressState();
+                answer.isRight ? round.doRight() : round.doWrong();
+                round.changePressState(answerIndex);
               },
             ),
           ),
@@ -94,10 +61,35 @@ class FlagButton extends StatelessWidget {
               ),
             ),
           ),
-        if (isAnswered && answer.isRight) ...dotAnnotator(Colors.green[300]),
-        if (isAnswered && isPressed && !answer.isRight)
-          ...dotAnnotator(Colors.red[300]),
+        if (isAnswered && answer.isRight) ...buildDotAnnotator(Colors.green[300]),
+        if (isAnswered && isPressed && !answer.isRight) ...buildDotAnnotator(Colors.red[300]),
       ],
     );
+  }
+
+  List<Widget> buildDotAnnotator(Color color) {
+    return [
+      Positioned.fill(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.transparent,
+          ),
+        ),
+      ),
+      Positioned(
+        bottom: 4,
+        right: 4,
+        child: Container(
+          width: 14,
+          height: 14,
+          decoration: BoxDecoration(
+            color: color,
+            border: Border.all(color: Colors.white, width: 1),
+            borderRadius: BorderRadius.circular(7),
+          ),
+        ),
+      ),
+    ];
   }
 }

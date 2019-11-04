@@ -1,4 +1,5 @@
 import 'package:flaguru/models/Settings.dart';
+import 'package:flaguru/utils/global_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'LocalStorage.dart';
@@ -17,13 +18,14 @@ class SettingsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isAudioEnabled {
+  bool get isMusicEnabled {
     return this._currentSettings.isAudioON;
   }
 
-  set isAudioEnabled(bool newState) {
+  set isMusicEnabled(bool newState) {
     this._currentSettings.isAudioON = newState;
     _localStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
+    newState ? audioPlayer?.playMusic() : audioPlayer?.pauseMusic();
     notifyListeners();
   }
 

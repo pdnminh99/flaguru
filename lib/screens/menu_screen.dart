@@ -6,7 +6,7 @@ import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
-import 'package:flaguru/widgets/background_slider.dart';
+import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +23,12 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
-
   AnimationController btnRotationController;
+
+  Timer timer1;
+  Timer timer2;
+
+  bool shouldQuit;
 
   @override
   void initState() {
@@ -45,20 +49,25 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    timer1?.cancel();
+    timer2?.cancel();
     btnFlyInController.dispose();
     btnRotationController.dispose();
     super.dispose();
   }
 
   setBtnRotationTimer() {
-    Timer.periodic(const Duration(seconds: 4), (_) {
-      btnRotationController.value = 0;
+    timer1 = Timer(const Duration(seconds: 2), () {
       btnRotationController.forward();
+      timer2 = Timer.periodic(const Duration(seconds: 4), (_) {
+        btnRotationController.value = 0;
+        btnRotationController.forward();
+      });
     });
   }
 
   void gotoDiffScreen(BuildContext context) {
-    Navigator.pushNamed(context, DifficultyScreen.routeName);
+    Navigator.pushReplacementNamed(context, DifficultyScreen.routeName);
   }
 
   void gotoLogin() {
@@ -80,20 +89,38 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
 
   void gotoAbout(BuildContext context) {}
 
+  bool confirmQuit(BuildContext context) {
+    final status = shouldQuit;
+    if (!shouldQuit) {
+      shouldQuit = true;
+      Timer(const Duration(seconds: 2), () => shouldQuit = false);
+      Scaffold.of(context).showSnackBar(buildSnackBar(2));
+    }
+    return status;
+  }
+
   @override
   Widget build(BuildContext context) {
+    shouldQuit = false;
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          BackgroundSlider(),
-          buildMenuButtons(),
-        ],
+      body: Builder(
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async => confirmQuit(context),
+            child: Stack(
+              children: <Widget>[
+                BackgroundCarousel(),
+                buildMenuButtons(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget buildMenuButtons() {
-    final sizedBox = SizedBox(height: 30);
+    final sizedBox = const SizedBox(height: 30);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
@@ -130,6 +157,19 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
           child: child,
         );
       },
+    );
+  }
+
+  Widget buildSnackBar(int duration) {
+    return SnackBar(
+      elevation: 0,
+      duration: Duration(seconds: duration),
+      backgroundColor: Colors.black38,
+      content: Text(
+        'Press again to quit',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 17),
+      ),
     );
   }
 }
