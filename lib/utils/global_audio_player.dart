@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/SettingsHandler.dart';
 
 class GlobalAudioPlayer with WidgetsBindingObserver {
-  AudioCache _cache = AudioCache(prefix: 'audio/');
+  var _cache = AudioCache(prefix: 'audio/');
     AudioPlayer _musicPlayer;
     AudioPlayer _soundPlayer;
   

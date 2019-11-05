@@ -129,7 +129,7 @@ class _InfoScreenState extends State<InfoScreen> {
                     //   email: _currentUser.email,
                     //   score: '100',
                     // ),
-                    getTotalScore(this.totalScore),
+                    getTotalScore(this.totalScore, _height),
                     SizedBox(height: _height * 0.05),
                     getScroreUserCard(
                         'Easy',
@@ -182,11 +182,11 @@ class _InfoScreenState extends State<InfoScreen> {
     else return Color.fromRGBO(56, 187, 231, 1);
   }
 
-  Widget getTotalScore(String score) {
+  Widget getTotalScore(String score, double _height) {
     return Container(
       child: Row(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/award.png', height: 50, width: 50,),
+          Image.asset('assets/infoscreen_icon/award.png', height: (_height * 0.067), width: (_height * 0.067),),
           Text(
             'Total Score: ',
             style: TextStyle(
@@ -211,8 +211,8 @@ class _InfoScreenState extends State<InfoScreen> {
       child: Column(
         children: <Widget>[
           name == 'rounds' ?
-          Image.asset('assets/infoscreen_icon/replay.png',height: 30, width: 30,)
-          : Image.asset('assets/infoscreen_icon/winner.png', height: 30, width: 30,) ,
+          Image.asset('assets/infoscreen_icon/replay.png',height: _height * 0.04, width: _height* 0.04,)
+          : Image.asset('assets/infoscreen_icon/winner.png', height: _height * 0.04, width: _height * 0.04,) ,
           Padding(
             padding: EdgeInsets.all(0),
             // padding: EdgeInsets.only(top: _height * 0.005),
@@ -225,7 +225,7 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           SizedBox(
-            height: 8.8,
+            height: _height * 0.0118,
           ),
           Text(
             name,
@@ -242,14 +242,14 @@ class _InfoScreenState extends State<InfoScreen> {
       margin: EdgeInsets.only(top: 19),
       child: Column(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/star.png', height: 40, width: 40,),
+          Image.asset('assets/infoscreen_icon/star.png', height: _height * 0.0539, width: _height * 0.0539,),
           Text(
             score,
             style: TextStyle(
                 fontSize: _height * 0.047, fontWeight: FontWeight.w700),
           ),
           SizedBox(
-            height: 4,
+            height: _height * 0.0053,
           ),
           Text(
             'High Score',
@@ -285,8 +285,8 @@ class _InfoScreenState extends State<InfoScreen> {
         children: <Widget>[
           //name
           Positioned(
-            top: -20,
-            left: 94,
+            top: _height * 0.0269 * -1,
+            left: _height * 0.1268,
             width: _height * 0.205,
             child: Container(
               decoration: BoxDecoration(
