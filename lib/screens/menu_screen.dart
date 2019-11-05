@@ -33,7 +33,9 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     this.auth.getCurrentUser().then((user) {
-      _currentUser = user;
+      setState(() {
+       this._currentUser = user; 
+      });
     });
 
     btnFlyInController = AnimationController(duration: const Duration(seconds: 1), vsync: this);

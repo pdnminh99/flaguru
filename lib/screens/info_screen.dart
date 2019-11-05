@@ -111,8 +111,8 @@ class _InfoScreenState extends State<InfoScreen> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
                                   this._currentUser.avatar,
-                                  height: _height * 0.12,
-                                  width: _height * 0.12,
+                                  height: _height * 0.11,
+                                  width: _height * 0.11,
                                   repeat: ImageRepeat.noRepeat,
                                   fit: BoxFit.cover,
                                 ),
@@ -143,7 +143,7 @@ class _InfoScreenState extends State<InfoScreen> {
                     //   email: _currentUser.email,
                     //   score: '100',
                     // ),
-                    getTotalScore(this.totalScore, _height),
+                    getTotalScore(_height),
                     SizedBox(height: _height * 0.05),
                     getScroreUserCard(
                         'Easy',
@@ -196,7 +196,7 @@ class _InfoScreenState extends State<InfoScreen> {
     else return Color.fromRGBO(56, 187, 231, 1);
   }
 
-  Widget getTotalScore(String score, double _height) {
+  Widget getTotalScore( double _height) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -209,7 +209,7 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           Text(
-            score == null ? '0' : score,
+            this.totalScore == null ? '0': this.totalScore,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
           )
         ],
@@ -217,14 +217,14 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
- Widget getScoreSmall(String value, double _height, String name) {
+ Widget getScoreSmall(String score, double _height, String name) {
     return (Container(
       //height: _height * 0.1,
       margin: EdgeInsets.only(top: 40),
       width: _height * 0.09,
       child: Column(
         children: <Widget>[
-          name == 'rounds' ?
+          name == 'Rounds' ?
           Image.asset('assets/infoscreen_icon/replay.png',height: _height * 0.04, width: _height* 0.04,)
           : Image.asset('assets/infoscreen_icon/winner.png', height: _height * 0.04, width: _height * 0.04,) ,
           Padding(
@@ -232,19 +232,19 @@ class _InfoScreenState extends State<InfoScreen> {
             // padding: EdgeInsets.only(top: _height * 0.005),
             child: Container(
               child: Text(
-                value,
+                score,
                 style: TextStyle(
                     fontSize: _height * 0.039, fontWeight: FontWeight.w700),
               ),
             ),
           ),
           SizedBox(
-            height: _height * 0.0118,
+            height: _height * 0.00218,
           ),
           Text(
             name,
             style: TextStyle(
-                fontSize: _height * 0.025, fontWeight: FontWeight.w700),
+                fontSize: _height * 0.019),
           )
         ],
       ),
@@ -253,22 +253,22 @@ class _InfoScreenState extends State<InfoScreen> {
 
   Widget getScoreHight(String score, _height) {
     return (Container(
-      margin: EdgeInsets.only(top: 19),
+      margin: EdgeInsets.only(top: 40),
       child: Column(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/star.png', height: _height * 0.0539, width: _height * 0.0539,),
+          Image.asset('assets/infoscreen_icon/star.png', height: _height * 0.04, width: _height * 0.04,),
           Text(
             score,
             style: TextStyle(
-                fontSize: _height * 0.047, fontWeight: FontWeight.w700),
+                fontSize: _height * 0.039, fontWeight: FontWeight.w700),
           ),
           SizedBox(
-            height: _height * 0.0053,
+            height: _height * 0.0023,
           ),
           Text(
             'High Score',
             style: TextStyle(
-                fontSize: _height * 0.03, fontWeight: FontWeight.w700),
+                fontSize: _height * 0.019),
           ),
         ],
       ),
@@ -283,7 +283,9 @@ class _InfoScreenState extends State<InfoScreen> {
           //color: Color.fromRGBO(34, 182, 192, 1),
           color: Colors.white,
           border: Border.all(
-            color: Color.fromRGBO(217, 217, 217, 1),
+            color: getColodiff(diff),
+            style: BorderStyle.solid,
+            width: 3,
           ),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
@@ -300,7 +302,7 @@ class _InfoScreenState extends State<InfoScreen> {
           //name
           Positioned(
             top: _height * 0.0269 * -1,
-            left: _height * 0.1268,
+            left: 85,
             width: _height * 0.205,
             child: Container(
               decoration: BoxDecoration(
@@ -310,10 +312,11 @@ class _InfoScreenState extends State<InfoScreen> {
               margin: EdgeInsets.only(top: 0, bottom: 6),
               alignment: Alignment.center,
               width: double.infinity,
+              height: 35,
               child: Text(
                 diff,
                 style: TextStyle(
-                    fontSize: _height * 0.038, fontWeight: FontWeight.w700),
+                    fontSize: _height * 0.031, fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -327,7 +330,7 @@ class _InfoScreenState extends State<InfoScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  getScoreSmall(rounds, _height, 'rounds'),
+                  getScoreSmall(rounds, _height, 'Rounds'),
                   SizedBox(
                     width: _height * 0.0068,
                   ),
@@ -335,7 +338,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   SizedBox(
                     width: _height * 0.0060,
                   ),
-                  getScoreSmall(rounds, _height, 'wins'),
+                  getScoreSmall(rounds, _height, 'Wins'),
                 ],
               ),
             ),
