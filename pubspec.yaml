@@ -58,11 +58,8 @@ flutter:
     - assets/images/
     - assets/background/
     - assets/icon/search.png
-<<<<<<< HEAD
     - assets/infoscreen_icon/
-=======
     - assets/audio/
->>>>>>> 90e1de00e2dab2ee65aa75cf171bd6e6af04b254
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

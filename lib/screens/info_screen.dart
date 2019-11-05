@@ -22,9 +22,6 @@ class _InfoScreenState extends State<InfoScreen> {
   //pro
   var auth = Authentication();
   User _currentUser;
-
-  //animation
-  Animation<double> animation;
   //ctor
   _InfoScreenState() {
     this.auth.getCurrentUser().then((user) {
@@ -42,9 +39,6 @@ class _InfoScreenState extends State<InfoScreen> {
     this.auth.signOut().then((_) {}).catchError((err) => print(err));
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
   }
-
-  @override
-  void initState() {}
 
   void backMenuScreen() {
     Navigator.popAndPushNamed(context, MenuScreen.routeName);
@@ -135,20 +129,39 @@ class _InfoScreenState extends State<InfoScreen> {
                     //   email: _currentUser.email,
                     //   score: '100',
                     // ),
-                    // getTotalScore(),
-                    // SizedBox(height: _height * 0.057),
-                    // getScroreUserCard('Easy', '100', '100', '100', _height),
-                    // SizedBox(height: _height * 0.05),
-                    // getScroreUserCard('Medium', '200', '200', '200', _height),
-                    // SizedBox(height: _height * 0.05),
-                    // getScroreUserCard('Hard', '300', '300', '300', _height),
-                    // SizedBox(height: _height * 0.05),
-                    // getScroreUserCard('Enless', '400', '400', '400', _height),
-                    // ButtonSwitchButtonLogout(
-                    //     signout: signout,
-                    //     switchuser: switchuser,
-                    //     paramcontext: context),
-                   Image.asset('assets/infoscreen_icon/star.png')
+                    getTotalScore(this.totalScore),
+                    SizedBox(height: _height * 0.05),
+                    getScroreUserCard(
+                        'Easy',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
+                        _height),
+                    SizedBox(height: _height * 0.04),
+                    getScroreUserCard(
+                        'Medium',
+                        this.normalDetails.playedCount.toString(),
+                        this.normalDetails.highestScore.toString(),
+                        this.normalDetails.winningCount.toString(),
+                        _height),
+                    SizedBox(height: _height * 0.04),
+                    getScroreUserCard(
+                        'Hard',
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
+                        this.hardDetails.winningCount.toString(),
+                        _height),
+                    SizedBox(height: _height * 0.04),
+                    getScroreUserCard(
+                        'Enless',
+                        this.easyDetails.playedCount.toString(),
+                        this.easyDetails.highestScore.toString(),
+                        this.easyDetails.winningCount.toString(),
+                        _height),
+                    ButtonSwitchButtonLogout(
+                        signout: signout,
+                        switchuser: switchuser,
+                        paramcontext: context),
                   ],
                 ),
               ),
@@ -159,10 +172,21 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Widget getTotalScore() {
+  Color getColodiff(String diff){
+    if(diff == "Easy") 
+    return Color.fromRGBO(210, 155, 111, 1);
+    else if (diff == "Medium")
+    return Color.fromRGBO(222, 222, 222, 1);
+    else if (diff == "Hard") 
+    return Color.fromRGBO(255, 193, 0, 1);
+    else return Color.fromRGBO(56, 187, 231, 1);
+  }
+
+  Widget getTotalScore(String score) {
     return Container(
       child: Row(
         children: <Widget>[
+          Image.asset('assets/infoscreen_icon/award.png', height: 50, width: 50,),
           Text(
             'Total Score: ',
             style: TextStyle(
@@ -171,7 +195,7 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           Text(
-            '769',
+            score,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
           )
         ],
@@ -179,12 +203,16 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Widget getScoreSmall(String value, double _height, String name) {
+ Widget getScoreSmall(String value, double _height, String name) {
     return (Container(
       //height: _height * 0.1,
+      margin: EdgeInsets.only(top: 40),
       width: _height * 0.09,
       child: Column(
         children: <Widget>[
+          name == 'rounds' ?
+          Image.asset('assets/infoscreen_icon/replay.png',height: 30, width: 30,)
+          : Image.asset('assets/infoscreen_icon/winner.png', height: 30, width: 30,) ,
           Padding(
             padding: EdgeInsets.all(0),
             // padding: EdgeInsets.only(top: _height * 0.005),
@@ -211,8 +239,10 @@ class _InfoScreenState extends State<InfoScreen> {
 
   Widget getScoreHight(String score, _height) {
     return (Container(
+      margin: EdgeInsets.only(top: 19),
       child: Column(
         children: <Widget>[
+          Image.asset('assets/infoscreen_icon/star.png', height: 40, width: 40,),
           Text(
             score,
             style: TextStyle(
@@ -230,8 +260,7 @@ class _InfoScreenState extends State<InfoScreen> {
       ),
     ));
   }
-
-  Widget getScroreUserCard(String diff, String rounds, String highestScore,
+   Widget getScroreUserCard(String diff, String rounds, String highestScore,
       String wins, double _height) {
     return (Container(
       height: _height * 0.205,
@@ -262,7 +291,7 @@ class _InfoScreenState extends State<InfoScreen> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
-                color: Color.fromRGBO(217, 217, 217, 1)
+                color: getColodiff(diff)
               ),
               margin: EdgeInsets.only(top: 0, bottom: 6),
               alignment: Alignment.center,
@@ -278,7 +307,7 @@ class _InfoScreenState extends State<InfoScreen> {
           //Text('EASY'),
           // score
           Padding(
-            padding: const EdgeInsets.only(top: 60),
+            padding: const EdgeInsets.only(top: 0),
             child: Container(
               //height: _height *0.1,
               child: Row(
