@@ -109,9 +109,9 @@ class RoundHandler {
     this._remainLives = isLivesCountON ? lifeCount : -1;
     this._isLivesCountON = isLivesCountON;
     this._questions = 1;
-    this.generateQAs(
-      isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
-    );
+    // this.generateQAs(
+    //   isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
+    // );
     this._easyCursor = 0;
     this._normalCursor = this._lastIndex ~/ 2;
     this._hardCursor = this._lastIndex;

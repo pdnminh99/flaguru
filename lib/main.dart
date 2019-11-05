@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flaguru/screens/demo_screen.dart';
-import 'models/SettingsHandler.dart';
-import 'screens/info_screen.dart';
-import 'screens/menu_screen.dart';
-import 'screens/play_screen.dart';
-import 'utils/global_audio_player.dart';
-import 'screens/difficulty_screen.dart';
+// import 'models/SettingsHandler.dart';
+// import 'screens/info_screen.dart';
+// import 'screens/menu_screen.dart';
+// import 'screens/play_screen.dart';
+// import 'utils/global_audio_player.dart';
+// import 'screens/difficulty_screen.dart';
 
 void main() async {
   SystemChrome.setEnabledSystemUIOverlays([]);

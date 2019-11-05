@@ -10,19 +10,29 @@ class Node {
   int _cursor = 0;
   var _rand = Random();
 
+  /*
+   * These function is for test only.
+   */
+  List<Country> testCountries() => this._countries;
+  int testRatio() => this._ratio;
+  int testCursor() => this._cursor;
+
   int get ratio => this._ratio;
 
   Node(Country country) {
-    insert(country);
+    this._countries.add(country);
     // print('Ratio is $ratio');
     this._ratio = country.ratio;
   }
 
-  void insert(Country country) {
+  bool insert(Country country) {
+    if (country.ratio != this.ratio) return false;
     this._countries.add(country);
+    return true;
   }
 
-  int _moveCursor() {
+  // turn this function to private after test.
+  int moveCursor() {
     var currentCursor = this._cursor;
     this._cursor++;
     if (this._cursor >= this._countries.length) this._cursor = 0;
@@ -47,7 +57,7 @@ class Node {
         return null;
       }
     }
-    return this._countries[this._moveCursor()].toQuestion();
+    return this._countries[this.moveCursor()].toQuestion();
   }
 
   Answer getRandomAnswer() =>
