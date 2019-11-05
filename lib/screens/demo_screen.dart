@@ -8,9 +8,10 @@ class DemoScreen extends State<MyApp> {
   @override
   void initState() {
     RoundHandler.getInstance().then((handler) {
-      print(handler.question.toString());
-      print(handler.passedQuestions);
-      handler.answers.forEach((answer) => print(answer.toString()));
+      print('Question counter: ${handler.passedQuestions}.');
+      // handler.generateQAs();
+      // print(handler.question.toString());
+      // handler.answers.forEach((answer) => print(answer.toString()));
     }).catchError((error) => print(error));
     super.initState();
   }

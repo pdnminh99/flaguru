@@ -94,7 +94,7 @@ class RoundHandler {
       _handlerInstance._initializeStaticParams(
           level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
     }
-    print(_handlerInstance._countriesChain.toString());
+    // print(_handlerInstance._countriesChain.toString());
     return _handlerInstance;
   }
 
@@ -109,9 +109,9 @@ class RoundHandler {
     this._remainLives = isLivesCountON ? lifeCount : -1;
     this._isLivesCountON = isLivesCountON;
     this._questions = 1;
-    // this.generateQAs(
-    //   isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
-    // );
+    this.generateQAs(
+      isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
+    );
     this._easyCursor = 0;
     this._normalCursor = this._lastIndex ~/ 2;
     this._hardCursor = this._lastIndex;
@@ -129,8 +129,8 @@ class RoundHandler {
     var database = DatabaseConnector();
     (await database.collectCountries()).forEach((country) {
       // print(country.toString());
-      if (country.ratio != 100)
-        print('> ${country.name} has ratio ${country.ratio}\n');
+      // if (country.ratio != 100)
+      //   print('> ${country.name} has ratio ${country.ratio}\n');
       if (this._countriesChain.length == 0 ||
           this._countriesChain[this._lastIndex].ratio != country.ratio)
         this._createNode(country);
