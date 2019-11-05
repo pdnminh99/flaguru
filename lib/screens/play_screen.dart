@@ -11,7 +11,6 @@ import '../widgets/play_screen_drawer.dart';
 import '../widgets/question_info_area.dart';
 import '../widgets/start_button.dart';
 import '../widgets/top_bar.dart';
-import '../models/QuestionProvider.dart';
 import '../widgets/answers_area.dart';
 import '../widgets/bottom_bar.dart';
 import '../widgets/countdown_watch.dart';

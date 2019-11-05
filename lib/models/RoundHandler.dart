@@ -83,18 +83,18 @@ class RoundHandler {
       if (timeLimit < 1) throw Exception("countdown time should be at least 1");
       if (level == Difficulty.UNLIMITED && !isLivesCountON)
         throw Exception('Unlimited gameplay must include lives Counter');
-      print('Found no instance of questionProvider, initialize new one');
+      print('Found no instance of RoundHandler, initialize new one');
       _handlerInstance = RoundHandler._internal();
       // initialize default params.
       await _handlerInstance._initializeDefaultParams(
           level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
     } else {
-      print('Found an instance of questionProvider.');
+      print('Found an instance of RoundHandler.');
       // In case where user choose a new difficulty.
       _handlerInstance._initializeStaticParams(
           level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
     }
-    // print(handlerInstance._chain.toString());
+    print(_handlerInstance._countriesChain.toString());
     return _handlerInstance;
   }
 
@@ -109,9 +109,9 @@ class RoundHandler {
     this._remainLives = isLivesCountON ? lifeCount : -1;
     this._isLivesCountON = isLivesCountON;
     this._questions = 1;
-    this.generateQAs(
-      isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
-    );
+    // this.generateQAs(
+    //   isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
+    // );
     this._easyCursor = 0;
     this._normalCursor = this._lastIndex ~/ 2;
     this._hardCursor = this._lastIndex;
@@ -128,6 +128,9 @@ class RoundHandler {
     // collect countries and parse to chain.
     var database = DatabaseConnector();
     (await database.collectCountries()).forEach((country) {
+      // print(country.toString());
+      if (country.ratio != 100)
+        print('> ${country.name} has ratio ${country.ratio}\n');
       if (this._countriesChain.length == 0 ||
           this._countriesChain[this._lastIndex].ratio != country.ratio)
         this._createNode(country);
