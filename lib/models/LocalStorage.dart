@@ -5,6 +5,7 @@ import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
+
   Future<Settings> getExistingSettings() async {
     var localSettings = await SharedPreferences.getInstance();
     var audio = localSettings.getBool("audio");
@@ -65,5 +66,11 @@ class LocalStorage {
       default:
         return 'EASY';
     }
+  }
+
+ Future<String> getTotalScore() async
+  {
+    var pref = await SharedPreferences.getInstance();
+    return pref.getInt('totalscore').toString();
   }
 }

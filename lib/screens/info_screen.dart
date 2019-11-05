@@ -1,11 +1,13 @@
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/LocalStorage.dart';
 import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/widgets/background_info.dart';
 import 'package:flaguru/widgets/button_switch_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flaguru/models/ProfileProvider.dart';
 
 class InfoScreen extends StatefulWidget {
   static String routeName = "/info_screen";
@@ -14,16 +16,28 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
-  var easyDetails = RoundDetails(level: Difficulty.EASY);
-  var normalDetails = RoundDetails(level: Difficulty.NORMAL);
-  var hardDetails = RoundDetails(level: Difficulty.HARD);
-  String totalScore = '0';
-
+  RoundDetails easyDetails ;
+  RoundDetails normalDetails ;
+  RoundDetails hardDetails ;
+  String totalScore;
+  
   //pro
   var auth = Authentication();
   User _currentUser;
+
+  //get score
+  Future _getScore() async
+  {
+    this.easyDetails =  await ProfileProvider().getLocalResult(Difficulty.EASY);
+    this.normalDetails = await ProfileProvider().getLocalResult(Difficulty.NORMAL);
+    this.hardDetails = await ProfileProvider().getLocalResult(Difficulty.HARD);
+    this.totalScore = await LocalStorage().getTotalScore();
+  }
   //ctor
-  _InfoScreenState() {
+  _InfoScreenState()  {
+    //
+   _getScore();
+   //
     this.auth.getCurrentUser().then((user) {
       setState(() {
         this._currentUser = user;
@@ -195,7 +209,7 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           Text(
-            score,
+            score == null ? '0' : score,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
           )
         ],
