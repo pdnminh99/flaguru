@@ -1,84 +1,77 @@
-import 'package:flaguru/models/Answer.dart';
-import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class QuestionArea extends StatelessWidget {
-  final bool isName;
-  final Question question;
-//  final QuestionUI question;
+import '../utils/round_provider.dart';
 
-  QuestionArea({
-    @required this.isName,
-    @required this.question,
-  });
+class QuestionArea extends StatefulWidget {
+  @override
+  _QuestionAreaState createState() => _QuestionAreaState();
+}
+
+class _QuestionAreaState extends State<QuestionArea> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final round = Provider.of<RoundProvider>(context);
+    final question = round.question;
+
     var tooLong = question.country.length > 15;
     return LayoutBuilder(
       builder: (context, constraint) {
-        return Stack(
-          children: <Widget>[
-//            Positioned.fill(
-//              child: Material(
-//                elevation: 5,
-//                child: Image.asset(
-//                  'assets/background/worldmap.jpg',
-//                  fit: BoxFit.cover,
-//                ),
-//              ),
-//            ),
-//            Positioned.fill(
-//              child: Container(
-//                color: Color(0xff019dad).withOpacity(0.6),
-//              ),
-//            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: isName
-                    ? Center(
-                        child: Text(
-                          question.country,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: (tooLong)
-                                ? constraint.maxWidth * 0.1
-                                : constraint.maxWidth * 0.13,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(2, 2),
-                                blurRadius: 3,
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Material(
-                        elevation: 15,
-                        borderRadius: BorderRadius.circular(3),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          height: constraint.maxWidth * 0.55 / 1.7,
-                          width: constraint.maxWidth * 0.55,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(2),
-                            child: Image.asset(
-                              question.imageURL,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+        return FadeTransition(
+          opacity: _controller,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: round.nameOrFlag
+                  ? Center(
+                      child: Text(
+                        question.country,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize:
+                              (tooLong) ? constraint.maxWidth * 0.09 : constraint.maxWidth * 0.12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          shadows: <Shadow>[
+                            Shadow(offset: const Offset(2, 2), blurRadius: 3, color: Colors.black),
+                          ],
                         ),
                       ),
-              ),
+                    )
+                  : Material(
+                      elevation: 15,
+                      borderRadius: BorderRadius.circular(3),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3),
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                        height: constraint.maxWidth * 0.55 / 1.7,
+                        width: constraint.maxWidth * 0.55,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: Image.asset(question.imageURL, fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
             ),
-          ],
+          ),
         );
       },
     );

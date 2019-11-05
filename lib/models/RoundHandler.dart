@@ -9,9 +9,10 @@ import 'package:flaguru/models/Enum.dart';
 class RoundHandler {
   Difficulty _level = Difficulty.EASY;
   var _localStorage = LocalStorage();
+
   // Life props
-  int _lifeCount = 0;
-  int _remainLives = 0;
+  final lifeTotal;
+  int _remainLives;
 
   int get remainLives {
     return this._remainLives;
@@ -25,11 +26,11 @@ class RoundHandler {
   }
 
   // Time props
-  int _timeLimit;
+  final timeLimit;
 
   // Question props
-  int _questions = 0;
-  int _remainQuestions = 0;
+  final numOfQtn;
+  int _remainQuestions;
 
   int get remainQuestions {
     return this._remainQuestions;
@@ -56,9 +57,9 @@ class RoundHandler {
         totalTimeElapsed: this._totalTimeElapsed,
         totalTimeLeftRightAnswers: this._totalTimeLeftRightAnswers,
         correctAnswers: this._correctAnswersCounter,
-        questionsCounter: this._questions,
+        questionsCounter: this.numOfQtn,
         remainLives: this.remainLives,
-        totalLives: this._lifeCount,
+        totalLives: this.lifeTotal,
         answerLogs: this._logs);
     this
         ._localStorage
@@ -83,20 +84,16 @@ class RoundHandler {
 
   RoundHandler({
     @required Difficulty level,
-    @required int lifeCount,
-    @required int questions,
-    @required int timeLimit,
+    @required this.lifeTotal,
+    @required this.numOfQtn,
+    @required this.timeLimit,
   }) {
-    if (lifeCount < 1)
-      throw Exception("Life count per round should be greater than 0");
+    if (lifeTotal < 1) throw Exception("Life count per round should be greater than 0");
     if (timeLimit < 1) throw Exception("countdown time should be at least 1");
-    if (questions < 1) throw Exception("There should be at least one question");
+    if (numOfQtn < 1) throw Exception("There should be at least one question");
     this._level = level;
-    this._lifeCount = lifeCount;
-    this._remainLives = lifeCount;
-    this._questions = questions;
-    this._remainQuestions = questions;
-    this._timeLimit = timeLimit;
+    this._remainLives = lifeTotal;
+    this._remainQuestions = numOfQtn;
     this._status = RoundStatus.IDLE;
   }
 
@@ -107,11 +104,10 @@ class RoundHandler {
       Answer answer}) {
     if (this.status != RoundStatus.PLAYING)
       throw Exception("Round status is yet started or is over");
-    if (this._timeLimit < timeLeft)
-      throw Exception(
-          "Why would countdown remain greater than countdown time?");
+    if (this.timeLimit < timeLeft)
+      throw Exception("Why would countdown remain greater than countdown time?");
 
-    final timeElapsed = _timeLimit - timeLeft;
+    final timeElapsed = timeLimit - timeLeft;
 
     this._totalTimeElapsed += timeElapsed;
     this._setRemainQuestions = this.remainQuestions - 1;
@@ -128,8 +124,8 @@ class RoundHandler {
 
   void reset() {
     this._status = RoundStatus.IDLE;
-    this._setRemainLife = this._lifeCount;
-    this._setRemainQuestions = this._questions;
+    this._setRemainLife = lifeTotal;
+    this._setRemainQuestions = numOfQtn;
   }
 
   bool start() {

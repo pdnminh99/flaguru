@@ -13,7 +13,7 @@ class QuestionProvider {
   Difficulty _level;
 
   set level(Difficulty newLevel) {
-    this._level = _level;
+    this._level = newLevel;
   }
 
   Difficulty get level => this._level;
@@ -25,8 +25,7 @@ class QuestionProvider {
 
   static QuestionProvider questionProviderInstance;
 
-  static Future<QuestionProvider> getInstance(
-      {Difficulty level: Difficulty.EASY}) async {
+  static Future<QuestionProvider> getInstance({Difficulty level: Difficulty.EASY}) async {
     if (questionProviderInstance == null) {
       print('Found no instance of questionProvider, initialize new one');
       questionProviderInstance = QuestionProvider._internal();
@@ -43,10 +42,9 @@ class QuestionProvider {
   ///   @param int numberOfQuestions: modify number of questions return by the function, default is 20.
   ///*  @param bool isFirstAnswerCorrect: if this is true, answer One is always true. Easier for debugging purposes.
   ///
-  List<Map<String, Object>> getCollections(
-      {int numberOfQuestions: 20, bool isFirstAnswerCorrect: false}) {
+  List<Map<String, Object>> getCollections({int numOfQtn: 20, bool isFirstAnswerCorrect: false}) {
     var collections = List<Map<String, Object>>();
-    for (var counter = 0; counter < numberOfQuestions; counter++) {
+    for (var counter = 0; counter < numOfQtn; counter++) {
       collections.add(this._parseQA(
           country: this._countries[this._rand.nextInt(this._countries.length)],
           isFirstAnswerCorrect: isFirstAnswerCorrect));
@@ -66,8 +64,7 @@ class QuestionProvider {
     if (isFirstAnswerCorrect) {
       candidates[0] = country.toAnswer(isCorrect: true);
     } else {
-      candidates[this._rand.nextInt(questionCounter)] =
-          country.toAnswer(isCorrect: true);
+      candidates[this._rand.nextInt(questionCounter)] = country.toAnswer(isCorrect: true);
     }
     return candidates;
   }
@@ -79,12 +76,11 @@ class QuestionProvider {
     return false;
   }
 
-  Map<String, Object> _parseQA(
-      {@required Country country, bool isFirstAnswerCorrect: false}) {
+  Map<String, Object> _parseQA({@required Country country, bool isFirstAnswerCorrect: false}) {
     return {
       'question': Question(country),
-      'answer': this._getAnswerCollections(
-          country: country, isFirstAnswerCorrect: isFirstAnswerCorrect)
+      'answer':
+          this._getAnswerCollections(country: country, isFirstAnswerCorrect: isFirstAnswerCorrect)
     };
   }
 }

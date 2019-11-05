@@ -29,8 +29,7 @@ class ResultRow extends AnimatedWidget {
     final upNumber = Tween(begin: 0.0, end: maxNum)
         .animate(CurvedAnimation(parent: controller, curve: Interval(0.2, 1)));
 
-    final style = TextStyle(
-        fontSize: fontSize, fontWeight: FontWeight.bold, color: color);
+    final style = TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: color);
 
     return FadeTransition(
       opacity: opacity,
