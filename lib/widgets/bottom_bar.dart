@@ -1,20 +1,44 @@
+import 'dart:math';
+
+import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class BottomBar extends StatelessWidget {
-  final bool isAnswered;
-  final bool isOver;
-  final Function onRefresh;
-  final Function onOver;
+class BottomBar extends StatefulWidget {
+  @override
+  _BottomBarState createState() => _BottomBarState();
+}
 
-  BottomBar({
-    @required this.isAnswered,
-    @required this.isOver,
-    @required this.onRefresh,
-    @required this.onOver,
-  });
+class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+    animation = Tween(begin: pi / 2, end: 0.0).animate(_controller);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final round = Provider.of<RoundProvider>(context);
+    final isOver = round.roundHandler.status == RoundStatus.OVER;
+    final isAnswered = round.isAnswered;
+
+    if (isAnswered)
+      _controller.forward();
+    else
+      _controller.reverse();
+
     return LayoutBuilder(builder: (context, constraint) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -22,23 +46,37 @@ class BottomBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (isAnswered)
-              SizedBox(
-                height: constraint.maxHeight * 0.7,
-                width: constraint.maxWidth * 0.2,
-                child: RaisedButton(
-                  elevation: 5,
-                  color: Colors.white,
-                  onPressed: (isOver) ? onOver : onRefresh,
-                  child: Icon(
-                    (isOver) ? Icons.airplay : Icons.arrow_forward,
-                    size: constraint.maxHeight * 0.55,
+            AnimatedBuilder(
+              animation: animation,
+              child: Stack(
+                children: <Widget>[
+                  SizedBox(
+                    height: constraint.maxHeight * 0.7,
+                    width: constraint.maxWidth * 0.2,
+                    child: RaisedButton(
+                      elevation: 5,
+                      color: Colors.white,
+                      onPressed: isOver ? () => round.onOver(context) : round.getNextQuestion,
+                      child: Icon(
+                        (isOver) ? Icons.airplay : Icons.arrow_forward,
+                        size: constraint.maxHeight * 0.55,
+                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                  Visibility(
+                      visible: !isAnswered,
+                      child: Positioned.fill(child: Container(color: Colors.transparent))),
+                ],
               ),
+              builder: (context, child) {
+                return Transform(
+                  transform: Matrix4.rotationX(animation.value),
+                  alignment: FractionalOffset.center,
+                  child: child,
+                );
+              },
+            ),
           ],
         ),
       );

@@ -1,4 +1,4 @@
-import 'package:flaguru/models/Enum.dart';
+import '../models/Enum.dart';
 
 class EnumString {
   static String getDifficulty(Difficulty difficulty) {

@@ -1,82 +1,102 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
-import "../models/Answer.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/round_provider.dart';
 import 'flag_button.dart';
 import 'name_button.dart';
 
-class AnswersArea extends StatelessWidget {
-  final bool isFlag;
-  final List<Answer> answers;
-  final bool isAnswered;
-  final Function doRight;
-  final Function doWrong;
-  final List<bool> pressStates;
-  final Function changePressState;
+class AnswersArea extends StatefulWidget {
+  @override
+  _AnswersAreaState createState() => _AnswersAreaState();
+}
 
-  AnswersArea({
-    @required this.isFlag,
-    @required this.answers,
-    @required this.isAnswered,
-    @required this.doRight,
-    @required this.doWrong,
-    @required this.pressStates,
-    @required this.changePressState,
-  });
+class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> animation;
+  bool isAnimated = false;
 
-  Widget buildButton(int index, num width) {
-    if (isFlag)
-      return FlagButton(
-        width: width,
-        answer: answers[index],
-        doRight: doRight,
-        doWrong: doWrong,
-        isAnswered: isAnswered,
-        isPressed: pressStates[index],
-        changePressState: () => changePressState(index),
-      );
-    return NameButton(
-      width: width,
-      answer: answers[index],
-      doRight: doRight,
-      doWrong: doWrong,
-      isAnswered: isAnswered,
-      isPressed: pressStates[index],
-      changePressState: () => changePressState(index),
-    );
+  @override
+  void initState() {
+    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+    animation = Tween(begin: pi / 2, end: 0.0).animate(_controller);
+
+    _controller.forward();
+    isAnimated = true;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraint) {
-      var halfWidth = constraint.maxWidth * 0.85 / 2;
+    final round = Provider.of<RoundProvider>(context);
+    final isFlag = round.nameOrFlag;
 
-      var spacingWidget = SizedBox(
-        height: constraint.maxWidth * 0.05,
-        width: constraint.maxWidth * 0.05,
-      );
+    if (!round.isAnswered && !isAnimated) {
+      _controller.value = 0;
+      _controller.forward();
+      isAnimated = true;
+    }
+    if (round.isAnswered) isAnimated = false;
 
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildButton(0, halfWidth),
-              spacingWidget,
-              buildButton(1, halfWidth),
-            ],
-          ),
-          spacingWidget,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildButton(2, halfWidth),
-              spacingWidget,
-              buildButton(3, halfWidth),
-            ],
-          )
-        ],
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        final halfWidth = constraint.maxWidth * 0.85 / 2;
+
+        final spacingWidget = SizedBox(
+          height: constraint.maxWidth * 0.05,
+          width: constraint.maxWidth * 0.05,
+        );
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildButtonWrapper(isFlag, halfWidth, 0),
+                spacingWidget,
+                buildButtonWrapper(isFlag, halfWidth, 1),
+              ],
+            ),
+            spacingWidget,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildButtonWrapper(isFlag, halfWidth, 2),
+                spacingWidget,
+                buildButtonWrapper(isFlag, halfWidth, 3),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildButtonWrapper(bool isFlag, num width, int index) {
+    return AnimatedBuilder(
+      animation: animation,
+      child: buildButton(isFlag, width, index),
+      builder: (context, child) {
+        return Transform(
+          transform: Matrix4.rotationX(animation.value),
+          alignment: FractionalOffset.center,
+          child: child,
+        );
+      },
+    );
+  }
+
+  Widget buildButton(bool isFlag, num width, int index) {
+    return (isFlag)
+        ? FlagButton(width: width, answerIndex: index)
+        : NameButton(width: width, answerIndex: index);
   }
 }

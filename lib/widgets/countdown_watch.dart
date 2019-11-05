@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/watch_provider.dart';
 
 class CountdownWatch extends StatelessWidget {
-  final num time;
   final num redTime;
 
-  CountdownWatch({
-    @required this.time,
-    @required this.redTime,
-  });
-
-  bool get isLastSeconds => time < redTime;
+  CountdownWatch({@required this.redTime});
 
   @override
   Widget build(BuildContext context) {
+    final time = Provider.of<WatchProvider>(context).time;
+    final isLastSeconds = time < redTime;
+
     Color color = isLastSeconds ? Colors.red[700] : Colors.black;
 
     return LayoutBuilder(
@@ -41,20 +41,15 @@ class CountdownWatch extends StatelessWidget {
                           : constraint.maxWidth * 0.07,
                       child: Text(
                         time.toString(),
-                        style: TextStyle(
-                          fontSize: constraint.maxHeight * 0.65,
-                          color: color,
-                        ),
+                        style: TextStyle(fontSize: constraint.maxHeight * 0.65, color: color),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     SpinKitChasingDots(
                       color: color,
                       size: constraint.maxHeight * 0.4,
-                      duration: Duration(seconds: 2),
+                      duration: const Duration(seconds: 2),
                     ),
                   ],
                 ),
