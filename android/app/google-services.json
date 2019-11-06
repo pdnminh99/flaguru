@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "185711489467",
-    "firebase_url": "https://flaguru-35568.firebaseio.com",
-    "project_id": "flaguru-35568",
-    "storage_bucket": "flaguru-35568.appspot.com"
+    "project_number": "783969604978",
+    "firebase_url": "https://triple-bonito-250007.firebaseio.com",
+    "project_id": "triple-bonito-250007",
+    "storage_bucket": "triple-bonito-250007.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:185711489467:android:04c220626aa30cb240549e",
+        "mobilesdk_app_id": "1:783969604978:android:fefe0b32712456f80d39eb",
         "android_client_info": {
-          "package_name": "com.example.flaguru"
+          "package_name": "com.kai.flaguru"
         }
       },
       "oauth_client": [
         {
-          "client_id": "185711489467-rlkbhadkah1ouq67v6l2gfg5e4ub6rmv.apps.googleusercontent.com",
+          "client_id": "783969604978-m18qauotk4q3crcpocejniui12l43pi2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.flaguru",
-            "certificate_hash": "51c22ead423be2ade25fd8c7b2f53e607712d1ee"
+            "package_name": "com.kai.flaguru",
+            "certificate_hash": "98a8c51cb850daabeb81fe8af710cbdbcec44b4e"
           }
         },
         {
-          "client_id": "185711489467-j0ce1371safricd61l8vn2qpubq54l1e.apps.googleusercontent.com",
+          "client_id": "783969604978-i13hakrno347s076tnrvksfo5np0bh4e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCx8trgVEdPxcDrqlLwT19aR8vJN2m8t-8"
+          "current_key": "AIzaSyD5dDBjhs9GkkpXDIYObAyrPYejKmxr83Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "185711489467-j0ce1371safricd61l8vn2qpubq54l1e.apps.googleusercontent.com",
+              "client_id": "783969604978-i13hakrno347s076tnrvksfo5np0bh4e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
