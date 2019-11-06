@@ -1,11 +1,11 @@
 import 'dart:ffi';
 
 import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/RoundDetails.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
+
   Future<Settings> getExistingSettings() async {
     var localSettings = await SharedPreferences.getInstance();
     var audio = localSettings.getBool("audio");
@@ -31,7 +31,7 @@ class LocalStorage {
   }
 
   Future<void> newRound(Difficulty level) async {
-    var symbol = _getSymbol(level);
+    var symbol = getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var playcount = pref.getInt('${symbol}played');
     if (playcount == null)
@@ -41,7 +41,7 @@ class LocalStorage {
   }
 
   Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
-    var symbol = _getSymbol(level);
+    var symbol = getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
     var winning = pref.getInt('${symbol}win');
@@ -55,20 +55,7 @@ class LocalStorage {
         'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
 
-  Future<RoundDetails> getLocalResult(Difficulty level) async {
-    var symbol = _getSymbol(level);
-    var pref = await SharedPreferences.getInstance();
-    var highestScore = pref.getInt('${symbol}score');
-    var playedCount = pref.getInt('${symbol}played');
-    var winningCount = pref.getInt('${symbol}win');
-    return RoundDetails(
-        highestScore: highestScore,
-        winningCount: winningCount,
-        playedCount: playedCount,
-        level: level);
-  }
-
-  String _getSymbol(Difficulty level) {
+  String getSymbol(Difficulty level) {
     switch (level) {
       case Difficulty.EASY:
         return 'EASY';
@@ -79,5 +66,11 @@ class LocalStorage {
       default:
         return 'EASY';
     }
+  }
+
+ Future<String> getTotalScore() async
+  {
+    var pref = await SharedPreferences.getInstance();
+    return pref.getInt('totalscore').toString();
   }
 }
