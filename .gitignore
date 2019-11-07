@@ -26,7 +26,7 @@
 .flutter-plugins
 .packages
 .pub-cache/
-.pub/i
+.pub/
 /build/
 
 # Android related
