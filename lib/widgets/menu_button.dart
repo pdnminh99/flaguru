@@ -67,13 +67,16 @@ class MenuButton extends AnimatedWidget {
                       height: double.infinity,
                       decoration: BoxDecoration(
                           border: const Border(left: BorderSide(color: Colors.black54, width: 1))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(14.0),
+                      child: Center(
                         child: rightIcon == 'G'
-                            ? Image.asset("./assets/icon/search.png", fit: BoxFit.scaleDown)
-                            : Hero(
-                                tag: 'avatar',
-                                child: CircleAvatar(backgroundImage: NetworkImage(rightIcon)),
+                            ? Padding(
+                                padding: const EdgeInsets.all(14),
+                                child:
+                                    Image.asset("./assets/icon/search.png", fit: BoxFit.scaleDown),
+                              )
+                            : CircleAvatar(
+                                backgroundImage: NetworkImage(rightIcon),
+                                backgroundColor: Colors.white,
                               ),
                       ),
                     ),

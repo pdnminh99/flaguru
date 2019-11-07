@@ -19,11 +19,12 @@ class _AnswersAreaState extends State<AnswersArea> with SingleTickerProviderStat
 
   @override
   void initState() {
-    _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween(begin: pi / 2, end: 0.0).animate(_controller);
 
     _controller.forward();
     isAnimated = true;
+
     super.initState();
   }
 

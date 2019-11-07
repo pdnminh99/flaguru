@@ -34,7 +34,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   void initState() {
     this.auth.getCurrentUser().then((user) {
       setState(() {
-       this._currentUser = user; 
+        this._currentUser = user;
       });
     });
 
@@ -82,7 +82,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   }
 
   void gotoProfile(BuildContext context) {
-    Navigator.popAndPushNamed(context, InfoScreen.routeName);
+    Navigator.pushReplacementNamed(context, InfoScreen.routeName);
   }
 
   void gotoTutorial(BuildContext context) {}
