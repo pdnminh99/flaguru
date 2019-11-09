@@ -12,7 +12,7 @@ import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 
 class MenuScreen extends StatefulWidget {
-  static String routeName = '/';
+  static final String routeName = '/';
 
   @override
   _MenuScreenState createState() => _MenuScreenState();

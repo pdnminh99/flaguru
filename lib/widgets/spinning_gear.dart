@@ -19,21 +19,18 @@ class _SpinningGearState extends State<SpinningGear> with SingleTickerProviderSt
   AnimationController _controller;
   Animation<double> animation;
 
-  Timer _timer;
-
   @override
   void initState() {
     _controller = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _controller, curve: Interval(0, 0.7, curve: Curves.easeIn)));
+        CurvedAnimation(parent: _controller, curve: Interval(0.3, 1, curve: Curves.easeIn)));
 
-    _timer = Timer(const Duration(milliseconds: 300), _controller.repeat);
+    _controller.repeat();
     super.initState();
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     _controller.dispose();
     super.dispose();
   }
