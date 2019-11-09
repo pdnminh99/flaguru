@@ -48,7 +48,12 @@ class MenuButton extends AnimatedWidget {
         color: Colors.white.withOpacity(0.9),
         child: Row(
           children: <Widget>[
-            Expanded(flex: 1, child: Icon(leftIcon, size: 28, color: Colors.black87)),
+            Expanded(
+              flex: 1,
+              child: (title == 'Settings')
+                  ? Hero(tag: 'settings', child: Icon(leftIcon, size: 28, color: Colors.black87))
+                  : Icon(leftIcon, size: 28, color: Colors.black87),
+            ),
             Expanded(
               flex: 3,
               child: Center(
