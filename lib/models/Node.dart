@@ -14,7 +14,9 @@ class Node {
    * These function is for test only.
    */
   List<Country> testCountries() => this._countries;
+
   int testRatio() => this._ratio;
+
   int testCursor() => this._cursor;
 
   int get ratio => this._ratio;
@@ -32,12 +34,12 @@ class Node {
   }
 
   // turn this function to private after test.
-  int moveCursor() {
-    var currentCursor = this._cursor;
-    this._cursor++;
-    if (this._cursor >= this._countries.length) this._cursor = 0;
-    return currentCursor;
-  }
+  //  int moveCursor() {
+  //    var currentCursor = this._cursor;
+  //    this._cursor++;
+  //    if (this._cursor >= this._countries.length) this._cursor = 0;
+  //    return currentCursor;
+  //  }
 
   bool isEmpty() => this._countries.length == 0;
 
@@ -48,18 +50,29 @@ class Node {
     return message;
   }
 
+  /*
+   * If this returns a null -> no question found. 
+   */
+
   Question getQuestion() {
-    while (this._countries[this._cursor].chances != 0) {
-      this._countries[this._cursor].call();
-      this._cursor++;
-      if (this._cursor >= this._countries.length) {
-        this._cursor = 0;
-        return null;
-      }
+    while (_cursor < _countries.length && _countries[_cursor].chances != 0) {
+      if (_cursor < _countries.length) _countries[_cursor].walkthrough();
+      _cursor++;
+//      if (_cursor >= _countries.length) {
+//        _cursor = 0;
+//        return null;
+//      }
     }
-    return this._countries[this.moveCursor()].toQuestion();
+    if (_cursor >= _countries.length) {
+      _cursor = 0;
+      return null;
+    }
+    var selectedQuestion = _countries[_cursor].toQuestion();
+    _countries[_cursor].chances = 2;
+    _cursor++;
+    return selectedQuestion;
   }
 
   Answer getRandomAnswer() =>
-      this._countries[this._rand.nextInt(this._countries.length)].toAnswer();
+      _countries[_rand.nextInt(_countries.length)].toAnswer();
 }

@@ -36,15 +36,21 @@ class Country {
 
   Question toQuestion() => Question(this);
 
+  void walkthrough() {
+    if (chances > 0)
+      chances -= 1;
+    else if (chances < 0) throw Exception('Why would chances be negative.');
+  }
+
   void call() {
-    if (this.chances == 0)
-      this.chances = 2;
+    if (chances == 0)
+      chances = 2;
     else
-      this.chances -= 1;
+      chances -= 1;
   }
 
   @override
   String toString() {
-    return 'id $id: $name\n';
+    return 'id $id: $name; chance: $chances; equals 0 ${chances == 0}\n';
   }
 }

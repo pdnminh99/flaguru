@@ -18,24 +18,20 @@ class RoundHandler {
   // Life props
   int _lifeCount = 0;
   int _remainLives = 0;
-  bool _isLivesCountON;
 
-  int get remainLives => this._remainLives;
+  int get remainLives => _remainLives;
 
   set _setRemainLives(int livesCount) {
     if (livesCount < 0) throw Exception('Why would lives count negative?');
-    if (!this._isLivesCountON)
-      throw Exception(
-          'You cannot set lives count in a non-livesCount gameplay.');
-    this._remainLives = livesCount;
+    _remainLives = livesCount;
   }
 
-  bool get isAlive => this._remainLives > 0;
+  bool get isAlive => _remainLives > 0;
 
   // Question props
-  int _questions = 1;
+  int _questions = 0;
 
-  int get passedQuestions => this._questions;
+  int get passedQuestions => _questions;
 
   // Answers props
   int _correctAnswersCounter = 0;
@@ -63,6 +59,7 @@ class RoundHandler {
   int _normalCursor;
 
   var _rand = Random();
+  bool _isFirstAnswerAlwaysRight;
 
   static bool isInit() => _handlerInstance != null;
 
@@ -72,27 +69,24 @@ class RoundHandler {
 
   static Future<RoundHandler> getInstance(
       {Difficulty level: Difficulty.EASY,
-      int lifeCount: 5,
+      int lifeCount: 1,
       int timeLimit: 15,
-      bool isLivesCountON: true,
       bool isFirstAnswerAlwaysRight: false}) async {
     if (_handlerInstance == null) {
       // Handle exceptions.
-      if (lifeCount < 1 && isLivesCountON)
+      if (lifeCount < 1)
         throw Exception("Life count per round should be greater than 0");
       if (timeLimit < 1) throw Exception("countdown time should be at least 1");
-      if (level == Difficulty.UNLIMITED && !isLivesCountON)
-        throw Exception('Unlimited gameplay must include lives Counter');
       print('Found no instance of RoundHandler, initialize new one');
       _handlerInstance = RoundHandler._internal();
       // initialize default params.
       await _handlerInstance._initializeDefaultParams(
-          level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
+          level, lifeCount, isFirstAnswerAlwaysRight);
     } else {
       print('Found an instance of RoundHandler.');
       // In case where user choose a new difficulty.
       _handlerInstance._initializeStaticParams(
-          level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
+          level, lifeCount, isFirstAnswerAlwaysRight);
     }
     // print(_handlerInstance._countriesChain.toString());
     return _handlerInstance;
@@ -101,85 +95,84 @@ class RoundHandler {
   void _initializeStaticParams(
     Difficulty level,
     int lifeCount,
-    bool isLivesCountON,
     bool isFirstAnswerAlwaysRight,
   ) {
     this._level = level;
-    this._lifeCount = isLivesCountON ? lifeCount : -1;
-    this._remainLives = isLivesCountON ? lifeCount : -1;
-    this._isLivesCountON = isLivesCountON;
-    this._questions = 1;
-    // this.generateQAs(
-    //   isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
-    // );
-    this._easyCursor = 0;
+    this._lifeCount = lifeCount;
+    this._remainLives = lifeCount;
+    this._questions = 0;
+    this._isFirstAnswerAlwaysRight = isFirstAnswerAlwaysRight;
+    this._easyCursor = _lastIndex;
     this._normalCursor = this._lastIndex ~/ 2;
-    this._hardCursor = this._lastIndex;
+    this._hardCursor = 0;
   }
 
   Future<void> _initializeDefaultParams(
     Difficulty level,
     int lifeCount,
-    bool isLivesCountON,
     bool isFirstAnswerAlwaysRight,
   ) async {
-    this._initializeStaticParams(
-        level, lifeCount, isLivesCountON, isFirstAnswerAlwaysRight);
+    _initializeStaticParams(level, lifeCount, isFirstAnswerAlwaysRight);
     // collect countries and parse to chain.
     var database = DatabaseConnector();
     (await database.collectCountries()).forEach((country) {
       // print(country.toString());
       // if (country.ratio != 100)
       //   print('> ${country.name} has ratio ${country.ratio}\n');
-      if (this._countriesChain.length == 0 ||
-          this._countriesChain[this._lastIndex].ratio != country.ratio)
-        this._createNode(country);
+      if (_countriesChain.length == 0 ||
+          _countriesChain[_lastIndex].ratio != country.ratio)
+        _createNode(country);
       else
-        this._countriesChain[this._lastIndex].insert(country);
+        _countriesChain[_lastIndex].insert(country);
     });
+    generateQAs(
+        // isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
+        );
   }
 
   void _createNode(Country newCountry) {
-    this._countriesChain.add(Node(newCountry));
-    this._hardCursor = this._lastIndex;
-    this._normalCursor = this._lastIndex ~/ 2;
+    _countriesChain.add(Node(newCountry));
+    _easyCursor = _lastIndex;
+    _normalCursor = _lastIndex ~/ 2;
   }
 
-  void generateQAs(
-      {bool isFirstAnswerAlwaysRight: false, int answerCounter: 4}) {
-    /*
-     * If questions count equal or greater than its maximum, game over. 
-     */
-    this._questions += 1;
-    this.answers.clear();
-    for (int counter = 0; counter < answerCounter; counter++)
-      this.answers.add(this
-          ._countriesChain[this._rand.nextInt(this._countriesChain.length)]
+  void generateQAs() {
+    if (remainLives < 0)
+      throw Exception('There is no lives remain to generate new question.');
+    _questions += 1;
+    answers.clear();
+    for (int counter = 0; counter < 4; counter++)
+      answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
           .getRandomAnswer());
-    switch (this._level) {
+    switch (_level) {
       case Difficulty.UNLIMITED:
       case Difficulty.EASY:
-        while (this._countriesChain[this._easyCursor].getQuestion() == null) {
-          this._easyCursor++;
-          if (this._easyCursor > this._lastIndex) this._easyCursor = 0;
-        }
-        this.question = this._countriesChain[this._easyCursor].getQuestion();
+        // while (_countriesChain[_easyCursor].getQuestion() == null) {
+        //   _easyCursor--;
+        //   if (_easyCursor < 0) _easyCursor = 0;
+        // }
+        // question = _countriesChain[_easyCursor].getQuestion();
+        do {
+          question = _countriesChain[_easyCursor].getQuestion();
+          if (question == null) _easyCursor--;
+          if (_easyCursor < 0) _easyCursor = _lastIndex;
+        } while (question == null);
         break;
       case Difficulty.NORMAL:
       case Difficulty.HARD:
-        while (this._countriesChain[this._hardCursor].getQuestion() == null) {
-          this._hardCursor--;
-          if (this._hardCursor < 0) this._hardCursor = this._lastIndex;
+        while (_countriesChain[_hardCursor].getQuestion() == null) {
+          _hardCursor--;
+          if (_hardCursor < 0) _hardCursor = _lastIndex;
         }
-        this.question = this._countriesChain[this._hardCursor].getQuestion();
+        question = _countriesChain[_hardCursor].getQuestion();
         break;
       default:
         throw Exception('Unknown difficulty');
     }
-    if (isFirstAnswerAlwaysRight)
-      this.answers[0] = question.toAnswer();
+    if (_isFirstAnswerAlwaysRight)
+      answers[0] = question.toAnswer();
     else
-      this.answers[this._rand.nextInt(5)] = question.toAnswer();
+      answers[_rand.nextInt(answers.length)] = question.toAnswer();
   }
 
   bool verifyAnswer({@required int timeLeft, @required Answer answer}) {
@@ -192,7 +185,7 @@ class RoundHandler {
     if (isCorrect) {
       this._correctAnswersCounter += 1;
       this._totalTimeLeftRightAnswers += timeLeft;
-    } else if (this._isLivesCountON)
+    } else
       this._setRemainLives = this.remainLives - 1;
     this._setLogs = AnswerLog(this.question, answer, isCorrect, timeElapsed);
     return isCorrect;
@@ -221,13 +214,17 @@ class RoundHandler {
     return roundResult;
   }
 
+  String _nodeString() {
+    String message = '';
+    for (var node in _countriesChain) message += '${node.toString()}.\n';
+    return message;
+  }
+
+//  @override
+//  String toString() =>
+//      'There are total ${this._countriesChain.length} nodes. \n> Question ${question.toString()} \n> Answer ${answers.toString()}\n';
   @override
   String toString() {
-    String message = 'There are total ${this._countriesChain.length} nodes.\n';
-    int counter = 0;
-    this._countriesChain.forEach((node) {
-      message += '$counter) ${node.toString()}';
-    });
-    return message;
+    return 'Cursor at node $_easyCursor. ${_nodeString()} node cursor at ${_countriesChain[_easyCursor].testCursor()}.';
   }
 }

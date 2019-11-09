@@ -35,7 +35,7 @@ class DatabaseConnector {
     //          .rawQuery("SELECT * FROM country ORDER BY RANDOM() LIMIT $count");
     maps = await this._db.rawQuery("SELECT * FROM country ORDER BY ratio ASC");
     for (var item in maps) print(item.keys);
-    var countries = List.generate(maps.length, (i) {
+    return List.generate(maps.length, (i) {
       // print(maps[i]['ratio']);
       return Country(
         id: maps[i]['ID'],
@@ -44,11 +44,11 @@ class DatabaseConnector {
         // callCounter: maps[i]['callcounter'],
         // correctCounter: maps[i]['correctcounter'],
         ratio: maps[i]['ratio'],
-        description: maps[i]['description'],
+        description: maps[i]['description'], chances: 0,
       );
     });
     // await this._db.close();
-    return countries;
+    // return countries;
   }
 
   Future<void> updateChances({@required int countryID, int chances}) =>
