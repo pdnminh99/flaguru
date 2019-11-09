@@ -1,6 +1,7 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+
 import '../models/SettingsHandler.dart';
 
 class GlobalAudioPlayer with WidgetsBindingObserver {
@@ -16,13 +17,6 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   GlobalAudioPlayer(this._settings) {
     WidgetsBinding.instance.addObserver(this);
   }
-
-  //  final _musicNames = ['elevate.mp3'];
-  //  final _soundNames = ['right.m4a', 'wrong.mp3', ];
-  //
-  //  Future loadAllAudio() async {
-  //    await _cache.loadAll([..._musicNames, ..._soundNames]);
-  //  }
 
   Future playMusic() async {
     if (!_settings.isMusicEnabled) return;
@@ -52,6 +46,11 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
       ..setVolume(0.5);
   }
 
+  Future playSoundGameOver() async {
+    if (soundMuted) return;
+    _soundPlayer = await _cache.play('gameover.mp3');
+  }
+
   Future playSoundScore() async {
     if (soundMuted) return;
     _soundPlayer = await _cache.play('result.mp3');
@@ -60,7 +59,7 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   Future playSoundLetsGo() async {
     if (soundMuted) return;
     _soundPlayer = await _cache.play('okletsgo.mp3')
-      ..setVolume(0.6);
+      ..setVolume(0.4);
   }
 
   Future playSoundTick() async {

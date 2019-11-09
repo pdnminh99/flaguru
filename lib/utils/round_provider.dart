@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 
@@ -63,12 +64,14 @@ class RoundProvider with ChangeNotifier {
 
   void doRight() {
     processAfterAnswered(true);
-    audioPlayer?.playSoundRight();
+    audioPlayer.playSoundRight();
   }
 
   void doWrong() {
     processAfterAnswered(false);
-    audioPlayer?.playSoundWrong();
+    (roundHandler.remainLives == 0)
+        ? audioPlayer.playSoundGameOver()
+        : audioPlayer.playSoundWrong();
   }
 
   void processAfterAnswered(bool isCorrect) {
