@@ -10,28 +10,29 @@ class Country {
   String name;
   String flag;
   int ratio;
-
-  // double get ratio => this._ratio;
-  // set ratio(double ratio) => this._ratio = ratio;
+  int _callCounter;
+  int _correctCounter;
   String description;
   int chances = 0;
-
-  // int callCounter = 0;
-  // int correctCounter = 0;
+  int nodeAddress;
 
   Country(
       {@required this.id,
       this.name,
       this.flag,
       this.description,
-      @required this.chances,
-      @required this.ratio});
+      int callCounter: 0,
+      int correctCounter: 0,
+      @required this.chances}) {
+    _callCounter = callCounter;
+    _correctCounter = correctCounter;
+    ratio = (_correctCounter / _callCounter * 100).round();
+  }
 
   Answer toAnswer() => Answer(
       countryID: this.id,
       country: this.name,
       imageUrl: this.flag,
-//        isRight: isCorrect,
       description: this.description);
 
   Question toQuestion() => Question(this);
@@ -42,15 +43,17 @@ class Country {
     else if (chances < 0) throw Exception('Why would chances be negative.');
   }
 
-  void call() {
-    if (chances == 0)
-      chances = 2;
-    else
-      chances -= 1;
-  }
+  void call() => chances = chances == 0 ? 2 : chances - 1;
+
+//  void call() {
+//    if (chances == 0)
+//      chances = 2;
+//    else
+//      chances -= 1;
+//  }
 
   @override
   String toString() {
-    return 'id $id: $name; chance: $chances; equals 0 ${chances == 0}\n';
+    return 'id $id: $name; chance: $chances.\n';
   }
 }

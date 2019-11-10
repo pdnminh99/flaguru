@@ -6,6 +6,8 @@ class Question {
   String country;
   String imageURL;
   String description;
+  int node;
+  int position;
 
   @override
   String toString() {
@@ -17,6 +19,7 @@ class Question {
     this.country = country.name;
     this.imageURL = country.flag;
     this.description = country.description;
+    this.node = country.nodeAddress;
   }
 
   Answer toAnswer() => Answer(

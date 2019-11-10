@@ -28,8 +28,9 @@ class Node {
   }
 
   bool insert(Country country) {
-    if (country.ratio != this.ratio) return false;
-    this._countries.add(country);
+    if (country.ratio != ratio) return false;
+    _countries.insert(_rand.nextInt(_countries.length), country);
+//    _countries.add(country);
     return true;
   }
 

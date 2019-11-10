@@ -13,20 +13,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flaguru/models/Enum.dart';
 
 class RoundHandler {
+  DatabaseConnector _sqlDatabase;
   Difficulty _level;
 
   // Life props
   int _lifeCount = 0;
-  int _remainLives = 0;
+  int remainLives = 0;
 
-  int get remainLives => _remainLives;
-
-  set _setRemainLives(int livesCount) {
-    if (livesCount < 0) throw Exception('Why would lives count negative?');
-    _remainLives = livesCount;
-  }
-
-  bool get isAlive => _remainLives > 0;
+  bool get isAlive => remainLives > 0;
 
   // Question props
   int _questions = 0;
@@ -35,11 +29,7 @@ class RoundHandler {
 
   // Answers props
   int _correctAnswersCounter = 0;
-  var _answerLogs = List<AnswerLog>();
-
-  List<AnswerLog> get _logs => this._answerLogs;
-
-  set _setLogs(AnswerLog log) => this._answerLogs.add(log);
+  var answerLogs = List<AnswerLog>();
 
   // Timing props
   int _totalTimeElapsed = 0;
@@ -51,12 +41,15 @@ class RoundHandler {
 
   var answers = List<Answer>();
   Question question;
+  bool _isVerified;
 
   int get _lastIndex => this._countriesChain.length - 1;
 
   int _easyCursor;
   int _hardCursor;
   int _normalCursor;
+  bool _isNormalCursorHeadLeft = true;
+  int _distanceFromNormalCursor = 0;
 
   var _rand = Random();
   bool _isFirstAnswerAlwaysRight;
@@ -97,13 +90,19 @@ class RoundHandler {
     int lifeCount,
     bool isFirstAnswerAlwaysRight,
   ) {
+    // clear old answer logs.
+    this.answerLogs.clear();
+    // get new variables.
     this._level = level;
     this._lifeCount = lifeCount;
-    this._remainLives = lifeCount;
+    this.remainLives = lifeCount;
     this._questions = 0;
     this._isFirstAnswerAlwaysRight = isFirstAnswerAlwaysRight;
+    // reset cursor.
     this._easyCursor = _lastIndex;
     this._normalCursor = this._lastIndex ~/ 2;
+    this._isNormalCursorHeadLeft = true;
+    this._distanceFromNormalCursor = 0;
     this._hardCursor = 0;
   }
 
@@ -114,20 +113,19 @@ class RoundHandler {
   ) async {
     _initializeStaticParams(level, lifeCount, isFirstAnswerAlwaysRight);
     // collect countries and parse to chain.
-    var database = DatabaseConnector();
-    (await database.collectCountries()).forEach((country) {
-      // print(country.toString());
-      // if (country.ratio != 100)
-      //   print('> ${country.name} has ratio ${country.ratio}\n');
+    _sqlDatabase = DatabaseConnector();
+    (await _sqlDatabase.collectCountries()).forEach((country) {
       if (_countriesChain.length == 0 ||
-          _countriesChain[_lastIndex].ratio != country.ratio)
+          _countriesChain[_lastIndex].ratio != country.ratio) {
+        country.nodeAddress = _countriesChain.length;
         _createNode(country);
-      else
+      } else {
+        country.nodeAddress = _countriesChain.length - 1;
+        // insert by randomizing position.
         _countriesChain[_lastIndex].insert(country);
+      }
     });
-    generateQAs(
-        // isFirstAnswerAlwaysRight: isFirstAnswerAlwaysRight,
-        );
+    generateQAs();
   }
 
   void _createNode(Country newCountry) {
@@ -137,7 +135,7 @@ class RoundHandler {
   }
 
   void generateQAs() {
-    if (remainLives < 0)
+    if (remainLives <= 0)
       throw Exception('There is no lives remain to generate new question.');
     _questions += 1;
     answers.clear();
@@ -147,11 +145,6 @@ class RoundHandler {
     switch (_level) {
       case Difficulty.UNLIMITED:
       case Difficulty.EASY:
-        // while (_countriesChain[_easyCursor].getQuestion() == null) {
-        //   _easyCursor--;
-        //   if (_easyCursor < 0) _easyCursor = 0;
-        // }
-        // question = _countriesChain[_easyCursor].getQuestion();
         do {
           question = _countriesChain[_easyCursor].getQuestion();
           if (question == null) _easyCursor--;
@@ -159,12 +152,34 @@ class RoundHandler {
         } while (question == null);
         break;
       case Difficulty.NORMAL:
+//        do {
+//          var leftCursor = _normalCursor - _distanceFromNormalCursor;
+//          var rightCursor = _normalCursor + _distanceFromNormalCursor;
+//          if (leftCursor < 0 && rightCursor >= _countriesChain.length)
+//            _distanceFromNormalCursor = 0;
+//          if (_isNormalCursorHeadLeft) {
+//            if (leftCursor < 0) _isNormalCursorHeadLeft = false;
+//            question =
+//                _countriesChain[_normalCursor + _distanceFromNormalCursor]
+//                    .getQuestion();
+//          } else {
+//
+//          }
+//          question = _countriesChain[_isNormalCursorHeadLeft
+//                  ? _normalCursor - _distanceFromNormalCursor
+//                  : _normalCursor + _distanceFromNormalCursor]
+//              .getQuestion();
+//          if (question == null) _isNormalCursorHeadLeft = false;
+//          if (question == null && !_isNormalCursorHeadLeft)
+//            _distanceFromNormalCursor++;
+//        } while (question == null);
+//        break;
       case Difficulty.HARD:
-        while (_countriesChain[_hardCursor].getQuestion() == null) {
-          _hardCursor--;
-          if (_hardCursor < 0) _hardCursor = _lastIndex;
-        }
-        question = _countriesChain[_hardCursor].getQuestion();
+        do {
+          question = _countriesChain[_hardCursor].getQuestion();
+          if (question == null) _hardCursor++;
+          if (_hardCursor >= _countriesChain.length) _hardCursor = 0;
+        } while (question == null);
         break;
       default:
         throw Exception('Unknown difficulty');
@@ -173,6 +188,7 @@ class RoundHandler {
       answers[0] = question.toAnswer();
     else
       answers[_rand.nextInt(answers.length)] = question.toAnswer();
+    _isVerified = false;
   }
 
   bool verifyAnswer({@required int timeLeft, @required Answer answer}) {
@@ -181,13 +197,20 @@ class RoundHandler {
           "Why would countdown remain greater than countdown time?");
     final timeElapsed = _timeLimit - timeLeft;
     this._totalTimeElapsed += timeElapsed;
-    var isCorrect = answer.countryID == this.question.countryID;
+    var isCorrect = answer.countryID == question.countryID;
+    // prevent FE from verifying one question more than once.
+    if (_isVerified) return isCorrect;
     if (isCorrect) {
-      this._correctAnswersCounter += 1;
-      this._totalTimeLeftRightAnswers += timeLeft;
+      _correctAnswersCounter += 1;
+      _totalTimeLeftRightAnswers += timeLeft;
     } else
-      this._setRemainLives = this.remainLives - 1;
-    this._setLogs = AnswerLog(this.question, answer, isCorrect, timeElapsed);
+      remainLives -= 1;
+    answerLogs.add(AnswerLog(question, answer, isCorrect, timeElapsed));
+    _isVerified = true;
+    // save result to database
+    //    _sqlDatabase
+    //        .updateCountryStats(question.countryID, isCorrect)
+    //        .catchError((error) => print(error));
     return isCorrect;
   }
 
@@ -206,7 +229,7 @@ class RoundHandler {
         questionsCounter: this.passedQuestions,
         remainLives: this.remainLives,
         totalLives: this._lifeCount,
-        answerLogs: this._logs);
+        answerLogs: this.answerLogs);
     LocalStorage.saveResult(
             roundResult.score, this._level, this.remainLives > 0)
         .then((_) => print('Save current result to localStorage.'))
@@ -225,6 +248,6 @@ class RoundHandler {
 //      'There are total ${this._countriesChain.length} nodes. \n> Question ${question.toString()} \n> Answer ${answers.toString()}\n';
   @override
   String toString() {
-    return 'Cursor at node $_easyCursor. ${_nodeString()} node cursor at ${_countriesChain[_easyCursor].testCursor()}.';
+    return 'Node cursor at ${_countriesChain[_hardCursor].testCursor()}.\nCursor at node $_easyCursor. ${_nodeString()}.';
   }
 }

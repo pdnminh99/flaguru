@@ -27,26 +27,19 @@ class DatabaseConnector {
   Future<List<Country>> collectCountries({count: 0}) async {
     await _connectSQLite();
     var maps = List<Map>();
-    //    if (count == 0)
-    //      maps = await this._db.rawQuery("SELECT * FROM country");
-    //    else
-    //      maps = await this
-    //          ._db
-    //          .rawQuery("SELECT * FROM country ORDER BY RANDOM() LIMIT $count");
-    maps = await this._db.rawQuery("SELECT * FROM country ORDER BY ratio ASC");
+    maps = await this._db.rawQuery("SELECT * FROM country ORDER BY correctcounter / callcounter ASC");
     for (var item in maps) print(item.keys);
-    return List.generate(maps.length, (i) {
-      // print(maps[i]['ratio']);
-      return Country(
-        id: maps[i]['ID'],
-        name: maps[i]['name'],
-        flag: maps[i]['flag'],
-        // callCounter: maps[i]['callcounter'],
-        // correctCounter: maps[i]['correctcounter'],
-        ratio: maps[i]['ratio'],
-        description: maps[i]['description'], chances: 0,
-      );
-    });
+    return List.generate(
+        maps.length,
+        (i) => Country(
+              id: maps[i]['ID'],
+              name: maps[i]['name'],
+              flag: maps[i]['flag'],
+              callCounter: maps[i]['callcounter'],
+              correctCounter: maps[i]['correctcounter'],
+              description: maps[i]['description'],
+              chances: 0,
+            ));
     // await this._db.close();
     // return countries;
   }
@@ -55,7 +48,15 @@ class DatabaseConnector {
       this._connectSQLite().then((_) => this._db.rawInsert(
           'UPDATE country SET chances = $chances WHERE ID = $countryID'));
 
-  // Future<void> updateRatio(Country country) =>
-  //     this._connectSQLite().then((_) => this._db.rawUpdate(
-  //         'UPDATE country SET callcounter = ${country.callCounter}, correctcounter = ${country.correctCounter}, ratio = ${country.ratio} WHERE ID = ${country.id}'));
+  Future<void> updateCountryStats(int countryID, bool isCorrect) {
+    return _connectSQLite().then((_) {
+      var query =
+          'UPDATE country SET callcounter = callcounter + 1 ${isCorrect ? ', correctcounter = correctcounter + 1' : ''} WHERE ID = $countryID';
+      return _db.rawUpdate(query);
+    });
+  }
+
+// Future<void> updateRatio(Country country) =>
+//     this._connectSQLite().then((_) => this._db.rawUpdate(
+//         'UPDATE country SET callcounter = ${country.callCounter}, correctcounter = ${country.correctCounter}, ratio = ${country.ratio} WHERE ID = ${country.id}'));
 }
