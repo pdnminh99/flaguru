@@ -91,19 +91,19 @@ class RoundHandler {
     bool isFirstAnswerAlwaysRight,
   ) {
     // clear old answer logs.
-    this.answerLogs.clear();
+    answerLogs.clear();
     // get new variables.
-    this._level = level;
-    this._lifeCount = lifeCount;
-    this.remainLives = lifeCount;
-    this._questions = 0;
-    this._isFirstAnswerAlwaysRight = isFirstAnswerAlwaysRight;
+    _level = level;
+    _lifeCount = lifeCount;
+    remainLives = lifeCount;
+    _questions = 0;
+    _isFirstAnswerAlwaysRight = isFirstAnswerAlwaysRight;
     // reset cursor.
-    this._easyCursor = _lastIndex;
-    this._normalCursor = this._lastIndex ~/ 2;
-    this._isNormalCursorHeadLeft = true;
-    this._distanceFromNormalCursor = 0;
-    this._hardCursor = 0;
+    _easyCursor = _lastIndex;
+    _normalCursor = _lastIndex ~/ 2;
+    _isNormalCursorHeadLeft = true;
+    _distanceFromNormalCursor = 0;
+    _hardCursor = 0;
   }
 
   Future<void> _initializeDefaultParams(
@@ -137,49 +137,17 @@ class RoundHandler {
   void generateQAs() {
     if (remainLives <= 0)
       throw Exception('There is no lives remain to generate new question.');
-    _questions += 1;
-    answers.clear();
-    for (int counter = 0; counter < 4; counter++)
-      answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
-          .getRandomAnswer());
+    _generateAnswers(4);
     switch (_level) {
       case Difficulty.UNLIMITED:
       case Difficulty.EASY:
-        do {
-          question = _countriesChain[_easyCursor].getQuestion();
-          if (question == null) _easyCursor--;
-          if (_easyCursor < 0) _easyCursor = _lastIndex;
-        } while (question == null);
+        _generateEasyQuestion();
         break;
       case Difficulty.NORMAL:
-//        do {
-//          var leftCursor = _normalCursor - _distanceFromNormalCursor;
-//          var rightCursor = _normalCursor + _distanceFromNormalCursor;
-//          if (leftCursor < 0 && rightCursor >= _countriesChain.length)
-//            _distanceFromNormalCursor = 0;
-//          if (_isNormalCursorHeadLeft) {
-//            if (leftCursor < 0) _isNormalCursorHeadLeft = false;
-//            question =
-//                _countriesChain[_normalCursor + _distanceFromNormalCursor]
-//                    .getQuestion();
-//          } else {
-//
-//          }
-//          question = _countriesChain[_isNormalCursorHeadLeft
-//                  ? _normalCursor - _distanceFromNormalCursor
-//                  : _normalCursor + _distanceFromNormalCursor]
-//              .getQuestion();
-//          if (question == null) _isNormalCursorHeadLeft = false;
-//          if (question == null && !_isNormalCursorHeadLeft)
-//            _distanceFromNormalCursor++;
-//        } while (question == null);
-//        break;
+        _generateNormalQuestion();
+        break;
       case Difficulty.HARD:
-        do {
-          question = _countriesChain[_hardCursor].getQuestion();
-          if (question == null) _hardCursor++;
-          if (_hardCursor >= _countriesChain.length) _hardCursor = 0;
-        } while (question == null);
+        _generateHardQuestion();
         break;
       default:
         throw Exception('Unknown difficulty');
@@ -189,6 +157,69 @@ class RoundHandler {
     else
       answers[_rand.nextInt(answers.length)] = question.toAnswer();
     _isVerified = false;
+  }
+
+  void _generateAnswers(int numberOfAnswers) {
+    _questions += 1;
+    answers.clear();
+    for (int counter = 0; counter < numberOfAnswers; counter++)
+      answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
+          .getRandomAnswer());
+  }
+
+  void _generateEasyQuestion() {
+    do {
+      question = _countriesChain[_easyCursor].getQuestion();
+      if (question == null) _easyCursor--;
+      if (_easyCursor < 0) _easyCursor = _lastIndex;
+    } while (question == null);
+  }
+
+  void _generateNormalQuestion() {
+    do {
+      var leftCursor = _normalCursor - _distanceFromNormalCursor;
+      var rightCursor = _normalCursor + _distanceFromNormalCursor;
+      // case both side is out of range.
+      if (leftCursor < 0 && rightCursor > _lastIndex) {
+        _isNormalCursorHeadLeft = true;
+        _distanceFromNormalCursor = 0;
+      }
+      // case heading left.
+      if (_isNormalCursorHeadLeft)
+        _fetchLeftFromNormalCursor(leftCursor);
+      // case heading right.
+      else
+        _fetchRightFromNormalCursor(rightCursor);
+    } while (question == null);
+  }
+
+  void _fetchLeftFromNormalCursor(int leftCursor) {
+    // if left side is still in range.
+    question =
+        leftCursor >= 0 ? _countriesChain[leftCursor].getQuestion() : null;
+    _isNormalCursorHeadLeft = question != null;
+  }
+
+  void _fetchRightFromNormalCursor(int rightCursor) {
+    // if right side is still in range.
+    if (rightCursor <= _lastIndex) {
+      question = _countriesChain[rightCursor].getQuestion();
+      if (question == null) {
+        _isNormalCursorHeadLeft = true;
+        _distanceFromNormalCursor++;
+      }
+    } else {
+      question = null;
+      _distanceFromNormalCursor++;
+    }
+  }
+
+  void _generateHardQuestion() {
+    do {
+      question = _countriesChain[_hardCursor].getQuestion();
+      if (question == null) _hardCursor++;
+      if (_hardCursor >= _countriesChain.length) _hardCursor = 0;
+    } while (question == null);
   }
 
   bool verifyAnswer({@required int timeLeft, @required Answer answer}) {
@@ -215,23 +246,22 @@ class RoundHandler {
   }
 
   void start() {
-    LocalStorage.newRound(this._level)
+    LocalStorage.newRound(_level)
         .then((_) => print('New round is started'))
         .catchError((error) => print(error));
   }
 
   Result getResult() {
     var roundResult = Result(
-        level: this._level,
-        totalTimeElapsed: this._totalTimeElapsed,
-        totalTimeLeftRightAnswers: this._totalTimeLeftRightAnswers,
-        correctAnswers: this._correctAnswersCounter,
-        questionsCounter: this.passedQuestions,
-        remainLives: this.remainLives,
-        totalLives: this._lifeCount,
-        answerLogs: this.answerLogs);
-    LocalStorage.saveResult(
-            roundResult.score, this._level, this.remainLives > 0)
+        level: _level,
+        totalTimeElapsed: _totalTimeElapsed,
+        totalTimeLeftRightAnswers: _totalTimeLeftRightAnswers,
+        correctAnswers: _correctAnswersCounter,
+        questionsCounter: passedQuestions,
+        remainLives: remainLives,
+        totalLives: _lifeCount,
+        answerLogs: answerLogs);
+    LocalStorage.saveResult(roundResult.score, _level, remainLives > 0)
         .then((_) => print('Save current result to localStorage.'))
         .catchError((error) => print(error));
     return roundResult;
@@ -248,6 +278,6 @@ class RoundHandler {
 //      'There are total ${this._countriesChain.length} nodes. \n> Question ${question.toString()} \n> Answer ${answers.toString()}\n';
   @override
   String toString() {
-    return 'Node cursor at ${_countriesChain[_hardCursor].testCursor()}.\nCursor at node $_easyCursor. ${_nodeString()}.';
+    return 'Node cursor at ${_countriesChain[_normalCursor].testCursor()}.\nCursor at node ${_countriesChain[_normalCursor].ratio}.\n${_nodeString()}.';
   }
 }

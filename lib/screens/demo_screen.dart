@@ -11,7 +11,7 @@ class DemoScreen extends State<MyApp> {
   @override
   void initState() {
     RoundHandler.getInstance(
-            level: Difficulty.HARD, isFirstAnswerAlwaysRight: true)
+            level: Difficulty.NORMAL, isFirstAnswerAlwaysRight: true)
         .then((handler) {
       setState(() => roundHandler = handler);
     });
