@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:flaguru/models/Enum.dart';
 import 'package:flutter/widgets.dart';
 
 import 'Answer.dart';
@@ -9,12 +10,13 @@ class Country {
   int id;
   String name;
   String flag;
+  Continent continent;
   int ratio;
   int _callCounter;
   int _correctCounter;
   String description;
   int chances = 0;
-  int nodeAddress;
+  // int nodeAddress;
 
   Country(
       {@required this.id,
@@ -23,6 +25,7 @@ class Country {
       this.description,
       int callCounter: 0,
       int correctCounter: 0,
+      this.continent,
       @required this.chances}) {
     _callCounter = callCounter;
     _correctCounter = correctCounter;

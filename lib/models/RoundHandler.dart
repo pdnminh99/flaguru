@@ -107,14 +107,10 @@ class RoundHandler {
     _sqlDatabase = DatabaseConnector();
     (await _sqlDatabase.collectCountries()).forEach((country) {
       if (_countriesChain.length == 0 ||
-          _countriesChain[_lastIndex].ratio != country.ratio) {
-        country.nodeAddress = _countriesChain.length;
+          _countriesChain[_lastIndex].ratio != country.ratio)
         _createNode(country);
-      } else {
-        country.nodeAddress = _countriesChain.length - 1;
-        // insert by randomizing position.
+      else
         _countriesChain[_lastIndex].insert(country);
-      }
     });
     generateQAs();
   }
@@ -154,8 +150,6 @@ class RoundHandler {
     _questions += 1;
     answers.clear();
     for (int counter = 0; counter < numberOfAnswers; counter++) {
-      // answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
-      //     .getRandomAnswer());
       var isDupicate = false;
       Answer nominationAnswer;
       do {

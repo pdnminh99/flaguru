@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'Enum.dart';
+
 class DatabaseConnector {
   Database _db;
   var privateLogs = List<AnswerLog>();
@@ -24,6 +26,27 @@ class DatabaseConnector {
     await File(path).writeAsBytes(bytes);
     // Open database
     if (this._db == null || !_db.isOpen) this._db = await openDatabase(path);
+  }
+
+  Continent mapContinent(int continentID) {
+    switch (continentID) {
+      case 1:
+        return Continent.EUROPE;
+      case 2:
+        return Continent.ASIA;
+      case 3:
+        return Continent.AFRICA;
+      case 4:
+        return Continent.AUSTRALIAandOCEANIA;
+      case 5:
+        return Continent.NORTH_AMERICA;
+      case 6:
+        return Continent.SOUTH_AMERICA;
+      case 7:
+        return Continent.ASIAandEUROPE;
+      default:
+        return Continent.EUROPE;
+    }
   }
 
   Future<List<Country>> collectCountries({count: 0}) async {
@@ -44,6 +67,7 @@ class DatabaseConnector {
               correctCounter: maps[i]['correctcounter'],
               description: maps[i]['description'],
               chances: maps[i]['chances'],
+              continent: mapContinent(maps[i]['continent']),
             ));
     // sort countries.
     for (var leftCursor = 0; leftCursor < countries.length - 1; leftCursor++) {

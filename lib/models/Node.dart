@@ -48,7 +48,7 @@ class Node {
   @override
   String toString() {
     String message = "Node $_ratio has ${_countries.length} countries:\n";
-    // for (var country in this._countries) message += "> ${country.toString()}";
+    for (var country in this._countries) message += "> ${country.toString()}";
     return message;
   }
 
@@ -104,8 +104,8 @@ class Node {
     throw Exception('Country with ID $countryID not found in node $ratio');
   }
 
-  void moveNode(int newNode) {
-    for (int i = 0; i < _countries.length; i++)
-      _countries[i].nodeAddress = newNode;
-  }
+  // void moveNode(int newNode) {
+  //   for (int i = 0; i < _countries.length; i++)
+  //     _countries[i].nodeAddress = newNode;
+  // }
 }
