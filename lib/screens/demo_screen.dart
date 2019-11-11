@@ -7,11 +7,14 @@ import '../main.dart';
 
 class DemoScreen extends State<MyApp> {
   RoundHandler roundHandler;
+  bool isFinish = false;
 
   @override
   void initState() {
     RoundHandler.getInstance(
-            level: Difficulty.NORMAL, isFirstAnswerAlwaysRight: true)
+            level: Difficulty.NORMAL,
+            isFirstAnswerAlwaysRight: true,
+            lifeCount: 3)
         .then((handler) {
       setState(() => roundHandler = handler);
     });
@@ -36,21 +39,49 @@ class DemoScreen extends State<MyApp> {
           Text('Question passed ${roundHandler.passedQuestions}'),
           Text('${roundHandler.question.toString()}'),
           Text('${roundHandler.answers.toString()}'),
+          ...selection(),
+          resultSection(),
           RaisedButton(
-            child: Text('Generate'),
-            onPressed: () => setState(() => roundHandler.generateQAs()),
+            child: Text('Get result'),
+            onPressed: () => setState(() => isFinish = true),
           ),
-          RaisedButton(
-              child: Text('Generate 50 questions'),
-              onPressed: () {
-                for (var i = 0; i < 50; i++) {
-                  roundHandler.generateQAs();
-                }
-                setState(() => roundHandler.generateQAs());
-              }),
+//          RaisedButton(
+//            child: Text('Generate'),
+//            onPressed: () => setState(() => roundHandler.generateQAs()),
+//          ),
+//          RaisedButton(
+//              child: Text('Generate 50 questions'),
+//              onPressed: () {
+//                for (var i = 0; i < 50; i++) {
+//                  roundHandler.generateQAs();
+//                }
+//                setState(() => roundHandler.generateQAs());
+//              }),
           Text('${roundHandler.toString()}'),
         ]),
       );
+
+  Widget resultSection() {
+    if (!isFinish) return Text('No result.');
+    return Text(
+        'Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n${roundHandler.getResult()}');
+  }
+
+  List<Widget> selection() {
+    var buttons = List<Widget>();
+    roundHandler.answers.forEach((answer) {
+      buttons.add(RaisedButton(
+        child: Text('${answer.country}'),
+        onPressed: () {
+          roundHandler.verifyAnswer(timeLeft: 8, answer: answer);
+          setState(() {
+            roundHandler.generateQAs();
+          });
+        },
+      ));
+    });
+    return buttons;
+  }
 
   Widget emptyCollection() => Scaffold(
         appBar: AppBar(

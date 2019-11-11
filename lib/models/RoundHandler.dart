@@ -74,12 +74,12 @@ class RoundHandler {
       _handlerInstance = RoundHandler._internal();
       // initialize default params.
       await _handlerInstance._initializeDefaultParams(
-          level, lifeCount, isFirstAnswerAlwaysRight);
+          level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     } else {
       print('Found an instance of RoundHandler.');
       // In case where user choose a new difficulty.
       _handlerInstance._initializeStaticParams(
-          level, lifeCount, isFirstAnswerAlwaysRight);
+          level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     }
     // print(_handlerInstance._countriesChain.toString());
     return _handlerInstance;
@@ -88,6 +88,7 @@ class RoundHandler {
   void _initializeStaticParams(
     Difficulty level,
     int lifeCount,
+    int timeLimit,
     bool isFirstAnswerAlwaysRight,
   ) {
     // clear old answer logs.
@@ -98,6 +99,7 @@ class RoundHandler {
     remainLives = lifeCount;
     _questions = 0;
     _isFirstAnswerAlwaysRight = isFirstAnswerAlwaysRight;
+    _timeLimit = timeLimit;
     // reset cursor.
     _easyCursor = _lastIndex;
     _normalCursor = _lastIndex ~/ 2;
@@ -109,9 +111,11 @@ class RoundHandler {
   Future<void> _initializeDefaultParams(
     Difficulty level,
     int lifeCount,
+    int timeLimit,
     bool isFirstAnswerAlwaysRight,
   ) async {
-    _initializeStaticParams(level, lifeCount, isFirstAnswerAlwaysRight);
+    _initializeStaticParams(
+        level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     // collect countries and parse to chain.
     _sqlDatabase = DatabaseConnector();
     (await _sqlDatabase.collectCountries()).forEach((country) {
@@ -262,8 +266,10 @@ class RoundHandler {
         totalLives: _lifeCount,
         answerLogs: answerLogs);
     LocalStorage.saveResult(roundResult.score, _level, remainLives > 0)
-        .then((_) => print('Save current result to localStorage.'))
+        .then((_) => print('Saved current result to localStorage.'))
         .catchError((error) => print(error));
+//    _updateCountriesStats();
+//    _filterEmptyCountries();
     return roundResult;
   }
 
@@ -280,4 +286,37 @@ class RoundHandler {
   String toString() {
     return 'Node cursor at ${_countriesChain[_normalCursor].testCursor()}.\nCursor at node ${_countriesChain[_normalCursor].ratio}.\n${_nodeString()}.';
   }
+
+  void _updateCountriesStats() {
+    answerLogs.forEach((log) {
+      var question = log.question;
+      var newCountry = _countriesChain[question.node]
+          .updateCountryStats(question.countryID, log.isCorrect);
+      // if null means the ratio remains the same even after calculation.
+      if (newCountry != null) {
+        // look for new position.
+        var isPositionFound = false;
+        for (var nodeID = 0; nodeID < _countriesChain.length; nodeID++)
+          if (_countriesChain[nodeID].ratio == newCountry.ratio) {
+            _countriesChain[nodeID].insert(newCountry);
+            isPositionFound = true;
+          }
+        if (!isPositionFound) _createNode(newCountry);
+      } else
+        print('${newCountry.name} after update still has the same ratio.');
+    });
+  }
+
+//  void _filterEmptyCountries() {
+//    var cursor = 0;
+//    while (cursor < _countriesChain.length) {
+//      if (_countriesChain[cursor].isEmpty()) {
+//        _countriesChain.removeAt(cursor);
+//        for (var iterator = cursor;
+//            iterator < _countriesChain.length;
+//            iterator++) _countriesChain[iterator].moveNode(iterator);
+//      } else
+//        cursor++;
+//    }
+//  }
 }

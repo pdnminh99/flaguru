@@ -59,10 +59,6 @@ class Node {
     while (_cursor < _countries.length && _countries[_cursor].chances != 0) {
       if (_cursor < _countries.length) _countries[_cursor].walkthrough();
       _cursor++;
-//      if (_cursor >= _countries.length) {
-//        _cursor = 0;
-//        return null;
-//      }
     }
     if (_cursor >= _countries.length) {
       _cursor = 0;
@@ -76,4 +72,24 @@ class Node {
 
   Answer getRandomAnswer() =>
       _countries[_rand.nextInt(_countries.length)].toAnswer();
+
+  Country updateCountryStats(int countryID, bool isCorrect) {
+    for (int i = 0; i < _countries.length; i++) {
+      if (_countries[i].id == countryID) {
+        var newRatio = _countries[i].calculateNewRatio(isCorrect);
+        var country = _countries[i];
+        if (newRatio != ratio) {
+          _countries.removeAt(i);
+          return country;
+        } else
+          return null;
+      }
+    }
+    throw Exception('Country with ID $countryID not found in node $ratio');
+  }
+
+  void moveNode(int newNode) {
+    for (int i = 0; i < _countries.length; i++)
+      _countries[i].nodeAddress = newNode;
+  }
 }

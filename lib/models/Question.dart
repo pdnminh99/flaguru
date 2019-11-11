@@ -7,7 +7,6 @@ class Question {
   String imageURL;
   String description;
   int node;
-  int position;
 
   @override
   String toString() {

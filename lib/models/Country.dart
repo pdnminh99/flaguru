@@ -45,12 +45,12 @@ class Country {
 
   void call() => chances = chances == 0 ? 2 : chances - 1;
 
-//  void call() {
-//    if (chances == 0)
-//      chances = 2;
-//    else
-//      chances -= 1;
-//  }
+  int calculateNewRatio(bool isCorrect) {
+    _callCounter++;
+    if (isCorrect) _correctCounter++;
+    ratio = (_correctCounter / _callCounter * 100).round();
+    return ratio;
+  }
 
   @override
   String toString() {
