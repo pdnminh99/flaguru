@@ -49,13 +49,16 @@ class DatabaseConnector {
     }
   }
 
-  Future<List<Country>> collectCountries({count: 0}) async {
+  Future<void> switchAllowStatus(bool newStatus, int countryID) =>
+      _connectSQLite().then((_) => _db.rawUpdate(
+          'UPDATE country SET isallow = ${newStatus ? 1 : 0} WHERE ID = $countryID'));
+
+  Future<List<Country>> collectCountries({bool isAllowedOnly: true}) async {
     await _connectSQLite();
     var maps = List<Map>();
-    maps = await this._db.rawQuery('''
-    SELECT * 
-    FROM country
-    ''');
+    var query = 'SELECT * FROM country';
+    if (isAllowedOnly) query += ' WHERE isallow = 1;';
+    maps = await this._db.rawQuery(query);
     // for (var item in maps) print(item.keys);
     var countries = List.generate(
         maps.length,
@@ -68,6 +71,7 @@ class DatabaseConnector {
               description: maps[i]['description'],
               chances: maps[i]['chances'],
               continent: mapContinent(maps[i]['continent']),
+              isAllow: maps[i]['isallow'] == 0 ? false : true,
             ));
     // sort countries.
     for (var leftCursor = 0; leftCursor < countries.length - 1; leftCursor++) {

@@ -1,3 +1,6 @@
+import 'package:flaguru/models/Country.dart';
+import 'package:flaguru/models/DatabaseConnector.dart';
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/Settings.dart';
 import 'package:flaguru/utils/global_audio_player.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +9,7 @@ import 'LocalStorage.dart';
 
 class SettingsHandler with ChangeNotifier {
   Settings _currentSettings;
+  var countries = List<Country>();
 
   bool get isSoundEnabled {
     return this._currentSettings.isSoundON;
@@ -50,8 +54,79 @@ class SettingsHandler with ChangeNotifier {
       settingInstance = SettingsHandler._internal();
       settingInstance._currentSettings =
           await LocalStorage.getExistingSettings();
+      await settingInstance._getCountries();
     }
     return settingInstance;
+  }
+
+  Future<void> _getCountries() {
+    var sqlDatabase = DatabaseConnector();
+    return sqlDatabase
+        .collectCountries(isAllowedOnly: false)
+        .then((countries) => this.countries = countries);
+  }
+
+  Map<String, List<Country>> getCountriesByContinent() {
+    var dictionary = Map<String, List<Country>>();
+    // var dictionary = Map.from({
+    dictionary['Europe'] = List<Country>();
+    dictionary['Africa'] = List<Country>();
+    dictionary['Asia'] = List<Country>();
+    dictionary['AsiaEurope'] = List<Country>();
+    dictionary['AustraliaOceania'] = List<Country>();
+    dictionary['NorthAmerica'] = List<Country>();
+    dictionary['SouthAmerica'] = List<Country>();
+    dictionary['Unknown'] = List<Country>();
+    // });
+    for (var country in countries) {
+      switch (country.continent) {
+        case Continent.EUROPE:
+          dictionary['Europe'].add(country);
+          break;
+        case Continent.AFRICA:
+          dictionary['Africa'].add(country);
+          break;
+        case Continent.ASIA:
+          dictionary['Asia'].add(country);
+          break;
+        case Continent.ASIAandEUROPE:
+          dictionary['AsiaEurope'].add(country);
+          break;
+        case Continent.AUSTRALIAandOCEANIA:
+          dictionary['AustraliaOceania'].add(country);
+          break;
+        case Continent.NORTH_AMERICA:
+          dictionary['NorthAmerica'].add(country);
+          break;
+        case Continent.SOUTH_AMERICA:
+          dictionary['SouthAmerica'].add(country);
+          break;
+        default:
+          dictionary['Unknown'].add(country);
+          break;
+      }
+    }
+    // print(dictionary.toString());
+    return dictionary;
+  }
+
+  void switchAllowStatus(int countryID) {
+    bool isFound = false;
+    bool newStatus = false;
+    for (var country in countries)
+      if (country.id == countryID) {
+        country.isAllow = !country.isAllow;
+        newStatus = country.isAllow;
+        isFound = true;
+        break;
+      }
+    if (isFound) {
+      var sqlDatabase = DatabaseConnector();
+      sqlDatabase
+          .switchAllowStatus(newStatus, countryID)
+          .then((_) => print('Switch $countryID allow status to $newStatus'))
+          .catchError((error) => print(error));
+    }
   }
 
   void resetSettings() {

@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:flaguru/models/Country.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/RoundHandler.dart';
+import 'package:flaguru/models/SettingsHandler.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 
 class DemoScreen extends State<MyApp> {
   RoundHandler roundHandler;
+  SettingsHandler settings;
   var _sqliteDatabase = DatabaseConnector();
   String logString = '';
   bool isFinish = false;
@@ -21,6 +24,17 @@ class DemoScreen extends State<MyApp> {
         .then((handler) {
       setState(() => roundHandler = handler);
     });
+    // var database = DatabaseConnector();
+    // database.collectCountries().then((countries) {
+    //   print('There are ${countries.length} countries before switch.');
+    //   return SettingsHandler.getInstance();
+    // }).then((settings) {
+    //   settings.switchAllowStatus(1291);
+    //   sleep(Duration(milliseconds: 500));
+    //   return database.collectCountries();
+    // }).then((countries) {
+    //   print('There are ${countries.length} countries after switch.');
+    // }).catchError((error) => print(error));
     super.initState();
   }
 

@@ -16,6 +16,7 @@ class Country {
   int _correctCounter;
   String description;
   int chances = 0;
+  bool isAllow = true;
   // int nodeAddress;
 
   Country(
@@ -26,6 +27,7 @@ class Country {
       int callCounter: 0,
       int correctCounter: 0,
       this.continent,
+      this.isAllow,
       @required this.chances}) {
     _callCounter = callCounter;
     _correctCounter = correctCounter;
@@ -61,6 +63,6 @@ class Country {
 
   @override
   String toString() => '''
-    $name -> ratio $ratio -> chance: $chances.
+    $name -> ratio $ratio -> chance: $chances -> $isAllow.
     ''';
 }
