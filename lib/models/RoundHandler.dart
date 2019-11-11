@@ -153,9 +153,21 @@ class RoundHandler {
   void _generateAnswers(int numberOfAnswers) {
     _questions += 1;
     answers.clear();
-    for (int counter = 0; counter < numberOfAnswers; counter++)
-      answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
-          .getRandomAnswer());
+    for (int counter = 0; counter < numberOfAnswers; counter++) {
+      // answers.add(_countriesChain[_rand.nextInt(_countriesChain.length)]
+      //     .getRandomAnswer());
+      var isDupicate = false;
+      Answer nominationAnswer;
+      do {
+        isDupicate = false;
+        nominationAnswer =
+            _countriesChain[_rand.nextInt(_countriesChain.length)]
+                .getRandomAnswer();
+        for (var answer in answers)
+          if (answer.countryID == nominationAnswer.countryID) isDupicate = true;
+      } while (isDupicate);
+      answers.add(nominationAnswer);
+    }
   }
 
   void _generateEasyQuestion() {

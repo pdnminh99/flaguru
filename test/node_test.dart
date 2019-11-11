@@ -8,53 +8,45 @@ void main() {
     Country(
       id: 1,
       name: 'Vietnam',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 2,
       name: 'America',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 3,
       name: 'Japan',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 4,
       name: 'Deutch',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 5,
       name: 'German',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 6,
       name: 'Laos',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 7,
       name: 'Singapore',
-      ratio: 100,
       chances: 0,
     ),
     Country(
       id: 8,
       name: 'Malaysia',
-      ratio: 100,
       chances: 0,
     ),
   ];
-  var falseCountry = Country(id: 10, name: 'Wakanda', ratio: 0, chances: 0);
+  var falseCountry = Country(id: 10, name: 'Wakanda', chances: 0);
   group('Initializing test.', () {
     test('New node is not null.', () {
       var sampleNode = Node(dummyData[0]);
