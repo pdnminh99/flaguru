@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/RoundHandler.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +8,16 @@ import '../main.dart';
 
 class DemoScreen extends State<MyApp> {
   RoundHandler roundHandler;
+  var _sqliteDatabase = DatabaseConnector();
+  String logString = '';
   bool isFinish = false;
 
   @override
   void initState() {
     RoundHandler.getInstance(
-            level: Difficulty.NORMAL,
+            level: Difficulty.HARD,
             isFirstAnswerAlwaysRight: true,
-            lifeCount: 3)
+            lifeCount: 100)
         .then((handler) {
       setState(() => roundHandler = handler);
     });
@@ -37,10 +40,48 @@ class DemoScreen extends State<MyApp> {
         ),
         body: ListView(padding: const EdgeInsets.all(8), children: <Widget>[
           Text('Question passed ${roundHandler.passedQuestions}'),
-          Text('${roundHandler.question.toString()}'),
-          Text('${roundHandler.answers.toString()}'),
+          // Text('${roundHandler.question.toString()}'),
+          // Text('${roundHandler.answers.toString()}'),
           ...selection(),
           resultSection(),
+          RaisedButton(
+            child: Text('Reset'),
+            onPressed: () {
+              RoundHandler.getInstance(
+                      level: Difficulty.HARD,
+                      isFirstAnswerAlwaysRight: true,
+                      lifeCount: 100)
+                  .then((handler) {
+                setState(() {
+                  logString = '';
+                  roundHandler = handler;
+                  isFinish = false;
+                });
+              });
+            },
+          ),
+          RaisedButton(
+            child: Text('Delete logs'),
+            onPressed: () {
+              _sqliteDatabase.deleteLogs().then((_) {
+                return _sqliteDatabase.readLogs();
+              }).then((logs) {
+                setState(() {
+                  logString = logs;
+                });
+              }).catchError((error) => print(error));
+            },
+          ),
+          RaisedButton(
+            child: Text('Get logs'),
+            onPressed: () {
+              _sqliteDatabase.readLogs().then((logs) {
+                setState(() {
+                  logString = logs;
+                });
+              });
+            },
+          ),
           RaisedButton(
             child: Text('Get result'),
             onPressed: () => setState(() => isFinish = true),
@@ -64,7 +105,7 @@ class DemoScreen extends State<MyApp> {
   Widget resultSection() {
     if (!isFinish) return Text('No result.');
     return Text(
-        'Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n${roundHandler.getResult()}');
+        'Result >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n${roundHandler.getResult()}\n$logString\n');
   }
 
   List<Widget> selection() {

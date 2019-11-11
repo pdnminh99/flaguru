@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Country.dart';
@@ -54,33 +55,19 @@ class RoundHandler {
   var _rand = Random();
   bool _isFirstAnswerAlwaysRight;
 
-  static bool isInit() => _handlerInstance != null;
-
-  RoundHandler._internal();
-
-  static RoundHandler _handlerInstance;
-
   static Future<RoundHandler> getInstance(
       {Difficulty level: Difficulty.EASY,
       int lifeCount: 1,
       int timeLimit: 15,
       bool isFirstAnswerAlwaysRight: false}) async {
-    if (_handlerInstance == null) {
-      // Handle exceptions.
-      if (lifeCount < 1)
-        throw Exception("Life count per round should be greater than 0");
-      if (timeLimit < 1) throw Exception("countdown time should be at least 1");
-      print('Found no instance of RoundHandler, initialize new one');
-      _handlerInstance = RoundHandler._internal();
-      // initialize default params.
-      await _handlerInstance._initializeDefaultParams(
-          level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
-    } else {
-      print('Found an instance of RoundHandler.');
-      // In case where user choose a new difficulty.
-      _handlerInstance._initializeStaticParams(
-          level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
-    }
+    // Handle exceptions.
+    if (lifeCount < 1)
+      throw Exception("Life count per round should be greater than 0");
+    if (timeLimit < 1) throw Exception("countdown time should be at least 1");
+    var _handlerInstance = RoundHandler();
+    // initialize default params.
+    await _handlerInstance._initializeDefaultParams(
+        level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     // print(_handlerInstance._countriesChain.toString());
     return _handlerInstance;
   }
@@ -240,12 +227,15 @@ class RoundHandler {
       _totalTimeLeftRightAnswers += timeLeft;
     } else
       remainLives -= 1;
-    answerLogs.add(AnswerLog(question, answer, isCorrect, timeElapsed));
+    var newLog = AnswerLog(question, answer, isCorrect, timeElapsed);
+    answerLogs.add(newLog);
+    // add Log to database.
+    _sqlDatabase.addLog(newLog);
+    _sqlDatabase
+        .updateCountryStats(newLog)
+        .then((_) => print('update successfully'))
+        .catchError((error) => print(error));
     _isVerified = true;
-    // save result to database
-    //    _sqlDatabase
-    //        .updateCountryStats(question.countryID, isCorrect)
-    //        .catchError((error) => print(error));
     return isCorrect;
   }
 
@@ -265,11 +255,11 @@ class RoundHandler {
         remainLives: remainLives,
         totalLives: _lifeCount,
         answerLogs: answerLogs);
+    // TODO check if network connection available before saveLog.
+    _sqlDatabase.saveLogs();
     LocalStorage.saveResult(roundResult.score, _level, remainLives > 0)
         .then((_) => print('Saved current result to localStorage.'))
         .catchError((error) => print(error));
-//    _updateCountriesStats();
-//    _filterEmptyCountries();
     return roundResult;
   }
 
@@ -279,44 +269,10 @@ class RoundHandler {
     return message;
   }
 
-//  @override
-//  String toString() =>
-//      'There are total ${this._countriesChain.length} nodes. \n> Question ${question.toString()} \n> Answer ${answers.toString()}\n';
   @override
-  String toString() {
-    return 'Node cursor at ${_countriesChain[_normalCursor].testCursor()}.\nCursor at node ${_countriesChain[_normalCursor].ratio}.\n${_nodeString()}.';
-  }
-
-  void _updateCountriesStats() {
-    answerLogs.forEach((log) {
-      var question = log.question;
-      var newCountry = _countriesChain[question.node]
-          .updateCountryStats(question.countryID, log.isCorrect);
-      // if null means the ratio remains the same even after calculation.
-      if (newCountry != null) {
-        // look for new position.
-        var isPositionFound = false;
-        for (var nodeID = 0; nodeID < _countriesChain.length; nodeID++)
-          if (_countriesChain[nodeID].ratio == newCountry.ratio) {
-            _countriesChain[nodeID].insert(newCountry);
-            isPositionFound = true;
-          }
-        if (!isPositionFound) _createNode(newCountry);
-      } else
-        print('${newCountry.name} after update still has the same ratio.');
-    });
-  }
-
-//  void _filterEmptyCountries() {
-//    var cursor = 0;
-//    while (cursor < _countriesChain.length) {
-//      if (_countriesChain[cursor].isEmpty()) {
-//        _countriesChain.removeAt(cursor);
-//        for (var iterator = cursor;
-//            iterator < _countriesChain.length;
-//            iterator++) _countriesChain[iterator].moveNode(iterator);
-//      } else
-//        cursor++;
-//    }
-//  }
+  String toString() => '''
+      *** Node cursor at ${_countriesChain[_normalCursor].testCursor()}. ***
+      *** Cursor at node ${_countriesChain[_normalCursor].ratio}. ***
+      ${_nodeString()}
+      ''';
 }

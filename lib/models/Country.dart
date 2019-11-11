@@ -26,7 +26,10 @@ class Country {
       @required this.chances}) {
     _callCounter = callCounter;
     _correctCounter = correctCounter;
-    ratio = (_correctCounter / _callCounter * 100).round();
+    ratio = callCounter == 0 && correctCounter == 0
+        ? 0
+        : (_correctCounter / _callCounter * 100).round();
+    // print('Country $name has new ratio $ratio');
   }
 
   Answer toAnswer() => Answer(
@@ -49,11 +52,12 @@ class Country {
     _callCounter++;
     if (isCorrect) _correctCounter++;
     ratio = (_correctCounter / _callCounter * 100).round();
+    // print('Country $name has new ratio $ratio');
     return ratio;
   }
 
   @override
-  String toString() {
-    return 'id $id: $name; chance: $chances.\n';
-  }
+  String toString() => '''
+    $name -> ratio $ratio -> chance: $chances.
+    ''';
 }

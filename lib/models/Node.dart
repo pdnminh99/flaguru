@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flaguru/models/Answer.dart';
 import 'package:flaguru/models/Country.dart';
+import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/Question.dart';
 
 class Node {
@@ -56,8 +57,17 @@ class Node {
    */
 
   Question getQuestion() {
+    var sqlDatabase = DatabaseConnector();
     while (_cursor < _countries.length && _countries[_cursor].chances != 0) {
-      if (_cursor < _countries.length) _countries[_cursor].walkthrough();
+      if (_cursor < _countries.length) {
+        _countries[_cursor].walkthrough();
+        // update chances
+        sqlDatabase
+            .updateChances(
+                countryID: _countries[_cursor].id,
+                chances: _countries[_cursor].chances)
+            .catchError((error) => print(error));
+      }
       _cursor++;
     }
     if (_cursor >= _countries.length) {
@@ -65,7 +75,13 @@ class Node {
       return null;
     }
     var selectedQuestion = _countries[_cursor].toQuestion();
-    _countries[_cursor].chances = 2;
+    _countries[_cursor].chances = 5;
+    // update chances
+    sqlDatabase
+        .updateChances(
+            countryID: _countries[_cursor].id,
+            chances: _countries[_cursor].chances)
+        .catchError((error) => print(error));
     _cursor++;
     return selectedQuestion;
   }
