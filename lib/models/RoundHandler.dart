@@ -30,7 +30,7 @@ class RoundHandler {
 
   // Answers props
   int _correctAnswersCounter = 0;
-  var answerLogs = List<AnswerLog>();
+  var _answerLogs = List<AnswerLog>();
 
   // Timing props
   int _totalTimeElapsed = 0;
@@ -79,7 +79,7 @@ class RoundHandler {
     bool isFirstAnswerAlwaysRight,
   ) {
     // clear old answer logs.
-    answerLogs.clear();
+    _answerLogs.clear();
     // get new variables.
     _level = level;
     _lifeCount = lifeCount;
@@ -240,13 +240,9 @@ class RoundHandler {
     } else
       remainLives -= 1;
     var newLog = AnswerLog(question, answer, isCorrect, timeElapsed);
-    answerLogs.add(newLog);
+    _answerLogs.add(newLog);
     // add Log to database.
     _sqlDatabase.addLog(newLog);
-    // _sqlDatabase
-    //     .updateCountryStats(newLog)
-    //     .then((_) => print('update successfully'))
-    //     .catchError((error) => print(error));
     _isVerified = true;
     return isCorrect;
   }
@@ -266,7 +262,7 @@ class RoundHandler {
         questionsCounter: passedQuestions,
         remainLives: remainLives,
         totalLives: _lifeCount,
-        answerLogs: answerLogs);
+        answerLogs: _answerLogs);
     // TODO check if network connection available before saveLog.
     _sqlDatabase.saveLogs();
     LocalStorage.saveResult(roundResult.score, _level, remainLives > 0)

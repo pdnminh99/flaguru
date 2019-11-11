@@ -90,13 +90,13 @@ class DatabaseConnector {
         VALUES ''';
     for (var index = 0; index < privateLogs.length; index++) {
       // update query process
-      incrementCallCounterQuery += '${privateLogs[index].question.countryID}';
-      incrementCallCounterQuery += index == privateLogs.length - 1 ? ');' : ',';
+      incrementCallCounterQuery += '${privateLogs[index].question.countryID},';
+      // incrementCallCounterQuery += index == privateLogs.length - 1 ? ');' : ',';
       if (privateLogs[index].isCorrect) {
         incrementCorrectCounterQuery +=
-            '${privateLogs[index].question.countryID}';
-        incrementCorrectCounterQuery +=
-            index == privateLogs.length - 1 ? ');' : ',';
+            '${privateLogs[index].question.countryID},';
+        // incrementCorrectCounterQuery +=
+        //     index == privateLogs.length - 1 ? ');' : ',';
         isAtLeastOneCorrect = true;
       }
       // insert query process
@@ -105,29 +105,36 @@ class DatabaseConnector {
       insertQuery += index == privateLogs.length - 1 ? ';' : ', ';
     }
     privateLogs.clear();
-    try {
-      if (isAtLeastOneCorrect) {
-        _connectSQLite()
-            .then((_) => _db.rawUpdate(incrementCallCounterQuery))
-            .then((_) => print('Update callcounter successfully'))
-            .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
-            .then(
-                (_) => print('Update correctcounter callcounter successfully'))
-            .then((_) => _db.rawInsert(insertQuery))
-            .then((_) => print('Insert successfully'))
-            .catchError((error) => print(error));
-      } else {
-        _connectSQLite()
-            .then((_) => _db.rawUpdate(incrementCallCounterQuery))
-            .then((_) => print('Update callcounter successfully'))
-            .then((_) => _db.rawInsert(insertQuery))
-            .then((_) => print('Insert successfully'))
-            .catchError((error) => print(error));
-      }
-    } catch (_) {
-      print(
-          'I know this bug. Which occured when player guessed so many flags that caused string overflow.');
+    // try {
+    incrementCallCounterQuery = incrementCallCounterQuery.substring(
+            0, incrementCallCounterQuery.length - 1) +
+        ');';
+    print(incrementCallCounterQuery + '\n');
+    if (isAtLeastOneCorrect) {
+      incrementCorrectCounterQuery = incrementCorrectCounterQuery.substring(
+              0, incrementCorrectCounterQuery.length - 1) +
+          ');';
+      print(incrementCorrectCounterQuery + '\n');
+      _connectSQLite()
+          .then((_) => _db.rawUpdate(incrementCallCounterQuery))
+          .then((_) => print('Update callcounter successfully'))
+          .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
+          .then((_) => print('Update correctcounter callcounter successfully'))
+          .then((_) => _db.rawInsert(insertQuery))
+          .then((_) => print('Insert successfully'))
+          .catchError((error) => print(error));
+    } else {
+      _connectSQLite()
+          .then((_) => _db.rawUpdate(incrementCallCounterQuery))
+          .then((_) => print('Update callcounter successfully'))
+          .then((_) => _db.rawInsert(insertQuery))
+          .then((_) => print('Insert successfully'))
+          .catchError((error) => print(error));
     }
+    // } catch (_) {
+    //   print(
+    //       'I know this bug. Which occured when player guessed so many flags that caused string overflow.');
+    // }
   }
 
   Future<String> readLogs() => _connectSQLite().then((_) => _db.rawQuery('''
