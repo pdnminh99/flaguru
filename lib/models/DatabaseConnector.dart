@@ -76,39 +76,78 @@ class DatabaseConnector {
 
   void saveLogs() {
     if (privateLogs.length == 0) return;
-    // var updateQuery = '';
+    var incrementCallCounterQuery = '''
+    UPDATE country 
+    SET callcounter = callcounter + 1
+    WHERE ID IN (''';
+    var isAtLeastOneCorrect = false;
+    var incrementCorrectCounterQuery = '''
+    UPDATE country 
+    SET correctcounter = correctcounter + 1
+    WHERE ID IN (''';
     var insertQuery = '''
         INSERT INTO answerlog(questionID, answerID, isCorrect, logTime, answerTime)
         VALUES ''';
     for (var index = 0; index < privateLogs.length; index++) {
-      // updateQuery += '''
-      // UPDATE country
-      // SET callcounter = callcounter + 1''';
-      // updateQuery += privateLogs[index].isCorrect
-      //     ? ''', correctcounter = correctcounter + 1
-      // WHERE ID = ${privateLogs[index].question.countryID};
-      //     '''
-      //     : ' WHERE ID = ${privateLogs[index].question.countryID};';
-      // print(updateQuery + '\n');
+      // update query process
+      incrementCallCounterQuery += '${privateLogs[index].question.countryID}';
+      incrementCallCounterQuery += index == privateLogs.length - 1 ? ');' : ',';
+      if (privateLogs[index].isCorrect) {
+        incrementCorrectCounterQuery +=
+            '${privateLogs[index].question.countryID}';
+        incrementCorrectCounterQuery +=
+            index == privateLogs.length - 1 ? ');' : ',';
+        isAtLeastOneCorrect = true;
+      }
+      // insert query process
       insertQuery +=
           '(${privateLogs[index].question.countryID}, ${privateLogs[index].answer.countryID}, ${privateLogs[index].isCorrect ? 1 : 0}, \'${DateTime.now().toString()}\', ${privateLogs[index].answerTime})';
       insertQuery += index == privateLogs.length - 1 ? ';' : ', ';
     }
     privateLogs.clear();
-    // _connectSQLite().then((_) => _db.update('country', {
-    //   'correctcounter':
-    // }, where: 'ID = ${privateLogs[index].question.countryID}'));
-    _connectSQLite()
-        // .then((_) => _db.execute(updateQuery))
-        // .then((_) => print('Update successfully'))
-        .then((_) => _db.rawInsert(insertQuery))
-        .then((_) => print('Insert successfully'))
-        .catchError((error) => print(error));
-    // _connectSQLite()
-    //     .then((_) => _db.rawInsert(insertQuery))
-    //     .then((_) => print('Insert successfully'))
-    //     .catchError((error) => print(error));
+    if (isAtLeastOneCorrect) {
+      _connectSQLite()
+          .then((_) => _db.rawUpdate(incrementCallCounterQuery))
+          .then((_) => print('Update callcounter successfully'))
+          .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
+          .then((_) => print('Update correctcounter callcounter successfully'))
+          .then((_) => _db.rawInsert(insertQuery))
+          .then((_) => print('Insert successfully'))
+          .catchError((error) => print(error));
+    } else {
+      _connectSQLite()
+          .then((_) => _db.rawUpdate(incrementCallCounterQuery))
+          .then((_) => print('Update callcounter successfully'))
+          .then((_) => _db.rawInsert(insertQuery))
+          .then((_) => print('Insert successfully'))
+          .catchError((error) => print(error));
+    }
   }
+
+  // void saveLogs() {
+  //   if (privateLogs.length == 0) return;
+  //   var updateQuery = '';
+  //   var insertQuery = '''
+  //       INSERT INTO answerlog(questionID, answerID, isCorrect, logTime, answerTime)
+  //       VALUES ''';
+  //   for (var index = 0; index < privateLogs.length; index++) {
+  //     updateQuery += 'UPDATE country SET callcounter = callcounter + 1';
+  //     updateQuery += privateLogs[index].isCorrect
+  //         ? ', correctcounter = correctcounter + 1 WHERE ID = ${privateLogs[index].question.countryID};'
+  //         : ' WHERE ID = ${privateLogs[index].question.countryID};';
+  //     // print(updateQuery + '\n');
+  //     insertQuery +=
+  //         '(${privateLogs[index].question.countryID}, ${privateLogs[index].answer.countryID}, ${privateLogs[index].isCorrect ? 1 : 0}, \'${DateTime.now().toString()}\', ${privateLogs[index].answerTime})';
+  //     insertQuery += index == privateLogs.length - 1 ? ';' : ', ';
+  //   }
+  //   privateLogs.clear();
+  //   _connectSQLite()
+  //       .then((_) => _db.execute(updateQuery))
+  //       .then((_) => print('Update successfully'))
+  //       .then((_) => _db.rawInsert(insertQuery))
+  //       .then((_) => print('Insert successfully'))
+  //       .catchError((error) => print(error));
+  // }
 
   Future<String> readLogs() => _connectSQLite().then((_) => _db.rawQuery('''
           SELECT *

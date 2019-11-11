@@ -231,10 +231,10 @@ class RoundHandler {
     answerLogs.add(newLog);
     // add Log to database.
     _sqlDatabase.addLog(newLog);
-    _sqlDatabase
-        .updateCountryStats(newLog)
-        .then((_) => print('update successfully'))
-        .catchError((error) => print(error));
+    // _sqlDatabase
+    //     .updateCountryStats(newLog)
+    //     .then((_) => print('update successfully'))
+    //     .catchError((error) => print(error));
     _isVerified = true;
     return isCorrect;
   }
