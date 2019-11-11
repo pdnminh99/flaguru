@@ -85,9 +85,9 @@ class DatabaseConnector {
     UPDATE country 
     SET correctcounter = correctcounter + 1
     WHERE ID IN (''';
-    var insertQuery = '''
-        INSERT INTO answerlog(questionID, answerID, isCorrect, logTime, answerTime)
-        VALUES ''';
+    // var insertQuery = '''
+    //     INSERT INTO answerlog(questionID, answerID, isCorrect, logTime, answerTime)
+    //     VALUES ''';
     for (var index = 0; index < privateLogs.length; index++) {
       // update query process
       incrementCallCounterQuery += '${privateLogs[index].question.countryID},';
@@ -100,9 +100,9 @@ class DatabaseConnector {
         isAtLeastOneCorrect = true;
       }
       // insert query process
-      insertQuery +=
-          '(${privateLogs[index].question.countryID}, ${privateLogs[index].answer.countryID}, ${privateLogs[index].isCorrect ? 1 : 0}, \'${DateTime.now().toString()}\', ${privateLogs[index].answerTime})';
-      insertQuery += index == privateLogs.length - 1 ? ';' : ', ';
+      // insertQuery +=
+      //     '(${privateLogs[index].question.countryID}, ${privateLogs[index].answer.countryID}, ${privateLogs[index].isCorrect ? 1 : 0}, \'${DateTime.now().toString()}\', ${privateLogs[index].answerTime})';
+      // insertQuery += index == privateLogs.length - 1 ? ';' : ', ';
     }
     privateLogs.clear();
     // try {
@@ -120,15 +120,15 @@ class DatabaseConnector {
           .then((_) => print('Update callcounter successfully'))
           .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
           .then((_) => print('Update correctcounter callcounter successfully'))
-          .then((_) => _db.rawInsert(insertQuery))
-          .then((_) => print('Insert successfully'))
+          // .then((_) => _db.rawInsert(insertQuery))
+          // .then((_) => print('Insert successfully'))
           .catchError((error) => print(error));
     } else {
       _connectSQLite()
           .then((_) => _db.rawUpdate(incrementCallCounterQuery))
           .then((_) => print('Update callcounter successfully'))
-          .then((_) => _db.rawInsert(insertQuery))
-          .then((_) => print('Insert successfully'))
+          // .then((_) => _db.rawInsert(insertQuery))
+          // .then((_) => print('Insert successfully'))
           .catchError((error) => print(error));
     }
     // } catch (_) {
