@@ -48,7 +48,7 @@ class Node {
   @override
   String toString() {
     String message = "Node $_ratio has ${_countries.length} countries:\n";
-    for (var country in this._countries) message += "> ${country.toString()}";
+    // for (var country in this._countries) message += "> ${country.toString()}";
     return message;
   }
 

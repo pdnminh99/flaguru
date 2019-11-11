@@ -273,6 +273,6 @@ class RoundHandler {
   String toString() => '''
       *** Node cursor at ${_countriesChain[_normalCursor].testCursor()}. ***
       *** Cursor at node ${_countriesChain[_normalCursor].ratio}. ***
-      ${_nodeString()}
-      ''';
+${_nodeString()}
+''';
 }
