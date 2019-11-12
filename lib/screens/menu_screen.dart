@@ -5,6 +5,7 @@ import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
+import 'package:flaguru/screens/settings_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
@@ -34,7 +35,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   void initState() {
     this.auth.getCurrentUser().then((user) {
       setState(() {
-       this._currentUser = user; 
+        this._currentUser = user;
       });
     });
 
@@ -82,12 +83,14 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   }
 
   void gotoProfile(BuildContext context) {
-    Navigator.popAndPushNamed(context, InfoScreen.routeName);
+    Navigator.pushReplacementNamed(context, InfoScreen.routeName);
   }
 
   void gotoTutorial(BuildContext context) {}
 
-  void gotoSetting(BuildContext context) {}
+  void gotoSetting(BuildContext context) {
+    Navigator.of(context).pushNamed(SettingsScreen.routeName);
+  }
 
   void gotoAbout(BuildContext context) {}
 

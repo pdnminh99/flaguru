@@ -11,54 +11,58 @@ import 'package:flaguru/models/ProfileProvider.dart';
 
 class InfoScreen extends StatefulWidget {
   static String routeName = "/info_screen";
+
   @override
   _InfoScreenState createState() => _InfoScreenState();
 }
 
 class _InfoScreenState extends State<InfoScreen> {
-  RoundDetails easyDetails ;
-  RoundDetails normalDetails ;
-  RoundDetails hardDetails ;
+  RoundDetails easyDetails;
+
+  RoundDetails normalDetails;
+
+  RoundDetails hardDetails;
+
   String totalScore;
-  
+
   //pro
   var auth = Authentication();
   User _currentUser;
 
   //get score
-  Future _getScore() async
-  {
-    this.easyDetails =  await ProfileProvider().getLocalResult(Difficulty.EASY);
+  Future _getScore() async {
+    this.easyDetails = await ProfileProvider().getLocalResult(Difficulty.EASY);
     this.normalDetails = await ProfileProvider().getLocalResult(Difficulty.NORMAL);
     this.hardDetails = await ProfileProvider().getLocalResult(Difficulty.HARD);
     this.totalScore = await LocalStorage().getTotalScore();
   }
+
   //ctor
-  _InfoScreenState()  {
+  _InfoScreenState() {
     //
-   _getScore();
-   //
+    _getScore();
+    //
     this.auth.getCurrentUser().then((user) {
       setState(() {
         this._currentUser = user;
-        this._currentUser.email =
-            user.email[0].toUpperCase() + user.email.substring(1);
+        this._currentUser.email = user.email[0].toUpperCase() + user.email.substring(1);
       });
     });
   }
+
   //meth
-  void signout(BuildContext context) {
+  void signOut(BuildContext context) {
     // Navigator.pushNamed(context, MenuScreen.routeName);
     // Navigator.pop(context);
     this.auth.signOut().then((_) {}).catchError((err) => print(err));
-    Navigator.popAndPushNamed(context, MenuScreen.routeName);
+    backMenuScreen();
   }
 
   void backMenuScreen() {
-    Navigator.popAndPushNamed(context, MenuScreen.routeName);
+    Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
-  void switchuser() {
+  void switchUser() {
     this.auth.switchUser().then((_) {
       return this.auth.getCurrentUser();
     }).then((user) {
@@ -123,8 +127,7 @@ class _InfoScreenState extends State<InfoScreen> {
                               Text(
                                 _currentUser.name,
                                 style: TextStyle(
-                                    fontSize: _height * 0.0273,
-                                    fontWeight: FontWeight.w700),
+                                    fontSize: _height * 0.0273, fontWeight: FontWeight.w700),
                               )
                             ],
                           ),
@@ -177,9 +180,7 @@ class _InfoScreenState extends State<InfoScreen> {
                     //     _height,
                     //     _width),
                     ButtonSwitchButtonLogout(
-                        signout: signout,
-                        switchuser: switchuser,
-                        paramcontext: context),
+                        signout: signOut, switchuser: switchUser, paramcontext: context),
                   ],
                 ),
               ),
@@ -190,14 +191,15 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Color getColodiff(String diff){
-    if(diff == "Easy") 
-    return Color.fromRGBO(210, 155, 111, 1);
+  Color getColodiff(String diff) {
+    if (diff == "Easy")
+      return Color.fromRGBO(210, 155, 111, 1);
     else if (diff == "Medium")
-    return Color.fromRGBO(222, 222, 222, 1);
-    else if (diff == "Hard") 
-    return Color.fromRGBO(255, 193, 0, 1);
-    else return Color.fromRGBO(56, 187, 231, 1);
+      return Color.fromRGBO(222, 222, 222, 1);
+    else if (diff == "Hard")
+      return Color.fromRGBO(255, 193, 0, 1);
+    else
+      return Color.fromRGBO(56, 187, 231, 1);
   }
   
   int sumTotalScore()
@@ -230,24 +232,31 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
- Widget getScoreSmall(String score, double _height, String name) {
+  Widget getScoreSmall(String score, double _height, String name) {
     return (Container(
       //height: _height * 0.1,
       margin: EdgeInsets.only(top: 40),
       width: _height * 0.09,
       child: Column(
         children: <Widget>[
-          name == 'Rounds' ?
-          Image.asset('assets/infoscreen_icon/replay.png',height: _height * 0.04, width: _height* 0.04,)
-          : Image.asset('assets/infoscreen_icon/winner.png', height: _height * 0.04, width: _height * 0.04,) ,
+          name == 'Rounds'
+              ? Image.asset(
+                  'assets/infoscreen_icon/replay.png',
+                  height: _height * 0.04,
+                  width: _height * 0.04,
+                )
+              : Image.asset(
+                  'assets/infoscreen_icon/winner.png',
+                  height: _height * 0.04,
+                  width: _height * 0.04,
+                ),
           Padding(
             padding: EdgeInsets.all(0),
             // padding: EdgeInsets.only(top: _height * 0.005),
             child: Container(
               child: Text(
                 score,
-                style: TextStyle(
-                    fontSize: _height * 0.039, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: _height * 0.039, fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -256,8 +265,7 @@ class _InfoScreenState extends State<InfoScreen> {
           ),
           Text(
             name,
-            style: TextStyle(
-                fontSize: _height * 0.019),
+            style: TextStyle(fontSize: _height * 0.019),
           )
         ],
       ),
@@ -269,19 +277,21 @@ class _InfoScreenState extends State<InfoScreen> {
       margin: EdgeInsets.only(top: 40),
       child: Column(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/star.png', height: _height * 0.04, width: _height * 0.04,),
+          Image.asset(
+            'assets/infoscreen_icon/star.png',
+            height: _height * 0.04,
+            width: _height * 0.04,
+          ),
           Text(
             score,
-            style: TextStyle(
-                fontSize: _height * 0.039, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: _height * 0.039, fontWeight: FontWeight.w700),
           ),
           SizedBox(
             height: _height * 0.0023,
           ),
           Text(
             'High Score',
-            style: TextStyle(
-                fontSize: _height * 0.019),
+            style: TextStyle(fontSize: _height * 0.019),
           ),
         ],
       ),

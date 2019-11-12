@@ -1,9 +1,11 @@
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/SettingsHandler.dart';
-import 'package:flaguru/screens/menu_screen.dart';
-import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'settings_switch_tile.dart';
+import '../models/Enum.dart';
+import '../models/SettingsHandler.dart';
+import '../screens/menu_screen.dart';
+import '../screens/play_screen.dart';
 
 class PlayScreenDrawer extends StatelessWidget {
   final Difficulty difficulty;
@@ -17,10 +19,7 @@ class PlayScreenDrawer extends StatelessWidget {
 
   void restart(BuildContext context) {
     // need confirmation
-    Navigator.of(context).pushReplacementNamed(
-      PlayScreen.routeName,
-      arguments: difficulty,
-    );
+    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
   }
 
   void popUpConfirmation(Function doYes) {}
@@ -40,13 +39,13 @@ class PlayScreenDrawer extends StatelessWidget {
               buildListTile('Restart', Icons.refresh, () => restart(context)),
               buildListTile('Main Menu', Icons.menu, () => navigateToMenu(context)),
               const SizedBox(height: 30),
-              buildSwitchTile(
+              SettingsSwitchTile(
                 'Sound',
                 Icons.music_note,
                 settings.isSoundEnabled,
                 (status) => settings.isSoundEnabled = status,
               ),
-              buildSwitchTile(
+              SettingsSwitchTile(
                 'Music',
                 Icons.music_video,
                 settings.isMusicEnabled,
@@ -75,24 +74,6 @@ class PlayScreenDrawer extends StatelessWidget {
       leading: Icon(leadingIcon, color: Colors.white),
       title: Text(title, style: TextStyle(fontSize: 20, color: Colors.white)),
       onTap: onTap,
-    );
-  }
-
-  Widget buildSwitchTile(String title, IconData leadingIcon, bool status, Function onChange) {
-    final fontSize = 20.0;
-    final color = Colors.white;
-
-    return SwitchListTile(
-      title: Row(
-        children: <Widget>[
-          Icon(leadingIcon, size: fontSize + 5, color: color),
-          const SizedBox(width: 30),
-          Text(title, style: TextStyle(fontSize: fontSize, color: color)),
-        ],
-      ),
-      value: status,
-      onChanged: (val) => onChange(val),
-      activeColor: Colors.tealAccent,
     );
   }
 }
