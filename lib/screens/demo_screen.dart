@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flaguru/models/Country.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
+import 'package:flaguru/models/DatabaseConnector.dart' as prefix0;
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/models/RoundHandler.dart';
 import 'package:flaguru/models/SettingsHandler.dart';
@@ -11,26 +12,28 @@ import '../main.dart';
 class DemoScreen extends State<MyApp> {
   RoundHandler roundHandler;
   SettingsHandler settings;
-  var _sqliteDatabase = DatabaseConnector();
   String logString = '';
   bool isFinish = false;
 
   @override
   void initState() {
     RoundHandler.getInstance(
-            level: Difficulty.HARD,
-            isFirstAnswerAlwaysRight: true,
-            lifeCount: 100)
+        level: Difficulty.HARD,
+        isFirstAnswerAlwaysRight: true,
+        lifeCount: 100)
         .then((handler) {
       setState(() => roundHandler = handler);
     });
-    var database = DatabaseConnector();
-    database.collectCountries().then((countries) {
-      print('There are ${countries.length} countries before switch.');
-      return SettingsHandler.getInstance();
-    }).then((settings) {
-      settings.switchAllowStatus(1291);
-    }).catchError((error) => print(error));
+//    prefix0.DatabaseConnector db;
+//    DatabaseConnector.getInstance().then((database) {
+//      db = database;
+//      return db.collectCountries();
+//    }).then((countries) {
+//      print('There are ${countries.length} countries before switch.');
+//      return SettingsHandler.getInstance();
+//    }).then((settings) {
+//      settings.switchAllowStatus(1291);
+//    }).catchError((error) => print(error));
     super.initState();
   }
 

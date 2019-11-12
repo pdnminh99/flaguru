@@ -24,24 +24,14 @@ class Node {
 
   Node(Country country) {
     this._countries.add(country);
-    // print('Ratio is $ratio');
     this._ratio = country.ratio;
   }
 
   bool insert(Country country) {
     if (country.ratio != ratio) return false;
     _countries.insert(_rand.nextInt(_countries.length), country);
-//    _countries.add(country);
     return true;
   }
-
-  // turn this function to private after test.
-  //  int moveCursor() {
-  //    var currentCursor = this._cursor;
-  //    this._cursor++;
-  //    if (this._cursor >= this._countries.length) this._cursor = 0;
-  //    return currentCursor;
-  //  }
 
   bool isEmpty() => this._countries.length == 0;
 
@@ -55,62 +45,39 @@ class Node {
   /*
    * If this returns a null -> no question found. 
    */
-
   Question getQuestion() {
-    var sqlDatabase = DatabaseConnector();
+    var queue = Map<int, int>();
     while (_cursor < _countries.length && _countries[_cursor].chances != 0) {
       if (_cursor < _countries.length) {
         _countries[_cursor].walkthrough();
-        // update chances
-        sqlDatabase
-            .updateChances(
-                countryID: _countries[_cursor].id,
-                chances: _countries[_cursor].chances)
-            .then((_) => print(
-                'Update ${_countries[_cursor].id} with ${_countries[_cursor].chances} chances'))
-            .catchError((error) => print(error));
+        queue[_countries[_cursor].id] = _countries[_cursor].chances;
       }
       _cursor++;
     }
     if (_cursor >= _countries.length) {
       _cursor = 0;
+      _updateChancesInDatabase(queue);
       return null;
     }
     var selectedQuestion = _countries[_cursor].toQuestion();
     _countries[_cursor].chances = 5;
-    // print(_countries[_cursor].toString());
-    // update chances
-    sqlDatabase
-        .updateChances(
-            countryID: _countries[_cursor].id,
-            chances: _countries[_cursor].chances)
-        .then((_) => print(
-            'Update ${_countries[_cursor].name} with ${_countries[_cursor].chances} chances'))
-        .catchError((error) => print(error));
+    queue[_countries[_cursor].id] = _countries[_cursor].chances;
+    _updateChancesInDatabase(queue);
     _cursor++;
     return selectedQuestion;
   }
 
-  Answer getRandomAnswer() =>
-      _countries[_rand.nextInt(_countries.length)].toAnswer();
-
-  Country updateCountryStats(int countryID, bool isCorrect) {
-    for (int i = 0; i < _countries.length; i++) {
-      if (_countries[i].id == countryID) {
-        var newRatio = _countries[i].calculateNewRatio(isCorrect);
-        var country = _countries[i];
-        if (newRatio != ratio) {
-          _countries.removeAt(i);
-          return country;
-        } else
-          return null;
-      }
-    }
-    throw Exception('Country with ID $countryID not found in node $ratio');
+  void _updateChancesInDatabase(Map<int, int> queue) {
+    DatabaseConnector.getInstance()
+        .then((db) {
+          for (var key in queue.keys)
+            db.addUpdateChancesTransaction(countryID: key, chances: queue[key]);
+          return db.commitUpdateChancesTransaction();
+        })
+        .then((_) => print('Commit update transaction.'))
+        .catchError((error) => print(error));
   }
 
-  // void moveNode(int newNode) {
-  //   for (int i = 0; i < _countries.length; i++)
-  //     _countries[i].nodeAddress = newNode;
-  // }
+  Answer getRandomAnswer() =>
+      _countries[_rand.nextInt(_countries.length)].toAnswer();
 }

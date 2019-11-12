@@ -59,12 +59,9 @@ class SettingsHandler with ChangeNotifier {
     return settingInstance;
   }
 
-  Future<void> _getCountries() {
-    var sqlDatabase = DatabaseConnector();
-    return sqlDatabase
-        .collectCountries(isAllowedOnly: false)
-        .then((countries) => this.countries = countries);
-  }
+  Future<void> _getCountries() => DatabaseConnector.getInstance()
+      .then((sqlDatabase) => sqlDatabase.collectCountries(isAllowedOnly: false))
+      .then((countries) => this.countries = countries);
 
   Map<String, List<Country>> getCountriesByContinent() {
     var dictionary = Map<String, List<Country>>();
@@ -120,13 +117,12 @@ class SettingsHandler with ChangeNotifier {
         isFound = true;
         break;
       }
-    if (isFound) {
-      var sqlDatabase = DatabaseConnector();
-      sqlDatabase
-          .switchAllowStatus(newStatus, countryID)
+    if (isFound)
+      DatabaseConnector.getInstance()
+          .then((sqlDatabase) =>
+              sqlDatabase.switchAllowStatus(newStatus, countryID))
           .then((_) => print('Switch $countryID allow status to $newStatus'))
           .catchError((error) => print(error));
-    }
   }
 
   void resetSettings() {

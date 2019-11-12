@@ -104,7 +104,7 @@ class RoundHandler {
     _initializeStaticParams(
         level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     // collect countries and parse to chain.
-    _sqlDatabase = DatabaseConnector();
+    _sqlDatabase = await DatabaseConnector.getInstance();
     (await _sqlDatabase.collectCountries()).forEach((country) {
       if (_countriesChain.length == 0 ||
           _countriesChain[_lastIndex].ratio != country.ratio)
