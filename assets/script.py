@@ -3,6 +3,10 @@ import xlrd as readxl
 import xlwt as writexl
 import wikipedia as wiki
 import re
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import datetime
 
 # 1) Europe
 # 2) Asia
@@ -11,6 +15,38 @@ import re
 # 5) North America
 # 6) South America
 # 7) EuropeAsia
+
+def initFirebaseData():
+    cred = credentials.Certificate('./google-services.json')
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+    map = {
+        1: 'Europe',
+        2: 'Asia',
+        3: 'Africa',
+        4: 'Australia and Ocenia',
+        5: 'North America',
+        6: 'South America',
+        7: 'Europe and Asia',
+    }
+    wb = readxl.open_workbook('countries.xls')
+    sheet = wb.sheet_by_index(0)
+    doc_ref = db.collection('countries')
+    id = 1291
+    for row in range(0, 197):
+        id = 1291 + row
+        name = sheet.cell(row, 1).value
+        flag = sheet.cell(row, 3).value
+        contintent = map[int(sheet.cell(row, 4).value)]
+        doc_ref.document(f'{id}').set({
+            'name': name,
+            'continent': contintent,
+            'callcounter': 0,
+            'correctcounter': 0,
+            'ratio': 0,
+            'recentupdatedate': datetime.datetime.now(),
+        })
+
 
 
 # def parseYMLformat():
@@ -75,7 +111,6 @@ def search(countries):
         countriessheet.write(row, col + 4, country['continent'])
         row += 1
     wb.save(location)
-
 
 def getcountries():
     countries = []
@@ -176,5 +211,6 @@ if __name__ == "__main__":
     #         print(countries[i])
 
     # search(countries)
-    parseinsertquery()
+    #parseinsertquery()
+    initFirebaseData()
     # cutparagraphs()
