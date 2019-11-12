@@ -25,7 +25,7 @@ class DatabaseConnector {
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(path).writeAsBytes(bytes);
     // Open database
-    if (this._db == null || !_db.isOpen) this._db = await openDatabase(path);
+    this._db = await openDatabase(path);
   }
 
   Continent mapContinent(int continentID) {
@@ -89,12 +89,11 @@ class DatabaseConnector {
     return countries;
   }
 
-  Future<void> updateChances({@required int countryID, int chances}) =>
-      this._connectSQLite().then((_) => this._db.rawUpdate('''
-          UPDATE country 
-          SET chances = $chances 
-          WHERE ID = $countryID
-          '''));
+  Future<void> updateChances({@required int countryID, int chances}) => this
+      ._connectSQLite()
+      .then((_) => this._db.rawUpdate(
+          'UPDATE country SET chances = $chances WHERE ID = $countryID'));
+      // .then((_) => _db.close());
 
   Future<void> updateCountryStats(AnswerLog newLog) =>
       _connectSQLite().then((_) => _db.rawUpdate(
@@ -137,17 +136,16 @@ class DatabaseConnector {
     incrementCallCounterQuery = incrementCallCounterQuery.substring(
             0, incrementCallCounterQuery.length - 1) +
         ');';
-    print(incrementCallCounterQuery + '\n');
     if (isAtLeastOneCorrect) {
       incrementCorrectCounterQuery = incrementCorrectCounterQuery.substring(
               0, incrementCorrectCounterQuery.length - 1) +
           ');';
-      print(incrementCorrectCounterQuery + '\n');
       _connectSQLite()
           .then((_) => _db.rawUpdate(incrementCallCounterQuery))
           .then((_) => print('Update callcounter successfully'))
           .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
           .then((_) => print('Update correctcounter callcounter successfully'))
+          // .then((_) => _db.close())
           // .then((_) => _db.rawInsert(insertQuery))
           // .then((_) => print('Insert successfully'))
           .catchError((error) => print(error));
@@ -155,6 +153,7 @@ class DatabaseConnector {
       _connectSQLite()
           .then((_) => _db.rawUpdate(incrementCallCounterQuery))
           .then((_) => print('Update callcounter successfully'))
+          // .then((_) => _db.close())
           // .then((_) => _db.rawInsert(insertQuery))
           // .then((_) => print('Insert successfully'))
           .catchError((error) => print(error));
@@ -169,7 +168,7 @@ class DatabaseConnector {
           SELECT *
           FROM answerlog
           ''')).then((maps) {
-        print('There are ${maps.length} answerlogs.');
+        // print('There are ${maps.length} answerlogs.');
         String logsString = '';
         int counter = 1;
         for (var map in maps) {

@@ -66,6 +66,8 @@ class Node {
             .updateChances(
                 countryID: _countries[_cursor].id,
                 chances: _countries[_cursor].chances)
+            .then((_) => print(
+                'Update ${_countries[_cursor].id} with ${_countries[_cursor].chances} chances'))
             .catchError((error) => print(error));
       }
       _cursor++;
@@ -76,11 +78,14 @@ class Node {
     }
     var selectedQuestion = _countries[_cursor].toQuestion();
     _countries[_cursor].chances = 5;
+    // print(_countries[_cursor].toString());
     // update chances
     sqlDatabase
         .updateChances(
             countryID: _countries[_cursor].id,
             chances: _countries[_cursor].chances)
+        .then((_) => print(
+            'Update ${_countries[_cursor].name} with ${_countries[_cursor].chances} chances'))
         .catchError((error) => print(error));
     _cursor++;
     return selectedQuestion;

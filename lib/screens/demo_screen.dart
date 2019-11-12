@@ -24,17 +24,13 @@ class DemoScreen extends State<MyApp> {
         .then((handler) {
       setState(() => roundHandler = handler);
     });
-    // var database = DatabaseConnector();
-    // database.collectCountries().then((countries) {
-    //   print('There are ${countries.length} countries before switch.');
-    //   return SettingsHandler.getInstance();
-    // }).then((settings) {
-    //   settings.switchAllowStatus(1291);
-    //   sleep(Duration(milliseconds: 500));
-    //   return database.collectCountries();
-    // }).then((countries) {
-    //   print('There are ${countries.length} countries after switch.');
-    // }).catchError((error) => print(error));
+    var database = DatabaseConnector();
+    database.collectCountries().then((countries) {
+      print('There are ${countries.length} countries before switch.');
+      return SettingsHandler.getInstance();
+    }).then((settings) {
+      settings.switchAllowStatus(1291);
+    }).catchError((error) => print(error));
     super.initState();
   }
 
@@ -74,28 +70,28 @@ class DemoScreen extends State<MyApp> {
               });
             },
           ),
-          RaisedButton(
-            child: Text('Delete logs'),
-            onPressed: () {
-              _sqliteDatabase.deleteLogs().then((_) {
-                return _sqliteDatabase.readLogs();
-              }).then((logs) {
-                setState(() {
-                  logString = logs;
-                });
-              }).catchError((error) => print(error));
-            },
-          ),
-          RaisedButton(
-            child: Text('Get logs'),
-            onPressed: () {
-              _sqliteDatabase.readLogs().then((logs) {
-                setState(() {
-                  logString = logs;
-                });
-              });
-            },
-          ),
+          // RaisedButton(
+          //   child: Text('Delete logs'),
+          //   onPressed: () {
+          //     _sqliteDatabase.deleteLogs().then((_) {
+          //       return _sqliteDatabase.readLogs();
+          //     }).then((logs) {
+          //       setState(() {
+          //         logString = logs;
+          //       });
+          //     }).catchError((error) => print(error));
+          //   },
+          // ),
+          // RaisedButton(
+          //   child: Text('Get logs'),
+          //   onPressed: () {
+          //     _sqliteDatabase.readLogs().then((logs) {
+          //       setState(() {
+          //         logString = logs;
+          //       });
+          //     });
+          //   },
+          // ),
           RaisedButton(
             child: Text('Get result'),
             onPressed: () => setState(() => isFinish = true),
