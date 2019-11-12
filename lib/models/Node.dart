@@ -68,14 +68,11 @@ class Node {
   }
 
   void _updateChancesInDatabase(Map<int, int> queue) {
-    DatabaseConnector.getInstance()
-        .then((db) {
-          for (var key in queue.keys)
-            db.addUpdateChancesTransaction(countryID: key, chances: queue[key]);
-          return db.commitUpdateChancesTransaction();
-        })
-        .then((_) => print('Commit update transaction.'))
-        .catchError((error) => print(error));
+    DatabaseConnector.getInstance().then((db) {
+      for (var key in queue.keys)
+        db.addUpdateChancesTransaction(countryID: key, chances: queue[key]);
+      return db.commitUpdateChancesTransaction();
+    }).catchError((error) => print(error));
   }
 
   Answer getRandomAnswer() =>
