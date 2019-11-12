@@ -101,7 +101,7 @@ class _InfoScreenState extends State<InfoScreen> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment(0, 1),
+                        alignment: Alignment(0, 1.2),
                         child: Container(
                           //margin: EdgeInsets.only(top: 50),
                           height: _height * 0.1709,
@@ -111,8 +111,8 @@ class _InfoScreenState extends State<InfoScreen> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
                                   this._currentUser.avatar,
-                                  height: _height * 0.11,
-                                  width: _height * 0.11,
+                                  height: _height * 0.10,
+                                  width: _height * 0.10,
                                   repeat: ImageRepeat.noRepeat,
                                   fit: BoxFit.cover,
                                 ),
@@ -150,28 +150,32 @@ class _InfoScreenState extends State<InfoScreen> {
                         this.easyDetails.playedCount.toString(),
                         this.easyDetails.highestScore.toString(),
                         this.easyDetails.winningCount.toString(),
-                        _height),
+                        _height,
+                        _width),
                     SizedBox(height: _height * 0.04),
                     getScroreUserCard(
                         'Medium',
                         this.normalDetails.playedCount.toString(),
                         this.normalDetails.highestScore.toString(),
                         this.normalDetails.winningCount.toString(),
-                        _height),
+                        _height,
+                        _width),
                     SizedBox(height: _height * 0.04),
                     getScroreUserCard(
                         'Hard',
                         this.hardDetails.winningCount.toString(),
                         this.hardDetails.winningCount.toString(),
                         this.hardDetails.winningCount.toString(),
-                        _height),
-                    SizedBox(height: _height * 0.04),
-                    getScroreUserCard(
-                        'Enless',
-                        this.easyDetails.playedCount.toString(),
-                        this.easyDetails.highestScore.toString(),
-                        this.easyDetails.winningCount.toString(),
-                        _height),
+                        _height,
+                        _width),
+                    // SizedBox(height: _height * 0.04),
+                    // getScroreUserCard(
+                    //     'Enless',
+                    //     this.easyDetails.playedCount.toString(),
+                    //     this.easyDetails.highestScore.toString(),
+                    //     this.easyDetails.winningCount.toString(),
+                    //     _height,
+                    //     _width),
                     ButtonSwitchButtonLogout(
                         signout: signout,
                         switchuser: switchuser,
@@ -195,22 +199,31 @@ class _InfoScreenState extends State<InfoScreen> {
     return Color.fromRGBO(255, 193, 0, 1);
     else return Color.fromRGBO(56, 187, 231, 1);
   }
+  
+  int sumTotalScore()
+  {
+    int total;
+    total = easyDetails.highestScore + hardDetails.highestScore + normalDetails.highestScore;
+    return total;
+  }
 
   Widget getTotalScore( double _height) {
+    print(this.totalScore);
     return Container(
       child: Row(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/award.png', height: (_height * 0.067), width: (_height * 0.067),),
+          Image.asset('assets/infoscreen_icon/award.png', height: (_height * 0.063), width: (_height * 0.063),),
           Text(
             'Total Score: ',
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 23,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            this.totalScore == null ? '0': this.totalScore,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+            //this.totalScore == null ? '0': this.totalScore,
+            sumTotalScore().toString(),
+            style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
           )
         ],
       ),
@@ -275,7 +288,7 @@ class _InfoScreenState extends State<InfoScreen> {
     ));
   }
    Widget getScroreUserCard(String diff, String rounds, String highestScore,
-      String wins, double _height) {
+      String wins, double _height, double _width) {
     return (Container(
       height: _height * 0.205,
       width: double.infinity,
@@ -300,27 +313,24 @@ class _InfoScreenState extends State<InfoScreen> {
         //crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           //name
-          Positioned(
-            top: _height * 0.0269 * -1,
-            left: 85,
-            width: _height * 0.205,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: getColodiff(diff)
-              ),
-              margin: EdgeInsets.only(top: 0, bottom: 6),
-              alignment: Alignment.center,
-              width: double.infinity,
-              height: 35,
-              child: Text(
-                diff,
-                style: TextStyle(
-                    fontSize: _height * 0.031, fontWeight: FontWeight.w700),
+        Align(
+          alignment: Alignment(0, -1.4),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: getColodiff(diff)
+                ),
+                margin: EdgeInsets.only(top: 0, bottom: 6),
+                alignment: Alignment.center,
+                width: _width * 0.35,
+                height: 35,
+                child: Text(
+                  diff,
+                  style: TextStyle(
+                      fontSize: _height * 0.031, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-          ),
-
           //Text('EASY'),
           // score
           Padding(
