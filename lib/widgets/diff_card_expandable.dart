@@ -1,9 +1,11 @@
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/screens/play_screen.dart';
-import 'package:flaguru/utils/enum_string.dart';
-import 'package:flaguru/widgets/start_button_animated.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+
+import '../models/Enum.dart';
+import '../screens/play_screen.dart';
+import '../utils/enum_string.dart';
+import 'diff_best_result_row.dart';
 
 class ExpandableDiffCard extends AnimatedWidget {
   final Difficulty diff;
@@ -14,22 +16,23 @@ class ExpandableDiffCard extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
+    final animation = listenable as Animation<double>;
     final borderRadius = BorderRadius.circular(10);
 
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Material(
-        elevation: 10,
+        elevation: 8,
         borderRadius: borderRadius,
         child: InkWell(
           borderRadius: borderRadius,
           onTap: onTap,
           child: Column(
             children: <Widget>[
-              buildHeader(EnumString.getDifficulty(diff)),
-              buildExpandableArea(listenable, context),
-              buildBestResult(),
+              buildHeader(animation, context),
+              buildExpandableArea(animation, context),
+              DiffBestResultRow(diff),
             ],
           ),
         ),
@@ -37,16 +40,38 @@ class ExpandableDiffCard extends AnimatedWidget {
     );
   }
 
-  Widget buildHeader(String header) {
-    return Padding(
-      padding: const EdgeInsets.all(25),
-      child: Text(
-        header.toUpperCase(),
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
+  Widget buildHeader(Animation<double> animation, BuildContext context) {
+    return Container(
+      height: 70,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          const SizedBox(width: 0),
+          buildTextContainer(),
+          buildStartButton(animation, context),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTextContainer() {
+    return Text(
+      EnumString.getDifficulty(diff).toUpperCase(),
+      style: TextStyle(fontSize: 22, color:Colors.black87, fontWeight: FontWeight.bold),
+    );
+  }
+
+  buildStartButton(Animation<double> animation, BuildContext context) {
+    return Container(
+      width: animation.value * 80,
+      height: animation.value * 50,
+      child: RaisedButton(
+        elevation: 6,
+        color: getColor(diff),
+        onPressed: () => toPlayScreen(context),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        child: Icon(Icons.play_arrow, size: animation.value * 35, color: Colors.white),
       ),
     );
   }
@@ -61,20 +86,8 @@ class ExpandableDiffCard extends AnimatedWidget {
           bottom: BorderSide(color: Colors.black38, width: 0.3),
         ),
       ),
-      child: SingleChildScrollView(child: buildDiffInfoArea(context)),
-    );
-  }
-
-  Widget buildBestResult() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Icon(Icons.check_circle, color: Colors.black54),
-          Icon(Icons.functions, color: Colors.black54),
-        ],
-      ),
+      child: SingleChildScrollView(
+          child: buildDiffInfoArea(context), physics: NeverScrollableScrollPhysics()),
     );
   }
 
@@ -86,10 +99,24 @@ class ExpandableDiffCard extends AnimatedWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text('Quiz total: 20'),
-          AnimatedStartButton(95, 55, Colors.white, () => toPlayScreen(context)),
         ],
       ),
     );
+  }
+
+  Color getColor(Difficulty diff) {
+    switch (diff) {
+      case Difficulty.EASY:
+        return Colors.green[700];
+      case Difficulty.NORMAL:
+        return const Color(0xff019dad);
+      case Difficulty.HARD:
+        return Colors.red[700];
+      case Difficulty.ENDLESS:
+        return Colors.indigo[700];
+      default:
+        return Colors.black;
+    }
   }
 
   void toPlayScreen(BuildContext context) {

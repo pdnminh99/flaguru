@@ -23,7 +23,7 @@ class _AnimatedStartButtonState extends State<AnimatedStartButton>
   void initState() {
     controller = AnimationController(duration: const Duration(seconds: 2), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: Interval(0.7, 1)));
+        .animate(CurvedAnimation(parent: controller, curve: Interval(0.55, 1)));
 
     controller.repeat();
     super.initState();
@@ -47,7 +47,7 @@ class _AnimatedStartButtonState extends State<AnimatedStartButton>
           elevation: 3,
           onPressed: widget.onPress,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: const Icon(Icons.play_arrow, size: 35),
+          child: const Icon(Icons.play_arrow, size: 35, color: Colors.white),
         ),
       ),
       builder: (BuildContext context, Widget child) {

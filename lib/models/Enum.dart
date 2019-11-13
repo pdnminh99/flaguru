@@ -1,4 +1,4 @@
-enum Difficulty { EASY, NORMAL, HARD }
+enum Difficulty { EASY, NORMAL, HARD, ENDLESS }
 enum Continent {
   ASIA,
   EUROPE,
