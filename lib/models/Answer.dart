@@ -20,15 +20,3 @@ class Answer {
     return '$countryID; name $country\n';
   }
 }
-
-//class QuestionUI {
-//  final String imageURL;
-//  final String country;
-//  final String description;
-//
-//  const QuestionUI({
-//    @required this.country,
-//    @required this.imageURL,
-//    @required this.description,
-//  });
-//}
