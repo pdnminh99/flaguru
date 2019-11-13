@@ -19,14 +19,6 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAppBar() {
-    return AppBar(
-      elevation: 0,
-      title: Text('Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-      backgroundColor: const Color(0xff019dad),
-    );
-  }
-
   Widget buildBottomGear(BuildContext context) {
     final size = MediaQuery.of(context).size.width;
 
