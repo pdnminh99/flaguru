@@ -58,7 +58,7 @@ class ExpandableDiffCard extends AnimatedWidget {
   Widget buildTextContainer() {
     return Text(
       EnumString.getDifficulty(diff).toUpperCase(),
-      style: TextStyle(fontSize: 22, color:Colors.black87, fontWeight: FontWeight.bold),
+      style: TextStyle(fontSize: 22, color: Colors.black87, fontWeight: FontWeight.bold),
     );
   }
 

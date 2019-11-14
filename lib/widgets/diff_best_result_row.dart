@@ -1,4 +1,5 @@
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/models/ProfileProvider.dart';
 import 'package:flutter/material.dart';
 
 class DiffBestResultRow extends StatefulWidget {
@@ -11,42 +12,44 @@ class DiffBestResultRow extends StatefulWidget {
 }
 
 class _DiffBestResultRowState extends State<DiffBestResultRow> {
-  var answers = '---';
-  var score = '---';
+  var score = '--';
+  var repeat = '--';
 
   @override
   void initState() {
-    getBestResult();
-
+    getUserResult();
     super.initState();
   }
 
-  void getBestResult() {
-    // database
+  void getUserResult() {
+    ProfileProvider().getLocalResult(widget.diff).then((details) => setState(() {
+          score = details.highestScore.toString();
+          repeat = details.playedCount.toString();
+        }));
   }
 
   @override
   Widget build(BuildContext context) {
     final color = Colors.black54;
+    final style = TextStyle(fontSize: 16, color: color, fontWeight: FontWeight.bold);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.check_circle, color: color),
+              Icon(Icons.repeat, color: color),
               const SizedBox(width: 10),
-              Text(answers,
-                  style: TextStyle(fontSize: 16, color: color, fontWeight: FontWeight.bold))
+              Text(repeat, style: style),
             ],
           ),
           Row(
             children: <Widget>[
               Icon(Icons.functions, color: color),
               const SizedBox(width: 10),
-              Text(score, style: TextStyle(fontSize: 16, color: color, fontWeight: FontWeight.bold))
+              Text(score, style: style),
             ],
           ),
         ],

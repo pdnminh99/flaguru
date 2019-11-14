@@ -7,6 +7,7 @@ import '../widgets/history_area.dart';
 import '../widgets/result_area.dart';
 import '../widgets/result_button_area.dart';
 import '../widgets/result_screen_animation.dart';
+import '../models/ProfileProvider.dart';
 
 class ResultScreen extends StatefulWidget {
   final Result result;
@@ -20,12 +21,15 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
   AnimationController controller;
   ResultScreenAnimation animation;
+  String highestScore = '--';
 
   @override
   void initState() {
-    controller = AnimationController(duration: const Duration(milliseconds: 6000), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 5000), vsync: this);
     animation = ResultScreenAnimation(controller);
     controller.forward();
+
+    getBestScore();
     super.initState();
   }
 
@@ -33,6 +37,12 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  void getBestScore() {
+    ProfileProvider().getLocalResult(widget.result.level).then((details) => setState(() {
+          highestScore = details.highestScore.toString();
+        }));
   }
 
   @override
@@ -76,6 +86,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                             result: widget.result,
                             controller: animation.resultArea,
                             bottomMargin: height * 0.06,
+                            highestScore: highestScore,
                           ),
                         ),
                         Positioned(

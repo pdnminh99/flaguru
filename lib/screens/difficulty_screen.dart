@@ -9,7 +9,7 @@ class DifficultyScreen extends StatefulWidget {
   static String routeName = '/difficulty_screen';
   final Difficulty diff;
 
-  DifficultyScreen({this.diff = Difficulty.EASY});
+  DifficultyScreen({this.diff = Difficulty.NORMAL});
 
   @override
   _DifficultyScreenState createState() => _DifficultyScreenState();
@@ -33,7 +33,7 @@ class _DifficultyScreenState extends State<DifficultyScreen> with TickerProvider
 
   void setTimer() {
     timer = Timer(
-        const Duration(milliseconds: 100), () => _controllers[getIndex(widget.diff)].forward());
+        const Duration(milliseconds: 250), () => _controllers[getIndex(widget.diff)].forward());
   }
 
   @override
@@ -49,7 +49,7 @@ class _DifficultyScreenState extends State<DifficultyScreen> with TickerProvider
       if (i == index) {
         (ctr.value == 1) ? ctr.reverse() : ctr.forward();
       } else
-        _controllers[i].reverse();
+        ctr.reverse();
     }
   }
 

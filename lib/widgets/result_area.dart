@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/result_area_animation.dart';
-import '../widgets/result_row.dart';
+import 'result_area_animation.dart';
+import 'result_row.dart';
 import '../models/Result.dart';
 
 class ResultArea extends AnimatedWidget {
   final Result result;
   final double bottomMargin;
   ResultAreaAnimation animation;
+  final String highestScore;
 
   ResultArea({
     @required this.result,
     @required this.bottomMargin,
+    @required this.highestScore,
     @required Animation<double> controller,
   }) : super(listenable: controller) {
     animation = ResultAreaAnimation(listenable as Animation<double>);
@@ -21,7 +23,6 @@ class ResultArea extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    final score = '--';
     return FadeTransition(
       opacity: animation.bgOpacity,
       child: Container(
@@ -98,7 +99,7 @@ class ResultArea extends AnimatedWidget {
                 ),
                 FadeTransition(
                   opacity: animation.best,
-                  child: buildBestRow(height, score),
+                  child: buildBestRow(height, highestScore),
                 ),
               ],
             );

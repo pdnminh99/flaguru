@@ -58,6 +58,7 @@ class ResultButtonArea extends AnimatedWidget {
   }
 
   void restart(BuildContext context, Difficulty difficulty) {
-    Navigator.of(context).pushReplacementNamed(DifficultyScreen.routeName, arguments: difficulty);
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => DifficultyScreen(diff: difficulty)));
   }
 }
