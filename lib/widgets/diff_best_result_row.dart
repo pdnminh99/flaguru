@@ -40,16 +40,16 @@ class _DiffBestResultRowState extends State<DiffBestResultRow> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.repeat, color: color),
+              Icon(Icons.star_border, color: color),
               const SizedBox(width: 10),
-              Text(repeat, style: style),
+              Text(score, style: style),
             ],
           ),
           Row(
             children: <Widget>[
-              Icon(Icons.functions, color: color),
+              Icon(Icons.loop, color: color),
               const SizedBox(width: 10),
-              Text(score, style: style),
+              Text(repeat, style: style),
             ],
           ),
         ],

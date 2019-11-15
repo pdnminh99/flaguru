@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../models/Enum.dart';
@@ -67,7 +65,7 @@ class ExpandableDiffCard extends AnimatedWidget {
       width: animation.value * 80,
       height: animation.value * 50,
       child: RaisedButton(
-        elevation: 6,
+        elevation: 5,
         color: getColor(diff),
         onPressed: () => toPlayScreen(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
@@ -77,51 +75,86 @@ class ExpandableDiffCard extends AnimatedWidget {
   }
 
   Widget buildExpandableArea(AnimationController controller, BuildContext context) {
+    final height = getSentences(diff).length * 35.0 + 15 * 2;
+    final side = const BorderSide(color: Colors.black38, width: 0.3);
+
     return Container(
       width: double.infinity,
-      height: controller.value * 150,
+      height: controller.value * height,
       decoration: BoxDecoration(
-        border: const Border(
-          top: BorderSide(color: Colors.black38, width: 0.3),
-          bottom: BorderSide(color: Colors.black38, width: 0.3),
-        ),
+        border: Border(top: side, bottom: side),
       ),
       child: SingleChildScrollView(
-          child: buildDiffInfoArea(context), physics: NeverScrollableScrollPhysics()),
+        physics: NeverScrollableScrollPhysics(),
+        child: Container(
+          height: height,
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          child: buildDiffInfoArea(context),
+        ),
+      ),
     );
   }
 
   Widget buildDiffInfoArea(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxHeight: 150),
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('Quiz total: 20'),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: getSentenceWidget(diff),
     );
   }
 
   Color getColor(Difficulty diff) {
     switch (diff) {
       case Difficulty.EASY:
-        return Colors.green[700];
+        return Colors.green[600];
       case Difficulty.NORMAL:
         return const Color(0xff019dad);
       case Difficulty.HARD:
-        return Colors.red[700];
+        return Colors.red[600];
       case Difficulty.ENDLESS:
-        return Colors.indigo[700];
+        return Colors.indigo;
       default:
         return Colors.black;
+    }
+  }
+
+  List<Widget> getSentenceWidget(Difficulty diff) {
+    final List<Widget> list = [];
+
+    for (var sen in getSentences(diff)) {
+      var parts = sen.split('`');
+      if (parts.length == 1)
+        list.add(Text(parts[0], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)));
+      else {
+        list.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(parts[0], style: TextStyle(fontSize: 18)),
+            const SizedBox(width: 10),
+            Text(parts[1], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+          ],
+        ));
+      }
+    }
+
+    return list;
+  }
+
+  List<String> getSentences(Difficulty diff) {
+    switch (diff) {
+      case Difficulty.EASY:
+        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s', 'Have fun!'];
+      case Difficulty.NORMAL:
+        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s'];
+      case Difficulty.HARD:
+        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s'];
+      case Difficulty.ENDLESS:
+        return ['Total of Quizzes`\u221E', 'Total of Lives`1', 'Time per Quiz`15s', 'Good luck!'];
+      default:
+        return [];
     }
   }
 
   void toPlayScreen(BuildContext context) {
     Navigator.of(context).pushReplacementNamed(PlayScreen.routeName, arguments: diff);
   }
-
-  List<String> getSentences() {}
 }

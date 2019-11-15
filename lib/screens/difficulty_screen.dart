@@ -6,7 +6,7 @@ import 'menu_screen.dart';
 import '../widgets/diff_card_expandable.dart';
 
 class DifficultyScreen extends StatefulWidget {
-  static String routeName = '/difficulty_screen';
+  static final routeName = '/difficulty_screen';
   final Difficulty diff;
 
   DifficultyScreen({this.diff = Difficulty.NORMAL});
@@ -16,14 +16,14 @@ class DifficultyScreen extends StatefulWidget {
 }
 
 class _DifficultyScreenState extends State<DifficultyScreen> with TickerProviderStateMixin {
-  final _controllers = List<AnimationController>(4);
+  final controllers = List<AnimationController>(4);
 
   Timer timer;
 
   @override
   void initState() {
-    for (var i = 0, len = _controllers.length; i < len; i++) {
-      _controllers[i] =
+    for (var i = 0, len = controllers.length; i < len; i++) {
+      controllers[i] =
           AnimationController(duration: const Duration(milliseconds: 350), vsync: this);
     }
 
@@ -32,20 +32,20 @@ class _DifficultyScreenState extends State<DifficultyScreen> with TickerProvider
   }
 
   void setTimer() {
-    timer = Timer(
-        const Duration(milliseconds: 250), () => _controllers[getIndex(widget.diff)].forward());
+    timer =
+        Timer(const Duration(milliseconds: 300), () => controllers[widget.diff.index].forward());
   }
 
   @override
   void dispose() {
     timer?.cancel();
-    for (var controller in _controllers) controller.dispose();
+    for (var ctr in controllers) ctr.dispose();
     super.dispose();
   }
 
   void animate(int index) {
-    for (var i = 0, len = _controllers.length; i < len; i++) {
-      final ctr = _controllers[i];
+    for (var i = 0, len = controllers.length; i < len; i++) {
+      final ctr = controllers[i];
       if (i == index) {
         (ctr.value == 1) ? ctr.reverse() : ctr.forward();
       } else
@@ -65,11 +65,11 @@ class _DifficultyScreenState extends State<DifficultyScreen> with TickerProvider
             child: Column(
               children: <Widget>[
                 buildHeader(context),
-                ExpandableDiffCard(_controllers[0], diff: Difficulty.EASY, onTap: () => animate(0)),
-                ExpandableDiffCard(_controllers[1],
+                ExpandableDiffCard(controllers[0], diff: Difficulty.EASY, onTap: () => animate(0)),
+                ExpandableDiffCard(controllers[1],
                     diff: Difficulty.NORMAL, onTap: () => animate(1)),
-                ExpandableDiffCard(_controllers[2], diff: Difficulty.HARD, onTap: () => animate(2)),
-                ExpandableDiffCard(_controllers[3],
+                ExpandableDiffCard(controllers[2], diff: Difficulty.HARD, onTap: () => animate(2)),
+                ExpandableDiffCard(controllers[3],
                     diff: Difficulty.ENDLESS, onTap: () => animate(3)),
               ],
             ),
@@ -96,20 +96,5 @@ class _DifficultyScreenState extends State<DifficultyScreen> with TickerProvider
         ],
       ),
     );
-  }
-
-  int getIndex(Difficulty diff) {
-    switch (diff) {
-      case Difficulty.EASY:
-        return 0;
-      case Difficulty.NORMAL:
-        return 1;
-      case Difficulty.HARD:
-        return 2;
-      case Difficulty.ENDLESS:
-        return 3;
-      default:
-        return -1;
-    }
   }
 }
