@@ -46,8 +46,8 @@ class FlagButton extends StatelessWidget {
             child: InkWell(
               borderRadius: borderRadius,
               onTap: () {
-                answer.isRight ? round.doRight() : round.doWrong();
                 round.changePressState(answerIndex);
+                answer.isRight ? round.doRight() : round.doWrong();
               },
             ),
           ),

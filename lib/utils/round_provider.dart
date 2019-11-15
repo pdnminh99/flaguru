@@ -1,30 +1,36 @@
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/Question.dart';
 import 'package:flutter/material.dart';
 
+import '../models/Rule.dart';
 import '../models/Answer.dart';
 import '../screens/result_screen.dart';
-import '../models/QuestionProvider.dart';
 import '../models/RoundHandler.dart';
 import 'global_audio_player.dart';
 import 'watch_provider.dart';
 
 class RoundProvider with ChangeNotifier {
-  final qtnTotal = 20;
-  final timeLimit = 15;
-  final maxLife = 5;
+  Rule rule;
   RoundHandler roundHandler;
+  bool isOver = false;
 
-  int index;
+  int index = 0;
   bool isAnswered;
   List<bool> pressStates;
 
   WatchProvider timer;
 
-  List<Map<String, Object>> qaList = [];
+  RoundProvider(difficulty) {
+    rule = Rule(difficulty);
+    RoundHandler.getInstance(
+      level: difficulty,
+      lifeCount: rule.maxLife,
+      timeLimit: rule.timeLimit,
+      isFirstAnswerAlwaysRight: true,
+    ).then((handler) {
+      roundHandler = handler;
+      setNewData();
+      startGame();
+    });
 
-  RoundProvider(level) {
-    QuestionProvider.getInstance(level: level).then(setQaList);
     timer = WatchProvider();
   }
 
@@ -34,27 +40,11 @@ class RoundProvider with ChangeNotifier {
     super.dispose();
   }
 
-  void setQaList(QuestionProvider qProvider) {
-    qaList = qProvider.getCollections(numOfQtn: qtnTotal, isFirstAnswerCorrect: true);
-    roundHandler = RoundHandler(
-      level: qProvider.level,
-      lifeTotal: maxLife,
-      timeLimit: timeLimit,
-      numOfQtn: qtnTotal,
-    );
-    resetData();
-    notifyListeners();
-  }
-
   void startGame() {
+    audioPlayer.playSoundLetsGo();
     roundHandler.start();
     setTimer();
     notifyListeners();
-  }
-
-  void resetData() {
-    index = 0;
-    setDataAfterAnswered();
   }
 
   void changePressState(int i) {
@@ -69,33 +59,37 @@ class RoundProvider with ChangeNotifier {
 
   void doWrong() {
     processAfterAnswered(false);
-    (roundHandler.remainLives == 0)
-        ? audioPlayer.playSoundGameOver()
-        : audioPlayer.playSoundWrong();
+    if (roundHandler.isAlive) {
+      audioPlayer.playSoundWrong();
+    } else {
+      audioPlayer.playSoundGameOver();
+      isOver = true;
+    }
   }
 
   void processAfterAnswered(bool isCorrect) {
     timer.cancel();
-    roundHandler.getAnswer(
-        isCorrect: isCorrect, question: qaList[index]['question'], timeLeft: timer.time);
     isAnswered = true;
+    roundHandler.verifyAnswer(timeLeft: timer.time, answer: getUserAnswer());
+    if (index + 1 == rule.quizTotal) isOver = true;
     notifyListeners();
   }
 
   void getNextQuestion() {
+    roundHandler.generateQAs();
     setTimer();
     index++;
-    setDataAfterAnswered();
+    setNewData();
     notifyListeners();
   }
 
-  void setDataAfterAnswered() {
+  void setNewData() {
     isAnswered = false;
     pressStates = [false, false, false, false];
   }
 
   void setTimer() {
-    timer.periodic(timeLimit, 1, () {
+    timer.periodic(rule.timeLimit, 1, () {
       if (timer.time < 10 && timer.time > 0) audioPlayer.playSoundTick();
       if (timer.time == 0) doWrong();
     });
@@ -103,13 +97,17 @@ class RoundProvider with ChangeNotifier {
 
   void onOver(BuildContext context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.result)));
-    print('remain: ${roundHandler.remainQuestions}  ${roundHandler.remainLives}');
+        context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.getResult())));
+  }
+
+  Answer getUserAnswer() {
+    final index = pressStates.indexOf(true);
+    if (index == -1) return null;
+    return roundHandler.answers[index];
   }
 
   bool get nameOrFlag => index % 2 == 1;
 
-  List<Answer> get answerSet => qaList.isEmpty ? [] : qaList[index]['answer'];
-
-  Question get question => qaList.isEmpty ? null : qaList[index]['question'];
+  List<AnswerUI> get answerSet =>
+      roundHandler.answers.map((a) => AnswerUI(a, roundHandler.question)).toList();
 }

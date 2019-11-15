@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/round_provider.dart';
 
 class BottomBar extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final round = Provider.of<RoundProvider>(context);
-    final isOver = round.roundHandler.status == RoundStatus.OVER;
+    final isOver = round.isOver;
     final isAnswered = round.isAnswered;
 
     if (isAnswered)

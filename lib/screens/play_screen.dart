@@ -1,10 +1,8 @@
-import 'package:flaguru/utils/round_provider.dart';
-import 'package:flaguru/widgets/round_area.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/Enum.dart';
 import '../widgets/play_screen_drawer.dart';
+import '../widgets/round_area.dart';
 import '../widgets/top_bar.dart';
 
 class PlayScreen extends StatelessWidget {

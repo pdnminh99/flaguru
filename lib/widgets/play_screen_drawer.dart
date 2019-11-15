@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'settings_switch_tile.dart';
+import '../screens/difficulty_screen.dart';
 import '../models/Enum.dart';
 import '../models/SettingsHandler.dart';
 import '../screens/menu_screen.dart';
-import '../screens/play_screen.dart';
 
 class PlayScreenDrawer extends StatelessWidget {
   final Difficulty difficulty;
@@ -19,7 +19,8 @@ class PlayScreenDrawer extends StatelessWidget {
 
   void restart(BuildContext context) {
     // need confirmation
-    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => DifficultyScreen(diff: difficulty)));
   }
 
   void popUpConfirmation(Function doYes) {}

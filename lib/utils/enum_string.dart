@@ -9,6 +9,8 @@ class EnumString {
         return 'Normal';
       case Difficulty.HARD:
         return 'Hard';
+      case Difficulty.ENDLESS:
+        return 'Endless';
       default:
         return '';
     }

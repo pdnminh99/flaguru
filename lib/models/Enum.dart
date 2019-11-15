@@ -1,11 +1,12 @@
-enum Difficulty { EASY, NORMAL, HARD }
+enum Difficulty { EASY, NORMAL, HARD, ENDLESS }
 enum Continent {
   ASIA,
   EUROPE,
   AFRICA,
-  AUSTRALIA,
-  ANTARCTICA,
+  AUSTRALIAandOCEANIA,
+  ASIAandEUROPE,
   NORTH_AMERICA,
-  SOUTH_AMERICA
+  SOUTH_AMERICA,
+  UNKNOWN,
 }
-enum RoundStatus { IDLE, PLAYING, OVER }
+// enum RoundStatus { IDLE, PLAYING, OVER }

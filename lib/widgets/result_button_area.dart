@@ -1,4 +1,5 @@
 import 'package:flaguru/models/Enum.dart';
+import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/menu_screen.dart';
 import 'package:flaguru/screens/play_screen.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class ResultButtonArea extends AnimatedWidget {
   }
 
   void restart(BuildContext context, Difficulty difficulty) {
-    Navigator.of(context).pushReplacementNamed(PlayScreen.routeName, arguments: difficulty);
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => DifficultyScreen(diff: difficulty)));
   }
 }

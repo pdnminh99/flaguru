@@ -43,12 +43,13 @@ class GlobalAudioPlayer with WidgetsBindingObserver {
   Future playSoundResult() async {
     if (soundMuted) return;
     _soundPlayer = await _cache.play('result.mp3')
-      ..setVolume(0.5);
+      ..setVolume(0.3);
   }
 
   Future playSoundGameOver() async {
     if (soundMuted) return;
-    _soundPlayer = await _cache.play('gameover.mp3');
+    _soundPlayer = await _cache.play('gameover.mp3')
+      ..setVolume(0.6);
   }
 
   Future playSoundScore() async {

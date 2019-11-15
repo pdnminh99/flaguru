@@ -28,7 +28,7 @@ class _QuestionAreaState extends State<QuestionArea> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final round = Provider.of<RoundProvider>(context);
-    final question = round.question;
+    final question = round.roundHandler.question;
 
     var tooLong = question.country.length > 15;
     return LayoutBuilder(
