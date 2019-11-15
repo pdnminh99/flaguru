@@ -219,14 +219,21 @@ class RoundHandler {
       throw Exception("Why would countdown remain greater than countdown time?");
     final timeElapsed = _timeLimit - timeLeft;
     this._totalTimeElapsed += timeElapsed;
-    var isCorrect = answer.countryID == question.countryID;
-    // prevent FE from verifying one question more than once.
-    if (_isVerified) return isCorrect;
-    if (isCorrect) {
-      _correctAnswersCounter += 1;
-      _totalTimeLeftRightAnswers += timeLeft;
-    } else
+    bool isCorrect;
+    if (answer == null) {
+      isCorrect = false;
+      if (_isVerified) return isCorrect;
       remainLives -= 1;
+    } else {
+      isCorrect = answer.countryID == question.countryID;
+      // prevent FE from verifying one question more than once.
+      if (_isVerified) return isCorrect;
+      if (isCorrect) {
+        _correctAnswersCounter += 1;
+        _totalTimeLeftRightAnswers += timeLeft;
+      } else
+        remainLives -= 1;
+    }
     var newLog = AnswerLog(question, answer, isCorrect, timeElapsed);
     _answerLogs.add(newLog);
     // add Log to database.
