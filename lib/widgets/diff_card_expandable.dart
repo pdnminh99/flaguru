@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/Rule.dart';
 import '../models/Enum.dart';
 import '../screens/play_screen.dart';
 import '../utils/enum_string.dart';
@@ -128,9 +129,9 @@ class ExpandableDiffCard extends AnimatedWidget {
         list.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(parts[0], style: TextStyle(fontSize: 18)),
+            Text(parts[0], style: TextStyle(fontSize: 17)),
             const SizedBox(width: 10),
-            Text(parts[1], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+            Text(parts[1], style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold))
           ],
         ));
       }
@@ -140,18 +141,15 @@ class ExpandableDiffCard extends AnimatedWidget {
   }
 
   List<String> getSentences(Difficulty diff) {
-    switch (diff) {
-      case Difficulty.EASY:
-        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s', 'Have fun!'];
-      case Difficulty.NORMAL:
-        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s'];
-      case Difficulty.HARD:
-        return ['Total of Quizzes`20', 'Total of Lives`5', 'Time per Quiz`15s'];
-      case Difficulty.ENDLESS:
-        return ['Total of Quizzes`\u221E', 'Total of Lives`1', 'Time per Quiz`15s', 'Good luck!'];
-      default:
-        return [];
-    }
+    final rule = Rule(diff);
+    final quizTotal = diff == Difficulty.ENDLESS ? '--' : rule.quizTotal;
+    final sentences = [
+      'Total of Quizzes`$quizTotal',
+      'Total of Lives`${rule.maxLife}',
+      'Seconds per Quiz`${rule.timeLimit}',
+    ];
+    if (diff == Difficulty.ENDLESS) sentences.add('Good luck!');
+    return sentences;
   }
 
   void toPlayScreen(BuildContext context) {

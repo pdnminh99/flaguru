@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'models/SettingsHandler.dart';
+import 'screens/demo_screen.dart';
 import 'screens/info_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/play_screen.dart';
 import 'screens/settings_screen.dart';
-import 'utils/global_audio_player.dart';
 import 'screens/difficulty_screen.dart';
+import 'models/SettingsHandler.dart';
+import 'utils/global_audio_player.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
     audioPlayer = GlobalAudioPlayer(this.settings);
-//    audioPlayer.playMusic();
+    audioPlayer.playMusic();
 
     return ChangeNotifierProvider(
       builder: (context) => settings,
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           PlayScreen.routeName: (context) => PlayScreen(ModalRoute.of(context).settings.arguments),
           InfoScreen.routeName: (context) => InfoScreen(),
           SettingsScreen.routeName: (context) => SettingsScreen(),
+          DemoScreen.routeName: (context) => DemoScreen(),
         },
       ),
     );

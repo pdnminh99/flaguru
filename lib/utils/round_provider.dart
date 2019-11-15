@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../models/Rule.dart';
 import '../models/Answer.dart';
 import '../screens/result_screen.dart';
 import '../models/RoundHandler.dart';
-import '../models/Question.dart';
 import 'global_audio_player.dart';
 import 'watch_provider.dart';
 
 class RoundProvider with ChangeNotifier {
-  final quizTotal = 20;
-  final timeLimit = 15;
-  final maxLife = 5;
-
+  Rule rule;
   RoundHandler roundHandler;
   bool isOver = false;
 
@@ -21,11 +18,12 @@ class RoundProvider with ChangeNotifier {
 
   WatchProvider timer;
 
-  RoundProvider(level) {
+  RoundProvider(difficulty) {
+    rule = Rule(difficulty);
     RoundHandler.getInstance(
-      level: level,
-      lifeCount: maxLife,
-      timeLimit: timeLimit,
+      level: difficulty,
+      lifeCount: rule.maxLife,
+      timeLimit: rule.timeLimit,
       isFirstAnswerAlwaysRight: true,
     ).then((handler) {
       roundHandler = handler;
@@ -43,6 +41,7 @@ class RoundProvider with ChangeNotifier {
   }
 
   void startGame() {
+    audioPlayer.playSoundLetsGo();
     roundHandler.start();
     setTimer();
     notifyListeners();
@@ -71,7 +70,8 @@ class RoundProvider with ChangeNotifier {
   void processAfterAnswered(bool isCorrect) {
     timer.cancel();
     isAnswered = true;
-    if (index + 1 == quizTotal) isOver = true;
+    roundHandler.verifyAnswer(timeLeft: timer.time, answer: getUserAnswer());
+    if (index + 1 == rule.quizTotal) isOver = true;
     notifyListeners();
   }
 
@@ -89,7 +89,7 @@ class RoundProvider with ChangeNotifier {
   }
 
   void setTimer() {
-    timer.periodic(timeLimit, 1, () {
+    timer.periodic(rule.timeLimit, 1, () {
       if (timer.time < 10 && timer.time > 0) audioPlayer.playSoundTick();
       if (timer.time == 0) doWrong();
     });
@@ -100,5 +100,14 @@ class RoundProvider with ChangeNotifier {
         context, MaterialPageRoute(builder: (context) => ResultScreen(roundHandler.getResult())));
   }
 
+  Answer getUserAnswer() {
+    final index = pressStates.indexOf(true);
+    if (index == -1) return null;
+    return roundHandler.answers[index];
+  }
+
   bool get nameOrFlag => index % 2 == 1;
+
+  List<AnswerUI> get answerSet =>
+      roundHandler.answers.map((a) => AnswerUI(a, roundHandler.question)).toList();
 }

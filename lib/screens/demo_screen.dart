@@ -4,6 +4,8 @@ import 'package:flaguru/models/SettingsHandler.dart';
 import 'package:flutter/material.dart';
 
 class DemoScreen extends StatefulWidget {
+  static final routeName = '/demo_screen';
+
   @override
   _DemoScreenState createState() => _DemoScreenState();
 }

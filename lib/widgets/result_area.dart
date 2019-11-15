@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flutter/material.dart';
 
 import 'result_area_animation.dart';
@@ -46,7 +47,9 @@ class ResultArea extends AnimatedWidget {
                     maxNum: result.correctAnswers,
                     icon: Icons.check_circle_outline,
                     leading: 'Right',
-                    trailing: ' / ' + result.questionsCounter.toString(),
+                    trailing: (result.level != Difficulty.ENDLESS)
+                        ? ' / ' + result.questionsCounter.toString()
+                        : '',
                     color: rowColor,
                     fontSize: height * 0.1,
                     getString: (val) => (val as num).toString(),

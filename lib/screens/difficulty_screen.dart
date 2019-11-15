@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../widgets/diff_card_expandable.dart';
 import '../models/Enum.dart';
 import 'menu_screen.dart';
-import '../widgets/diff_card_expandable.dart';
 
 class DifficultyScreen extends StatefulWidget {
   static final routeName = '/difficulty_screen';
   final Difficulty diff;
 
-  DifficultyScreen({this.diff = Difficulty.NORMAL});
+  DifficultyScreen({this.diff = Difficulty.EASY});
 
   @override
   _DifficultyScreenState createState() => _DifficultyScreenState();

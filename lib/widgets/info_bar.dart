@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/utils/round_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,8 @@ class InfoBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<RoundProvider>(context);
     final round = provider.roundHandler;
+    final quizTotal =
+        (provider.rule.difficulty == Difficulty.ENDLESS) ? '--' : provider.rule.quizTotal;
 
     return LayoutBuilder(
       builder: (context, constraint) {
@@ -25,7 +28,7 @@ class InfoBar extends StatelessWidget {
                 ],
               ),
               Text(
-                '${provider.index + 1} of ${provider.quizTotal}',
+                '${provider.index + 1} of $quizTotal',
                 style: TextStyle(
                   fontSize: constraint.maxHeight * 0.5,
                   color: Colors.white,
