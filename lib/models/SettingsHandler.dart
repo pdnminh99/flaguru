@@ -1,10 +1,10 @@
-import 'package:flaguru/models/Country.dart';
-import 'package:flaguru/models/DatabaseConnector.dart';
-import 'package:flaguru/models/Enum.dart';
-import 'package:flaguru/models/Settings.dart';
-import 'package:flaguru/utils/global_audio_player.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
+import '../models/Country.dart';
+import '../models/DatabaseConnector.dart';
+import '../models/Enum.dart';
+import '../models/Settings.dart';
+import '../utils/global_audio_player.dart';
 import 'LocalStorage.dart';
 
 class SettingsHandler with ChangeNotifier {
@@ -17,8 +17,7 @@ class SettingsHandler with ChangeNotifier {
 
   set isSoundEnabled(bool newState) {
     this._currentSettings.isSoundON = newState;
-    LocalStorage.updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
     notifyListeners();
   }
 
@@ -28,8 +27,7 @@ class SettingsHandler with ChangeNotifier {
 
   set isMusicEnabled(bool newState) {
     this._currentSettings.isAudioON = newState;
-    LocalStorage.updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
     newState ? audioPlayer?.playMusic() : audioPlayer?.pauseMusic();
     notifyListeners();
   }
@@ -40,8 +38,7 @@ class SettingsHandler with ChangeNotifier {
 
   set skipTutorials(bool newState) {
     this._currentSettings.skipTutorials = newState;
-    LocalStorage.updateNewSettings(this._currentSettings)
-        .catchError((error) => print(error));
+    LocalStorage.updateNewSettings(this._currentSettings).catchError((error) => print(error));
     notifyListeners();
   }
 
@@ -52,8 +49,7 @@ class SettingsHandler with ChangeNotifier {
   static Future<SettingsHandler> getInstance() async {
     if (settingInstance == null) {
       settingInstance = SettingsHandler._internal();
-      settingInstance._currentSettings =
-          await LocalStorage.getExistingSettings();
+      settingInstance._currentSettings = await LocalStorage.getExistingSettings();
       await settingInstance._getCountries();
     }
     return settingInstance;
@@ -119,8 +115,7 @@ class SettingsHandler with ChangeNotifier {
       }
     if (isFound)
       DatabaseConnector.getInstance()
-          .then((sqlDatabase) =>
-              sqlDatabase.switchAllowStatus(newStatus, countryID))
+          .then((sqlDatabase) => sqlDatabase.switchAllowStatus(newStatus, countryID))
           .then((_) => print('Switch $countryID allow status to $newStatus'))
           .catchError((error) => print(error));
   }
