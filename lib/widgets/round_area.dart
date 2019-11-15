@@ -5,7 +5,6 @@ import '../models/Enum.dart';
 import '../utils/round_provider.dart';
 import '../widgets/loading_spinner.dart';
 import '../widgets/play_area.dart';
-import '../widgets/start_area.dart';
 
 class RoundArea extends StatelessWidget {
   final Difficulty difficulty;
@@ -26,8 +25,6 @@ class RoundArea extends StatelessWidget {
     final handler = Provider.of<RoundProvider>(context).roundHandler;
     if (handler == null)
       return LoadingSpinner();
-    else if (handler.status == RoundStatus.IDLE)
-      return StartArea();
     else
       return PlayArea();
   }

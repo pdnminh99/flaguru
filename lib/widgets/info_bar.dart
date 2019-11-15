@@ -20,12 +20,12 @@ class InfoBar extends StatelessWidget {
                 children: <Widget>[
                   for (var i = 0; i < round.remainLives; i++)
                     getRemainLifeDot(constraint.maxHeight * 0.4),
-                  for (var i = 0, left = round.lifeTotal - round.remainLives; i < left; i++)
+                  for (var i = 0, left = round.lifeCount - round.remainLives; i < left; i++)
                     getLostLifeDot(constraint.maxHeight * 0.4),
                 ],
               ),
               Text(
-                '${provider.index + 1} of ${provider.qtnTotal}',
+                '${provider.index + 1} of ${provider.quizTotal}',
                 style: TextStyle(
                   fontSize: constraint.maxHeight * 0.5,
                   color: Colors.white,

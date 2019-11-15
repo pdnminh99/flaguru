@@ -14,7 +14,7 @@ class NameButton extends StatelessWidget {
     final round = Provider.of<RoundProvider>(context);
     final isAnswered = round.isAnswered;
     final isPressed = round.pressStates[answerIndex];
-    final answer = round.answerSet[answerIndex];
+    final answer = round.roundHandler.answers[answerIndex];
     final tooLong = answer.country.length > 30;
 
     final borderRadius = BorderRadius.circular(5);

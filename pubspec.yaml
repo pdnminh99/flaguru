@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  test:
   flutter_test:
     sdk: flutter
 
@@ -56,6 +57,12 @@ flutter:
   assets:
     - assets/database/flaguru.db
     - assets/images/
+    - assets/images/Asia/
+    - assets/images/Africa/
+    - assets/images/AustraliaOceania/
+    - assets/images/Europe/
+    - assets/images/NorthAmerica/
+    - assets/images/SouthAmerica/
     - assets/background/
     - assets/icon/search.png
     - assets/infoscreen_icon/

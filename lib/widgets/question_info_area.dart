@@ -25,7 +25,7 @@ class QuestionInfoArea extends StatelessWidget {
         color: (isAnswered) ? const Color(0xff99d8df) : Colors.white.withOpacity(0.3),
         borderRadius: (isAnswered) ? BorderRadius.circular(10) : BorderRadius.circular(0),
       ),
-      child: isAnswered ? InfoArea(round.question, millis) : QuestionArea(),
+      child: isAnswered ? InfoArea(round.roundHandler.question, millis) : QuestionArea(),
     );
   }
 }
