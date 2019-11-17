@@ -6,6 +6,7 @@ import 'package:flaguru/models/User.dart';
 import 'package:flaguru/screens/difficulty_screen.dart';
 import 'package:flaguru/screens/info_screen.dart';
 import 'package:flaguru/screens/settings_screen.dart';
+import 'package:flaguru/screens/tutorial_screen.dart';
 import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
@@ -86,7 +87,9 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     Navigator.pushReplacementNamed(context, InfoScreen.routeName);
   }
 
-  void gotoTutorial(BuildContext context) {}
+  void gotoTutorial(BuildContext context) {
+    Navigator.pushReplacementNamed(context, TutorialScreen.routeName);
+  }
 
   void gotoSetting(BuildContext context) {
     Navigator.of(context).pushNamed(SettingsScreen.routeName);
