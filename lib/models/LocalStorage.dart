@@ -73,6 +73,8 @@ class LocalStorage {
         return 'NORMAL';
       case Difficulty.HARD:
         return 'HARD';
+      case Difficulty.ENDLESS:
+        return 'ENDLESS';
       default:
         return 'EASY';
     }
