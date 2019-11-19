@@ -57,6 +57,7 @@ flutter:
   assets:
     - assets/database/flaguru.db
     - assets/images/
+    - assets/images/logo/
     - assets/images/Asia/
     - assets/images/Africa/
     - assets/images/AustraliaOceania/
