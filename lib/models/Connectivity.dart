@@ -1,7 +1,9 @@
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
+import 'package:flaguru/models/Report.dart';
 
 class Connection {
   void connectivityListen(Function func) {
@@ -20,7 +22,7 @@ class Connection {
     }) as Connectivity;
   }
 
-  Map<String, Object> _summarizeReports(String userID, List<AnswerLog> logs) {
+  Report _summarizeReports(String userID, List<AnswerLog> logs) {
     var correctCountriesID = List<int>();
     var wrongCountriesID = List<int>();
     for (var log in logs) {
@@ -29,11 +31,10 @@ class Connection {
       else
         wrongCountriesID.add(log.question.countryID);
     }
-    return {
-      'user': userID,
-      'correctcounter': correctCountriesID,
-      'wrongcounter': wrongCountriesID,
-    };
+    return Report(
+        correctCountriesIDs: correctCountriesID,
+        wrongCountriesIDs: wrongCountriesID,
+        user: userID);
   }
 
   Future<bool> sendReports(List<AnswerLog> logs) async {
@@ -42,8 +43,9 @@ class Connection {
     var auth = Authentication();
     var currentUser = await auth.getCurrentUser();
     var userID = currentUser == null ? 'guest' : currentUser.uuid;
+    var report = _summarizeReports(userID, logs);
     print('Sending reports of $userID to the cloud.');
-    print(_summarizeReports(userID, logs));
+    print(report.toJSON());
     return true;
   }
 
