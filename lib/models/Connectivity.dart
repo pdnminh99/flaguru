@@ -65,4 +65,8 @@ class Connection {
         }
       });
   }
+
+  static Future<void> checkUpdates() async {
+    var databaseInstance = await DatabaseConnector.getInstance();
+  }
 }
