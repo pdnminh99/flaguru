@@ -1,24 +1,66 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:flaguru/models/AnswerLog.dart';
+import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/DatabaseConnector.dart';
 
 class Connection {
-  var subscription;
   void connectivityListen(Function func) {
-    print("true");
-    subscription = Connectivity()
+    // print("true");
+    var subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
         print("No Connection");
         //Do smth here
-      } else if (result == ConnectivityResult.wifi) {
-        print("Wifi Connected");
+      } else {
+        print("Wifi or mobile Connected");
         //Do smth here
         func();
       }
-    });
+    }) as Connectivity;
   }
 
-  dispose() {
-    subscription.cancel();
+  Map<String, Object> _summarizeReports(String userID, List<AnswerLog> logs) {
+    var correctCountriesID = List<int>();
+    var wrongCountriesID = List<int>();
+    for (var log in logs) {
+      if (log.isCorrect)
+        correctCountriesID.add(log.question.countryID);
+      else
+        wrongCountriesID.add(log.question.countryID);
+    }
+    return {
+      'user': userID,
+      'correctcounter': correctCountriesID,
+      'wrongcounter': wrongCountriesID,
+    };
+  }
+
+  Future<bool> sendReports(List<AnswerLog> logs) async {
+    var connectivityInstance = await (Connectivity().checkConnectivity());
+    if (connectivityInstance == ConnectivityResult.none) return false;
+    var auth = Authentication();
+    var currentUser = await auth.getCurrentUser();
+    var userID = currentUser == null ? 'guest' : currentUser.uuid;
+    print('Sending reports of $userID to the cloud.');
+    print(_summarizeReports(userID, logs));
+    return true;
+  }
+
+  static void createNetworkListener() {
+    var listener = Connectivity()
+      ..onConnectivityChanged.listen((status) {
+        if (status == ConnectivityResult.none)
+          print('>>>> NETWORK DISCONNECTED <<<<<');
+        else {
+          print(status == ConnectivityResult.mobile
+              ? '>>>> MOBILE NETWORK DETECTED <<<<'
+              : '>>>> WIFI NETWORK DETECTED <<<<');
+          DatabaseConnector.getInstance()
+              .then((connector) => connector.checkResultLogs())
+              .then((_) => print('Local logs are sent to the cloud.'))
+              .catchError((error) => print(error));
+        }
+      });
   }
 }

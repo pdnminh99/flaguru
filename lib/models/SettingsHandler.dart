@@ -1,3 +1,4 @@
+import 'package:flaguru/models/Connectivity.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Country.dart';
@@ -51,6 +52,7 @@ class SettingsHandler with ChangeNotifier {
       settingInstance = SettingsHandler._internal();
       settingInstance._currentSettings = await LocalStorage.getExistingSettings();
       await settingInstance._getCountries();
+      Connection.createNetworkListener();
     }
     return settingInstance;
   }

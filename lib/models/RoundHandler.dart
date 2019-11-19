@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flaguru/models/Answer.dart';
+import 'package:flaguru/models/Connectivity.dart';
 import 'package:flaguru/models/Country.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/LocalStorage.dart';
@@ -63,7 +64,8 @@ class RoundHandler {
       int timeLimit: 15,
       bool isFirstAnswerAlwaysRight: false}) async {
     // Handle exceptions.
-    if (lifeCount < 1) throw Exception("Life count per round should be greater than 0");
+    if (lifeCount < 1)
+      throw Exception("Life count per round should be greater than 0");
     if (timeLimit < 1) throw Exception("countdown time should be at least 1");
     var _handlerInstance = RoundHandler();
     // initialize default params.
@@ -102,11 +104,13 @@ class RoundHandler {
     int timeLimit,
     bool isFirstAnswerAlwaysRight,
   ) async {
-    _initializeStaticParams(level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
+    _initializeStaticParams(
+        level, lifeCount, timeLimit, isFirstAnswerAlwaysRight);
     // collect countries and parse to chain.
     _sqlDatabase = await DatabaseConnector.getInstance();
     (await _sqlDatabase.collectCountries()).forEach((country) {
-      if (_countriesChain.length == 0 || _countriesChain[_lastIndex].ratio != country.ratio)
+      if (_countriesChain.length == 0 ||
+          _countriesChain[_lastIndex].ratio != country.ratio)
         _createNode(country);
       else
         _countriesChain[_lastIndex].insert(country);
@@ -121,7 +125,8 @@ class RoundHandler {
   }
 
   void generateQAs() {
-    if (remainLives <= 0) throw Exception('There is no lives remain to generate new question.');
+    if (remainLives <= 0)
+      throw Exception('There is no lives remain to generate new question.');
     _generateAnswers(4);
     switch (_level) {
       case Difficulty.ENDLESS:
@@ -152,7 +157,9 @@ class RoundHandler {
       Answer nominationAnswer;
       do {
         isDupicate = false;
-        nominationAnswer = _countriesChain[_rand.nextInt(_countriesChain.length)].getRandomAnswer();
+        nominationAnswer =
+            _countriesChain[_rand.nextInt(_countriesChain.length)]
+                .getRandomAnswer();
         for (var answer in answers)
           if (answer.countryID == nominationAnswer.countryID) isDupicate = true;
       } while (isDupicate);
@@ -188,7 +195,8 @@ class RoundHandler {
 
   void _fetchLeftFromNormalCursor(int leftCursor) {
     // if left side is still in range.
-    question = leftCursor >= 0 ? _countriesChain[leftCursor].getQuestion() : null;
+    question =
+        leftCursor >= 0 ? _countriesChain[leftCursor].getQuestion() : null;
     _isNormalCursorHeadLeft = question != null;
   }
 
@@ -216,7 +224,8 @@ class RoundHandler {
 
   bool verifyAnswer({@required int timeLeft, @required Answer answer}) {
     if (this._timeLimit < timeLeft)
-      throw Exception("Why would countdown remain greater than countdown time?");
+      throw Exception(
+          "Why would countdown remain greater than countdown time?");
     final timeElapsed = _timeLimit - timeLeft;
     this._totalTimeElapsed += timeElapsed;
     bool isCorrect;
@@ -259,7 +268,13 @@ class RoundHandler {
         totalLives: _lifeCount,
         answerLogs: _answerLogs);
     // TODO check if network connection available before saveLog.
-    _sqlDatabase.saveLogs();
+    var connection = Connection()
+      ..sendReports(_answerLogs).then((status) {
+        if (status)
+          _sqlDatabase.saveLogs(false);
+        else
+          _sqlDatabase.saveLogs(true);
+      }).catchError((error) => print(error));
     LocalStorage.saveResult(roundResult.score, _level, remainLives > 0)
         .then((_) => print('Saved current result to localStorage.'))
         .catchError((error) => print(error));
