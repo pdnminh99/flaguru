@@ -1,8 +1,8 @@
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
+import 'package:flaguru/models/HttpProvider.dart';
 import 'package:flaguru/models/Report.dart';
 
 class Connection {
@@ -44,9 +44,10 @@ class Connection {
     var currentUser = await auth.getCurrentUser();
     var userID = currentUser == null ? 'guest' : currentUser.uuid;
     var report = _summarizeReports(userID, logs);
-    print('Sending reports of $userID to the cloud.');
-    print(report.toJSON());
-    return true;
+    // print('Sending reports of $userID to the cloud.');
+    // print(report.toJSON());
+    var httpProvider = HttpProvider();
+    return await httpProvider.sendReports(report);
   }
 
   static void createNetworkListener() {

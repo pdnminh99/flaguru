@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,8 +16,14 @@ class Report {
     this.generatedTime = DateTime.now();
   }
 
-  String toJSON() =>
-      '{ "user": "$user", "correccounter": ${correctCountriesIDs.toString()}, "wrongcounter": ${wrongCountriesIDs.toString()}, "reportdate": "${generatedTime.toString()}" }';
+  String toJSON() => jsonEncode({
+        'user': user,
+        'correctcounter': correctCountriesIDs,
+        'wrongcounter': wrongCountriesIDs,
+      });
+
+  // String toJSON() =>
+  //     '{ "user": "$user", "correccounter": ${correctCountriesIDs.toString()}, "wrongcounter": ${wrongCountriesIDs.toString()} }';
 
   @override
   String toString() =>
