@@ -65,6 +65,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     timer2?.cancel();
     btnFlyInController.dispose();
     btnRotationController.dispose();
+    bottomFlagController.dispose();
     super.dispose();
   }
 
