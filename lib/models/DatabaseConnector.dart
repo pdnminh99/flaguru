@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Country.dart';
+import 'package:flaguru/models/Report.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -148,7 +149,8 @@ class DatabaseConnector {
 
   void addLog(AnswerLog newLog) => privateLogs.add(newLog);
 
-  void clearLogs() => _transactionQueue = _db.batch();
+  Future<bool> clearLogs() =>
+      _db.delete('answerlog').then((_) => true).catchError((_) => false);
 
   void saveLogs(bool isSaveLogsEnable) {
     if (isSaveLogsEnable)
@@ -218,8 +220,27 @@ class DatabaseConnector {
     }
   }
 
-  void checkResultLogs() {
-    print('Sending local data to the cloud.');
+  Future<Report> checkResultLogs() {
+    return _db
+        .query('answerlog', columns: ['questionID', 'isCorrect']).then((logs) {
+      if (logs.length == 0) return null;
+      var logsReport = Report();
+      logsReport.correctCountriesIDs = List<int>();
+      logsReport.wrongCountriesIDs = List<int>();
+      logsReport.user = '';
+      for (var log in logs) {
+        // print(log);
+        if (log['isCorrect'] != 0)
+          logsReport.correctCountriesIDs.add(log['questionID']);
+        else
+          logsReport.wrongCountriesIDs.add(log['questionID']);
+      }
+      return logsReport;
+    });
+  }
+
+  Future<bool> clearResultLogs() {
+    return _db.delete('answerlog').then((_) => true).catchError((_) => false);
   }
 
   Future<String> readLogs() => _db.rawQuery('''

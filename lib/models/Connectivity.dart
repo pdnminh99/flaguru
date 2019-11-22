@@ -43,26 +43,44 @@ class Connection {
     var auth = Authentication();
     var currentUser = await auth.getCurrentUser();
     var userID = currentUser == null ? 'guest' : currentUser.uuid;
-    var report = _summarizeReports(userID, logs);
-    // print('Sending reports of $userID to the cloud.');
-    // print(report.toJSON());
     var httpProvider = HttpProvider();
-    return await httpProvider.sendReports(report);
+    return await httpProvider.sendReports(_summarizeReports(userID, logs));
   }
+
+  static Future<Report> _summarizeReportFromSQLite() async {
+    var logsResult =
+        await (await DatabaseConnector.getInstance()).checkResultLogs();
+    if (logsResult == null) return null;
+    var auth = Authentication();
+    var currentUser = await auth.getCurrentUser();
+    logsResult.user = currentUser == null ? 'guest' : currentUser.uuid;
+    print(logsResult.toString());
+    return logsResult;
+  }
+
+  static Future<bool> _clearLocalLogs() async =>
+      await (await DatabaseConnector.getInstance()).clearLogs();
 
   static void createNetworkListener() {
     var listener = Connectivity()
-      ..onConnectivityChanged.listen((status) {
+      ..onConnectivityChanged.listen((ConnectivityResult status) {
         if (status == ConnectivityResult.none)
           print('>>>> NETWORK DISCONNECTED <<<<<');
         else {
           print(status == ConnectivityResult.mobile
               ? '>>>> MOBILE NETWORK DETECTED <<<<'
               : '>>>> WIFI NETWORK DETECTED <<<<');
-          DatabaseConnector.getInstance()
-              .then((connector) => connector.checkResultLogs())
-              .then((_) => print('Local logs are sent to the cloud.'))
-              .catchError((error) => print(error));
+          _summarizeReportFromSQLite().then((Report logsResult) {
+            var httpProvider = HttpProvider();
+            return httpProvider.sendReports(logsResult);
+          }).then((bool isSuccess) {
+            if (isSuccess) {
+              print(
+                  'Local logs are sent to the cloud. Attempting to remove local storage.');
+              return _clearLocalLogs();
+            }
+            return false;
+          }).catchError((error) => print(error));
         }
       });
   }

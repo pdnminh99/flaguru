@@ -9,10 +9,7 @@ class Report {
   var wrongCountriesIDs = List<int>();
   DateTime generatedTime;
 
-  Report(
-      {@required this.user,
-      @required this.correctCountriesIDs,
-      @required this.wrongCountriesIDs}) {
+  Report({this.user, this.correctCountriesIDs, this.wrongCountriesIDs}) {
     this.generatedTime = DateTime.now();
   }
 

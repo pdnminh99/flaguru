@@ -3,15 +3,15 @@ import 'package:http/http.dart';
 import 'package:flaguru/models/Report.dart';
 
 class HttpProvider {
-  final _reportURL = 'https://us-central1-flaguru-35568.cloudfunctions.net/handleReport';
+  final _reportURL =
+      'https://us-central1-flaguru-35568.cloudfunctions.net/handleReport';
   final _updateURL = '';
 
   Future<bool> sendReports(Report reportLogs) async {
+    if (reportLogs == null) return false;
     Map<String, String> headers = {"Content-type": "application/json"};
     String JSONbody = reportLogs.toJSON();
     var response = await post(_reportURL, headers: headers, body: JSONbody);
-    // print('Sending report to the cloud. Status code ${response.statusCode}');
-    // print(response.body);
     return response.statusCode == 200;
   }
 
