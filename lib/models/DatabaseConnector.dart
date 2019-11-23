@@ -80,29 +80,6 @@ class DatabaseConnector {
       _db.update('country', {'isallow': _mapStatusToInt(newStatus)},
           where: 'ID = ?', whereArgs: [countryID]);
 
-//  Future<List<Country>> collectCountries({bool isAllowedOnly: true}) async {
-//    await _connectSQLite();
-//    var maps = List<Map>();
-//    var query = 'SELECT * FROM country';
-//    if (isAllowedOnly) query += ' WHERE isallow = 1;';
-//    maps = await this._db.rawQuery(query);
-//    // for (var item in maps) print(item.keys);
-//    var countries = List.generate(
-//        maps.length,
-//        (i) => Country(
-//              id: maps[i]['ID'],
-//              name: maps[i]['name'],
-//              flag: maps[i]['flag'],
-//              callCounter: maps[i]['callcounter'],
-//              correctCounter: maps[i]['correctcounter'],
-//              description: maps[i]['description'],
-//              chances: maps[i]['chances'],
-//              continent: _mapContinent(maps[i]['continent']),
-//              isAllow: maps[i]['isallow'] == 0 ? false : true,
-//            ));
-//    return countriesSortByRatio(countries);
-//  }
-
   Future<List<Country>> collectCountries({bool isAllowedOnly: true}) async {
     var countries = List<Country>();
     print(_db.isOpen);
@@ -209,7 +186,6 @@ class DatabaseConnector {
     } else {
       _db
           .rawUpdate(incrementCallCounterQuery)
-          // .then((_) => print('Update callcounter successfully'))
           .then((_) => isSaveLogsEnable ? _db.rawInsert(insertQuery) : null)
           .then((result) {
         if (result != null)
@@ -268,6 +244,17 @@ class DatabaseConnector {
 
   Future<void> deleteLogs() => _db
       .delete('answerlog')
-      // .then((_) => _db.close())
       .then((_) => print('Logs deleted successfully.'));
+
+  Future<bool> updateCountries(List<Country> newCountries) async {
+    if (newCountries == null || newCountries.length == 0) return false;
+    newCountries.forEach((country) {
+      _transactionQueue.update('country', {
+        'callcounter': country.callCounter,
+        'correctcounter': country.correctCounter,
+      });
+    });
+    await _transactionQueue.commit(noResult: true, continueOnError: true);
+    return true;
+  }
 }

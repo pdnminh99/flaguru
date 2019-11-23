@@ -13,10 +13,17 @@ class Country {
   Continent continent;
   int ratio;
   int _callCounter;
+
+  int get callCounter => _callCounter;
+
   int _correctCounter;
+
+  int get correctCounter => _correctCounter;
+
   String description;
   int chances = 0;
   bool isAllow = true;
+
   // int nodeAddress;
 
   Country(
@@ -34,7 +41,6 @@ class Country {
     ratio = callCounter == 0 && correctCounter == 0
         ? 0
         : (_correctCounter / _callCounter * 100).round();
-    // print('Country $name has new ratio $ratio');
   }
 
   Answer toAnswer() => Answer(
@@ -57,7 +63,6 @@ class Country {
     _callCounter++;
     if (isCorrect) _correctCounter++;
     ratio = (_correctCounter / _callCounter * 100).round();
-    // print('Country $name has new ratio $ratio');
     return ratio;
   }
 

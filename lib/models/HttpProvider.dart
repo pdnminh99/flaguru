@@ -7,17 +7,19 @@ class HttpProvider {
       'https://us-central1-flaguru-35568.cloudfunctions.net/handleReport';
   final _updateURL = '';
 
-  Future<bool> sendReports(Report reportLogs) async {
-    if (reportLogs == null) return false;
-    Map<String, String> headers = {"Content-type": "application/json"};
-    String JSONbody = reportLogs.toJSON();
-    var response = await post(_reportURL, headers: headers, body: JSONbody);
-    return response.statusCode == 200;
-  }
+  Future<bool> sendReports(Report reportLogs) async => reportLogs == null
+      ? false
+      : (await post(_reportURL,
+                  headers: {"Content-type": "application/json"},
+                  body: reportLogs.toJSON()))
+              .statusCode ==
+          200;
 
   Future<List<Country>> getUpdates(DateTime recentUpdateDates) async {
-    var response =
-        await get('$_updateURL?date=${recentUpdateDates.toString()}');
+    if (recentUpdateDates == null) {
+      // retrieve all changes.
+    }
+    //    var response = await get('$_updateURL?date=${recentUpdateDates.toString()}');
     return List<Country>();
   }
 }

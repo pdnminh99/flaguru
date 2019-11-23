@@ -1,28 +1,36 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 class Report {
   String user;
   var correctCountriesIDs = List<int>();
   var wrongCountriesIDs = List<int>();
-  DateTime generatedTime;
 
-  Report({this.user, this.correctCountriesIDs, this.wrongCountriesIDs}) {
-    this.generatedTime = DateTime.now();
+  Report({
+    this.user,
+    this.correctCountriesIDs,
+    this.wrongCountriesIDs,
+  });
+
+  String get _platformString {
+    if (Platform.isWindows) return 'windows';
+    if (Platform.isAndroid) return 'android';
+    if (Platform.isIOS) return 'ios';
+    if (Platform.isLinux) return 'linux';
+    if (Platform.isFuchsia) return 'fuchsia';
+    if (Platform.isMacOS) return 'macos';
+    return 'not identified';
   }
 
   String toJSON() => jsonEncode({
         'user': user,
         'correctcounter': correctCountriesIDs,
         'wrongcounter': wrongCountriesIDs,
+        'platform': _platformString,
       });
-
-  // String toJSON() =>
-  //     '{ "user": "$user", "correccounter": ${correctCountriesIDs.toString()}, "wrongcounter": ${wrongCountriesIDs.toString()} }';
 
   @override
   String toString() =>
-      '{ user: $user, correct: $correctCountriesIDs, wrong $wrongCountriesIDs, time: $generatedTime }';
+      '{ user: $user, correct: $correctCountriesIDs, wrong $wrongCountriesIDs, platform: $_platformString }';
 }

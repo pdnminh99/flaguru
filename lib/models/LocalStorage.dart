@@ -38,7 +38,8 @@ class LocalStorage {
       pref.setInt('${symbol}played', playCount + 1);
   }
 
-  static Future<void> saveResult(int newScore, Difficulty level, bool isWin) async {
+  static Future<void> saveResult(
+      int newScore, Difficulty level, bool isWin) async {
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
     var lastHighestScore = pref.getInt('${symbol}score');
@@ -49,19 +50,17 @@ class LocalStorage {
     if (winning == null)
       pref.setInt('${symbol}win', 0);
     else if (isWin) pref.setInt('${symbol}win', winning + 1);
-    pref.setInt('totalscore', totalScore == null ? totalScore : totalScore + newScore);
+    pref.setInt(
+        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
   }
 
   static Future<RoundDetails> getLocalResult(Difficulty level) async {
     var symbol = _getSymbol(level);
     var pref = await SharedPreferences.getInstance();
-    var highestScore = pref.getInt('${symbol}score');
-    var playedCount = pref.getInt('${symbol}played');
-    var winningCount = pref.getInt('${symbol}win');
     return RoundDetails(
-        highestScore: highestScore,
-        winningCount: winningCount,
-        playedCount: playedCount,
+        highestScore: pref.getInt('${symbol}score'),
+        winningCount: pref.getInt('${symbol}win'),
+        playedCount: pref.getInt('${symbol}played'),
         level: level);
   }
 
@@ -80,8 +79,24 @@ class LocalStorage {
     }
   }
 
-  Future<String> getTotalScore() async {
-    var pref = await SharedPreferences.getInstance();
-    return pref.getInt('totalscore').toString();
+  Future<String> getTotalScore() async =>
+      (await SharedPreferences.getInstance()).getInt('totalscore').toString();
+
+  static Future<DateTime> queryLastTimeUpdates() async {
+    var lastTimeUpdateString =
+        (await SharedPreferences.getInstance()).getString('lasttimeupdate');
+    return lastTimeUpdateString == null
+        ? null
+        : DateTime.parse(lastTimeUpdateString);
+  }
+
+  static Future<bool> updateLastTimeUpdate() async {
+    try {
+      (await SharedPreferences.getInstance())
+          .setString('lasttimeupdate', DateTime.now().toString());
+      return true;
+    } catch (Exception) {
+      return false;
+    }
   }
 }
