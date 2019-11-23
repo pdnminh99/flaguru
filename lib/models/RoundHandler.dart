@@ -127,7 +127,6 @@ class RoundHandler {
   void generateQAs() {
     if (remainLives <= 0)
       throw Exception('There is no lives remain to generate new question.');
-    _generateAnswers(4);
     switch (_level) {
       case Difficulty.ENDLESS:
       case Difficulty.EASY:
@@ -142,6 +141,7 @@ class RoundHandler {
       default:
         throw Exception('Unknown difficulty');
     }
+    _generateAnswers(4);
     if (_isFirstAnswerAlwaysRight)
       answers[0] = question.toAnswer();
     else
@@ -162,7 +162,7 @@ class RoundHandler {
                 .getRandomAnswer();
         for (var answer in answers)
           if (answer.countryID == nominationAnswer.countryID) isDupicate = true;
-      } while (isDupicate);
+      } while (isDupicate || nominationAnswer.countryID == question.countryID);
       answers.add(nominationAnswer);
     }
   }
