@@ -15,6 +15,7 @@ class SettingsHandler with ChangeNotifier {
   }
 
   set isSoundEnabled(bool newState) {
+//    print('Set music to $newState');
     this._currentSettings.isSoundON = newState;
     LocalStorage.updateNewSettings(this._currentSettings)
         .catchError((error) => print(error));
@@ -26,6 +27,7 @@ class SettingsHandler with ChangeNotifier {
   }
 
   set isMusicEnabled(bool newState) {
+//    print('Set music to $newState');
     this._currentSettings.isAudioON = newState;
     LocalStorage.updateNewSettings(this._currentSettings)
         .catchError((error) => print(error));

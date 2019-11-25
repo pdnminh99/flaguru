@@ -1,30 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flaguru/models/AnswerLog.dart';
 import 'package:flaguru/models/Authenticator.dart';
-import 'package:flaguru/models/Country.dart';
 import 'package:flaguru/models/DatabaseConnector.dart';
 import 'package:flaguru/models/HttpProvider.dart';
 import 'package:flaguru/models/LocalStorage.dart';
 import 'package:flaguru/models/Report.dart';
 
 class Connection {
-  void connectivityListen(Function func) {
-    // print("true");
-    var subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        print("No Connection");
-        //Do smth here
-      } else {
-        print("Wifi or mobile Connected");
-        //Do smth here
-        func();
-      }
-    }) as Connectivity;
-  }
-
   Report _summarizeReports(String userID, List<AnswerLog> logs) {
     var correctCountriesID = List<int>();
     var wrongCountriesID = List<int>();
@@ -63,35 +45,40 @@ class Connection {
   static Future<bool> _clearLocalLogs() async =>
       await (await DatabaseConnector.getInstance()).clearLogs();
 
-  static Future<void> _executeSendingReportToCloud() =>
-      _summarizeReportFromSQLite()
-          .then((Report logsResult) => HttpProvider().sendReports(logsResult))
-          .then((bool isSuccess) => isSuccess ? _clearLocalLogs() : false);
+  static Future<void> _executeSendingReportToCloud() {
+    return _summarizeReportFromSQLite()
+        .then((Report logsResult) => HttpProvider().sendReports(logsResult))
+        .then((bool isSuccess) => isSuccess ? _clearLocalLogs() : false);
+  }
 
-  static Future<void> _lookForUpdates() => LocalStorage.queryLastTimeUpdates()
-      .then((lastTimeUpdate) => lastTimeUpdate == null ||
-              DateTime.now().difference(lastTimeUpdate).inDays > 0
-          ? Future.wait([
-              _executeQueryNewChanges(lastTimeUpdate),
-              LocalStorage.updateLastTimeUpdate()
-            ])
-          : (() => print(
-              'Haven\'t seen any update status or it is not the right time to update. Ignore the update process.'))())
-      .catchError((error) => print(error));
+  static Future<void> _lookForUpdates() {
+    return LocalStorage.queryLastTimeUpdates().then((lastTimeUpdate) =>
+        lastTimeUpdate == null ||
+                DateTime.now()
+                        .difference(
+                            DateTime.fromMillisecondsSinceEpoch(lastTimeUpdate))
+                        .inDays >
+                    0
+            ? _executeQueryNewChanges(lastTimeUpdate)
+            : (() {})());
+  }
 
   static void createNetworkListener() {
     Connectivity().onConnectivityChanged.listen(
         (ConnectivityResult connectionStatus) => connectionStatus !=
                 ConnectivityResult.none
-            ? Future.wait([_lookForUpdates(), _executeSendingReportToCloud()])
+            ? Future.wait([_executeSendingReportToCloud(), _lookForUpdates()])
                 .catchError((error) => print(error))
-            : (() => print('>>>> NETWORK DISCONNECTED <<<<<'))());
+            : (() {})());
   }
 
-  static Future<bool> _executeQueryNewChanges(DateTime lastTimeUpdate) async {
+  static Future<bool> _executeQueryNewChanges(int lastTimeUpdate) async {
+    var timestampNow = DateTime.now().millisecondsSinceEpoch;
     var db = await DatabaseConnector.getInstance();
-    var httpProvider = HttpProvider();
-    var changes = await httpProvider.getUpdates(lastTimeUpdate);
-    return await db.updateCountries(changes);
+    var currentUser = await Authentication().getCurrentUser();
+    var changes = await HttpProvider().getUpdates(
+        lastTimeUpdate, currentUser == null ? 'guest' : currentUser.uuid);
+    return await db.updateCountries(changes) &&
+        await LocalStorage.updateLastTimeUpdate(timestampNow);
   }
 }

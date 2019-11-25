@@ -82,18 +82,13 @@ class LocalStorage {
   Future<String> getTotalScore() async =>
       (await SharedPreferences.getInstance()).getInt('totalscore').toString();
 
-  static Future<DateTime> queryLastTimeUpdates() async {
-    var lastTimeUpdateString =
-        (await SharedPreferences.getInstance()).getString('lasttimeupdate');
-    return lastTimeUpdateString == null
-        ? null
-        : DateTime.parse(lastTimeUpdateString);
-  }
+  static Future<int> queryLastTimeUpdates() async =>
+      (await SharedPreferences.getInstance()).getInt('lasttimeupdate');
 
-  static Future<bool> updateLastTimeUpdate() async {
+  static Future<bool> updateLastTimeUpdate(int newTimestamp) async {
     try {
       (await SharedPreferences.getInstance())
-          .setString('lasttimeupdate', DateTime.now().toString());
+          .setInt('lasttimeupdate', newTimestamp);
       return true;
     } catch (Exception) {
       return false;

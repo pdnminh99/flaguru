@@ -215,10 +215,6 @@ class DatabaseConnector {
     });
   }
 
-  Future<bool> clearResultLogs() {
-    return _db.delete('answerlog').then((_) => true).catchError((_) => false);
-  }
-
   Future<String> readLogs() => _db.rawQuery('''
           SELECT *
           FROM answerlog
@@ -242,19 +238,14 @@ class DatabaseConnector {
         return logsString;
       });
 
-  Future<void> deleteLogs() => _db
-      .delete('answerlog')
-      .then((_) => print('Logs deleted successfully.'));
-
   Future<bool> updateCountries(List<Country> newCountries) async {
     if (newCountries == null || newCountries.length == 0) return false;
-    newCountries.forEach((country) {
-      _transactionQueue.update('country', {
-        'callcounter': country.callCounter,
-        'correctcounter': country.correctCounter,
-      });
-    });
+    newCountries.forEach((country) => _transactionQueue.update('country', {
+          'callcounter': country.callCounter,
+          'correctcounter': country.correctCounter,
+        }));
     await _transactionQueue.commit(noResult: true, continueOnError: true);
+    print('Successfully update ${newCountries.length} countries');
     return true;
   }
 }
