@@ -82,7 +82,6 @@ class DatabaseConnector {
 
   Future<List<Country>> collectCountries({bool isAllowedOnly: true}) async {
     var countries = List<Country>();
-    print(_db.isOpen);
     var rawQueryResult = await _db.query('country');
     for (var country in rawQueryResult) {
       countries.add(Country(
@@ -130,10 +129,10 @@ class DatabaseConnector {
       _db.delete('answerlog').then((_) => true).catchError((_) => false);
 
   void saveLogs(bool isSaveLogsEnable) {
-    if (isSaveLogsEnable)
-      print('Save logs to local storage since no network detected');
-    else
-      print('Logs are send to the cloud. No need to store in local.');
+    // if (isSaveLogsEnable)
+    //   print('Save logs to local storage since no network detected');
+    // else
+    //   print('Logs are send to the cloud. No need to store in local.');
     if (privateLogs.length == 0) return;
     var incrementCallCounterQuery = '''
     UPDATE country 
@@ -150,12 +149,9 @@ class DatabaseConnector {
     for (var index = 0; index < privateLogs.length; index++) {
       // update query process
       incrementCallCounterQuery += '${privateLogs[index].question.countryID},';
-      // incrementCallCounterQuery += index == privateLogs.length - 1 ? ');' : ',';
       if (privateLogs[index].isCorrect) {
         incrementCorrectCounterQuery +=
             '${privateLogs[index].question.countryID},';
-        // incrementCorrectCounterQuery +=
-        //     index == privateLogs.length - 1 ? ');' : ',';
         isAtLeastOneCorrect = true;
       }
       // insert query process
@@ -173,25 +169,24 @@ class DatabaseConnector {
           ');';
       _db
           .rawUpdate(incrementCallCounterQuery)
-          // .then((_) => print('Update callcounter successfully'))
           .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
           .then((_) => isSaveLogsEnable ? _db.rawInsert(insertQuery) : null)
           .then((result) {
-        if (result != null)
-          print(
-              'Update correctcounter, callcounter and insert results successfully.');
-        else
-          print('Update correctcounter and callcounter successfully.');
+        // if (result != null)
+        //   print(
+        //       'Update correctcounter, callcounter and insert results successfully.');
+        // else
+        //   print('Update correctcounter and callcounter successfully.');
       }).catchError((error) => print(error));
     } else {
       _db
           .rawUpdate(incrementCallCounterQuery)
           .then((_) => isSaveLogsEnable ? _db.rawInsert(insertQuery) : null)
           .then((result) {
-        if (result != null)
-          print('Update callcounter and insert results successfully.');
-        else
-          print('Update callcounter successfully.');
+        // if (result != null)
+        //   print('Update callcounter and insert results successfully.');
+        // else
+        //   print('Update callcounter successfully.');
       }).catchError((error) => print(error));
     }
   }
@@ -205,7 +200,6 @@ class DatabaseConnector {
       logsReport.wrongCountriesIDs = List<int>();
       logsReport.user = '';
       for (var log in logs) {
-        // print(log);
         if (log['isCorrect'] != 0)
           logsReport.correctCountriesIDs.add(log['questionID']);
         else
@@ -219,7 +213,6 @@ class DatabaseConnector {
           SELECT *
           FROM answerlog
           ''').then((maps) {
-        // print('There are ${maps.length} answerlogs.');
         String logsString = '';
         int counter = 1;
         for (var map in maps) {
@@ -240,12 +233,17 @@ class DatabaseConnector {
 
   Future<bool> updateCountries(List<Country> newCountries) async {
     if (newCountries == null || newCountries.length == 0) return false;
-    newCountries.forEach((country) => _transactionQueue.update('country', {
-          'callcounter': country.callCounter,
-          'correctcounter': country.correctCounter,
-        }));
+    newCountries.forEach((country) {
+      _transactionQueue.update(
+          'country',
+          {
+            'callcounter': country.callCounter,
+            'correctcounter': country.correctCounter,
+          },
+          where: 'ID = ?',
+          whereArgs: [country.id]);
+    });
     await _transactionQueue.commit(noResult: true, continueOnError: true);
-    print('Successfully update ${newCountries.length} countries');
     return true;
   }
 }
