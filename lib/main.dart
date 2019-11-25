@@ -1,4 +1,5 @@
 import 'package:flaguru/screens/tutorial_screen.dart';
+import 'package:flaguru/widgets/tutorial_widget/difficultyscreen_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (context) => SettingsScreen(),
           DemoScreen.routeName: (context) => DemoScreen(),
           TutorialScreen.routeName: (context) => TutorialScreen(),
+          //Difftutorial.routeName :(context) => Difftutorial(),
         },
       ),
     );

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flaguru/models/Authenticator.dart';
 import 'package:flaguru/models/User.dart';
@@ -14,22 +13,19 @@ import 'package:flutter/material.dart';
 
 class MenuScreen extends StatefulWidget {
   static final String routeName = '/';
-
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
+class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin {
   var auth = Authentication();
   User _currentUser;
-
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
   AnimationController btnRotationController;
 
   Timer timer1;
   Timer timer2;
-
   bool shouldQuit;
 
   @override
