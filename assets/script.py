@@ -16,6 +16,7 @@ import datetime
 # 6) South America
 # 7) EuropeAsia
 
+
 def initFirebaseData():
     cred = credentials.Certificate('./google-services.json')
     firebase_admin.initialize_app(cred)
@@ -44,9 +45,8 @@ def initFirebaseData():
             'callcounter': 0,
             'correctcounter': 0,
             'ratio': 0,
-            'recentupdatedate': datetime.datetime.now(),
+            'recentupdatedate': int(datetime.datetime.timestamp(datetime.datetime.now()) * 1000),
         })
-
 
 
 # def parseYMLformat():
@@ -112,6 +112,7 @@ def search(countries):
         row += 1
     wb.save(location)
 
+
 def getcountries():
     countries = []
     # get European countries.
@@ -176,10 +177,12 @@ def getcountries():
             countries.append(newcountry)
     return countries
 
+
 def writeCountryDescriptionToText(name, description):
     textfile = open(f'descriptions/{name}.txt', 'w')
     textfile.write(description)
     textfile.close()
+
 
 def parseinsertquery():
     wb = readxl.open_workbook('countries.xls')
@@ -211,6 +214,7 @@ if __name__ == "__main__":
     #         print(countries[i])
 
     # search(countries)
-    #parseinsertquery()
+    # parseinsertquery()
     initFirebaseData()
+    # print(datetime.datetime.timestamp(datetime.datetime.now()))
     # cutparagraphs()
