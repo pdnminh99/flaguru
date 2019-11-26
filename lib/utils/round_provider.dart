@@ -24,7 +24,7 @@ class RoundProvider with ChangeNotifier {
       level: difficulty,
       lifeCount: rule.maxLife,
       timeLimit: rule.timeLimit,
-      isFirstAnswerAlwaysRight: true,
+      isFirstAnswerAlwaysRight: false,
     ).then((handler) {
       roundHandler = handler;
       setNewData();
