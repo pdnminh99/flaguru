@@ -11,7 +11,7 @@ class InfoBarTutorial extends InfoBar
 {
   final GlobalKey lifekey;
   final GlobalKey totalquestionkey;
-  final TextStyleTutorial mytext = TextStyleTutorial();
+  final TextStyleTutorial styleshowcase = TextStyleTutorial();
   InfoBarTutorial(this.lifekey, this.totalquestionkey);
   @override 
   Widget build (BuildContext context)
@@ -31,9 +31,9 @@ class InfoBarTutorial extends InfoBar
               Showcase(
                 key : lifekey,
                 title: "Your Life",
-                titleTextStyle: mytext.tiltestyle,
-                description: "If you lost all your life, The game will end\ntouch screen to continue",
-                descTextStyle: mytext.descstyle,
+                titleTextStyle: styleshowcase.tiltestyle,
+                description: "If you lost all your life, Game will end",
+                descTextStyle: styleshowcase.descstyle,
                 child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -43,13 +43,20 @@ class InfoBarTutorial extends InfoBar
                     getLostLifeDot(constraint.maxHeight * 0.4),
                 ],
               )),
-              Text(
+              Showcase(
+                key: totalquestionkey,
+                title: "Your question in total question",
+                titleTextStyle: styleshowcase.tiltestyle,
+                description: "Touch screen to continue",
+                descTextStyle: styleshowcase.descstyle,
+                child :Text(
                 '${provider.index + 1} of $quizTotal',
                 style: TextStyle(
                   fontSize: constraint.maxHeight * 0.5,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
+              )
               ),
             ],
           ),

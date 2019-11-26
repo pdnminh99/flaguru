@@ -9,14 +9,14 @@ import 'play_area_tutorial.dart';
 
 class RoundAreaTutorial extends RoundArea
 {
-  RoundAreaTutorial(Difficulty difficulty) : super(difficulty);
-  
+  RoundAreaTutorial(Difficulty difficulty, this.listkey) : super(difficulty);
+  final List<GlobalKey> listkey;
  @override
   Widget buildArea(BuildContext context) {
     // TODO: implement buildArea
     final handler = Provider.of<RoundProvider>(context).roundHandler;
     if (handler == null)
     return LoadingSpinner();
-    else return PlayAreaTutorial();
+    else return PlayAreaTutorial(listkey);
   }
 }

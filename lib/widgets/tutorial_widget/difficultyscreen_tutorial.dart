@@ -84,7 +84,12 @@ class _DifficultyScreenState extends State<DifficultyScreenTutorial>
     for (var ctr in controllers) ctr.dispose();
     super.dispose();
   }
+  void delayShowcase()
+  {
+    Future.delayed(Duration(milliseconds: 500), (){ 
 
+    });
+  }
   void buildSnackBarPressPlayButton(BuildContext context)
   {
     final snackbar = 
@@ -106,8 +111,10 @@ class _DifficultyScreenState extends State<DifficultyScreenTutorial>
                     child: Column(
                       children: <Widget>[
                         buildHeader(context),
-                        ExpandableDiffCardTutorial(controllers[0],
-                            diff: Difficulty.EASY, onTap: () => {}, listkey: mykey,),
+                        boolbuildshowcase ?  ExpandableDiffCardTutorial(controllers[0], diff: Difficulty.EASY, listkey: mykey,)
+                        : ExpandableDiffCard(controllers[0],
+                            diff: Difficulty.EASY, onTap: () => {}) 
+                           ,
                         ExpandableDiffCard(controllers[1],
                             diff: Difficulty.NORMAL, onTap: ()=>{buildSnackBarPressPlayButton(context)}
                             

@@ -8,11 +8,10 @@ import '../playscreen_tutorial.dart';
 
 class ExpandableDiffCardTutorial extends ExpandableDiffCard {
   ExpandableDiffCardTutorial(AnimationController controller,
-      {Difficulty diff, Function onTap,this.titlediffkey, this.listkey})
+      {Difficulty diff, Function onTap, this.listkey})
       : super(controller, diff: diff, onTap: onTap);
 
   final List<GlobalKey> listkey;
-  final GlobalKey titlediffkey;
   @override
   Widget build(BuildContext context) {
     final animation = listenable as Animation<double>;
