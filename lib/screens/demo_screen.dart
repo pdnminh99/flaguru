@@ -18,20 +18,13 @@ class _DemoScreenState extends State<DemoScreen> {
 
   @override
   void initState() {
-    RoundHandler.getInstance(level: Difficulty.HARD, isFirstAnswerAlwaysRight: true, lifeCount: 100)
+    RoundHandler.getInstance(
+            level: Difficulty.EASY,
+            isFirstAnswerAlwaysRight: true,
+            lifeCount: 100)
         .then((handler) {
       setState(() => roundHandler = handler);
     });
-//    prefix0.DatabaseConnector db;
-//    DatabaseConnector.getInstance().then((database) {
-//      db = database;
-//      return db.collectCountries();
-//    }).then((countries) {
-//      print('There are ${countries.length} countries before switch.');
-//      return SettingsHandler.getInstance();
-//    }).then((settings) {
-//      settings.switchAllowStatus(1291);
-//    }).catchError((error) => print(error));
     super.initState();
   }
 
@@ -39,7 +32,9 @@ class _DemoScreenState extends State<DemoScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light(),
-      home: this.roundHandler == null ? this.emptyCollection() : this.parseCollectionToListView(),
+      home: this.roundHandler == null
+          ? this.emptyCollection()
+          : this.parseCollectionToListView(),
     );
   }
 
@@ -57,7 +52,9 @@ class _DemoScreenState extends State<DemoScreen> {
             child: Text('Reset'),
             onPressed: () {
               RoundHandler.getInstance(
-                      level: Difficulty.HARD, isFirstAnswerAlwaysRight: true, lifeCount: 100)
+                      level: Difficulty.HARD,
+                      isFirstAnswerAlwaysRight: true,
+                      lifeCount: 100)
                   .then((handler) {
                 setState(() {
                   logString = '';
@@ -89,22 +86,22 @@ class _DemoScreenState extends State<DemoScreen> {
           //     });
           //   },
           // ),
+          // RaisedButton(
+          //   child: Text('Get result'),
+          //   onPressed: () => setState(() => isFinish = true),
+          // ),
           RaisedButton(
-            child: Text('Get result'),
-            onPressed: () => setState(() => isFinish = true),
+            child: Text('Generate'),
+            onPressed: () => setState(() => roundHandler.generateQAs()),
           ),
-//          RaisedButton(
-//            child: Text('Generate'),
-//            onPressed: () => setState(() => roundHandler.generateQAs()),
-//          ),
-//          RaisedButton(
-//              child: Text('Generate 50 questions'),
-//              onPressed: () {
-//                for (var i = 0; i < 50; i++) {
-//                  roundHandler.generateQAs();
-//                }
-//                setState(() => roundHandler.generateQAs());
-//              }),
+          RaisedButton(
+              child: Text('Generate 50 questions'),
+              onPressed: () {
+                for (var i = 0; i < 50; i++) {
+                  roundHandler.generateQAs();
+                }
+                setState(() => roundHandler.generateQAs());
+              }),
           Text('${roundHandler.toString()}'),
         ]),
       );

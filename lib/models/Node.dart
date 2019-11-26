@@ -60,7 +60,7 @@ class Node {
       return null;
     }
     var selectedQuestion = _countries[_cursor].toQuestion();
-    _countries[_cursor].chances = 5;
+    _countries[_cursor].chances = 10;
     queue[_countries[_cursor].id] = _countries[_cursor].chances;
     _updateChancesInDatabase(queue);
     _cursor++;

@@ -18,10 +18,10 @@ class HttpProvider {
               .statusCode ==
           200;
 
-  Future<List<Country>> getUpdates(int recentUpdateDates, String userID) async {
+  Future<List<Country>> getUpdates(int recentUpdateDates, String userID, String name) async {
     var response = recentUpdateDates == null
-        ? (await get('$_updateURL?user=$userID'))
-        : (await get('$_updateURL?date=$recentUpdateDates&user=$userID'));
+        ? (await get('$_updateURL?user=$userID&name=$name'))
+        : (await get('$_updateURL?date=$recentUpdateDates&user=$userID&name=$name'));
     if (response.statusCode != 200) return List<Country>();
     var countries = List<Country>();
     jsonDecode(response.body).forEach((country) {
