@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:flaguru/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'difficulty_screen.dart';
 import 'info_screen.dart';
 import 'settings_screen.dart';
+import '../widgets/logo.dart';
 import '../models/Authenticator.dart';
 import '../models/User.dart';
 import '../widgets/Menu_Icon/menu__icon_icons.dart';
