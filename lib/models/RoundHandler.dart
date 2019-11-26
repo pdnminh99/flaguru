@@ -183,6 +183,8 @@ class RoundHandler {
       if (leftCursor < 0 && rightCursor > _lastIndex) {
         _isNormalCursorHeadLeft = true;
         _distanceFromNormalCursor = 0;
+        leftCursor = _normalCursor;
+        rightCursor = _normalCursor;
       }
       // case heading left.
       if (_isNormalCursorHeadLeft)
@@ -202,7 +204,11 @@ class RoundHandler {
 
   void _fetchRightFromNormalCursor(int rightCursor) {
     // if right side is still in range.
-    if (rightCursor <= _lastIndex) {
+    if (rightCursor <= _lastIndex && _distanceFromNormalCursor == 0) {
+      question = null;
+      _isNormalCursorHeadLeft = true;
+      _distanceFromNormalCursor++;
+    } else if (rightCursor <= _lastIndex) {
       question = _countriesChain[rightCursor].getQuestion();
       if (question == null) {
         _isNormalCursorHeadLeft = true;

@@ -77,7 +77,9 @@ class Connection {
     var db = await DatabaseConnector.getInstance();
     var currentUser = await Authentication().getCurrentUser();
     var changes = await HttpProvider().getUpdates(
-        lastTimeUpdate, currentUser == null ? 'guest' : currentUser.uuid);
+        lastTimeUpdate,
+        currentUser == null ? 'guest' : currentUser.uuid,
+        currentUser == null ? 'unknown' : currentUser.name);
     return await db.updateCountries(changes) &&
         await LocalStorage.updateLastTimeUpdate(timestampNow);
   }
