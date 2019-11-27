@@ -10,6 +10,16 @@ import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'difficulty_screen.dart';
+import 'info_screen.dart';
+import 'settings_screen.dart';
+import '../widgets/logo.dart';
+import '../models/Authenticator.dart';
+import '../models/User.dart';
+import '../widgets/Menu_Icon/menu__icon_icons.dart';
+import '../widgets/background_carousel.dart';
+import '../widgets/menu_button.dart';
 
 class MenuScreen extends StatefulWidget {
   static final String routeName = '/';
@@ -23,6 +33,8 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
   AnimationController btnRotationController;
+  AnimationController bottomFlagController;
+  Animation<Offset> bottomFlagAnim;
 
   Timer timer1;
   Timer timer2;
@@ -44,6 +56,11 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
     btnRotationController = AnimationController(duration: const Duration(seconds: 2), vsync: this);
     setBtnRotationTimer();
 
+    bottomFlagController = AnimationController(duration: const Duration(seconds: 10), vsync: this);
+    bottomFlagAnim = Tween(begin: Offset(-1, 0), end: Offset(1, 0))
+        .animate(CurvedAnimation(parent: bottomFlagController, curve: Interval(0.3, 1)));
+    bottomFlagController.repeat();
+
     super.initState();
   }
 
@@ -53,6 +70,7 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
     timer2?.cancel();
     btnFlyInController.dispose();
     btnRotationController.dispose();
+    bottomFlagController.dispose();
     super.dispose();
   }
 
@@ -106,6 +124,7 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     shouldQuit = false;
+
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -114,7 +133,13 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
             child: Stack(
               children: <Widget>[
                 BackgroundCarousel(),
-                buildMenuButtons(),
+                Column(
+                  children: <Widget>[
+                    buildTopArea(context),
+                    buildMenuButtons(),
+                    buildBottomArea(context),
+                  ],
+                ),
               ],
             ),
           );
@@ -144,6 +169,41 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
           sizedBox,
           buildMenuButtonWrapper(1000, gotoAbout, Menu_Icon.info_outline, "About", 0.6, 0.8),
         ],
+      ),
+    );
+  }
+
+  Widget buildTopArea(BuildContext context) {
+    final height = (MediaQuery.of(context).size.height - 60 * 5 - 30 * 4) / 5 * 3;
+
+    return Container(
+      height: height,
+      width: double.infinity,
+      alignment: Alignment.center,
+      child: Container(height: height * 0.5, child: Logo()),
+    );
+  }
+
+  Widget buildBottomArea(BuildContext context) {
+    final height = (MediaQuery.of(context).size.height - 60 * 5 - 30 * 4) / 5 * 2;
+
+    return SlideTransition(
+      position: bottomFlagAnim,
+      child: Container(
+        height: height,
+        width: double.infinity,
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Image.asset('assets/images/logo/waving-flag-long-flip.gif', height: 20),
+              Text(
+                ' HELLO WORLD',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
