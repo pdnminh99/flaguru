@@ -1,4 +1,6 @@
+import 'package:flaguru/widgets/tutorial_widget/menuscreen_tutorial.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 class Menututorial extends StatelessWidget {
   @override
@@ -122,6 +124,10 @@ class Resulttutorial extends StatelessWidget {
     );
   }
 }
+=======
+import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
+>>>>>>> 4b02583cd2494587cfed3ebfef92b6224112fd3c
 
 class TutorialScreen extends StatefulWidget {
   static String routeName = "./tutorial_screen";
@@ -131,86 +137,30 @@ class TutorialScreen extends StatefulWidget {
 
 class _TutorialScreenState extends State<TutorialScreen>
     with SingleTickerProviderStateMixin {
-  static var tutorialPage = <Widget>[
-    new Menututorial(),
-    new Difftutorial(),
-    new Playtutorial(),
-    new Resulttutorial()
-  ];
-  TabController tabController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tabController = TabController(vsync: this, length: tutorialPage.length);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    tabController.dispose();
+   
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
 
+  @override 
+  Widget build(BuildContext context)
+  {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff019dad),
-        centerTitle: true,
-        title: Text(
-          'Tutorial',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.popAndPushNamed(context, "/");
-          },
-          color: Colors.white,
-          icon: Icon(Icons.arrow_back_ios),
-        ),
-      ),
-      body: Stack(
-        fit: StackFit.expand,
-        overflow: Overflow.clip,
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                height: _height * 0.922,
-                child: TabBarView(
-                  controller: tabController,
-                  children: tutorialPage,
-                ),
-              ),
-              // TabPageSelector(
-              //   controller: tabController,
-              //   indicatorSize: 13,
-              //   selectedColor: Color(0xff019dad),
-              // ),
-            ],
-          ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: IconButton(
-              color: Color(0xff019dad),
-              icon: Icon(Icons.arrow_forward_ios),
-              onPressed: () {
-                print(tabController.index);
-                print(tutorialPage.length);
-                if (tabController.index != tutorialPage.length - 1) {
-                  tabController.animateTo(tabController.index + 1);
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    );
+        body: ShowCaseWidget(
+          builder: Builder(
+            builder: (context) => MenuScreenTutorial()
+          ),),);
   }
+
+  
 }
