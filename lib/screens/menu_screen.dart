@@ -1,8 +1,16 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flaguru/models/Authenticator.dart';
+import 'package:flaguru/models/User.dart';
+import 'package:flaguru/screens/difficulty_screen.dart';
+import 'package:flaguru/screens/info_screen.dart';
+import 'package:flaguru/screens/settings_screen.dart';
+import 'package:flaguru/screens/tutorial_screen.dart';
+import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
+import 'package:flaguru/widgets/background_carousel.dart';
+import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'difficulty_screen.dart';
 import 'info_screen.dart';
 import 'settings_screen.dart';
@@ -15,24 +23,21 @@ import '../widgets/menu_button.dart';
 
 class MenuScreen extends StatefulWidget {
   static final String routeName = '/';
-
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
+class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin {
   var auth = Authentication();
   User _currentUser;
-
-  AnimationController btnFlyInController;
   Animation<double> btnFlyInAnim;
+  AnimationController btnFlyInController;
   AnimationController btnRotationController;
   AnimationController bottomFlagController;
   Animation<Offset> bottomFlagAnim;
 
   Timer timer1;
   Timer timer2;
-
   bool shouldQuit;
 
   @override
@@ -96,7 +101,9 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     Navigator.pushReplacementNamed(context, InfoScreen.routeName);
   }
 
-  void gotoTutorial(BuildContext context) {}
+  void gotoTutorial(BuildContext context) {
+    Navigator.pushReplacementNamed(context, TutorialScreen.routeName);
+  }
 
   void gotoSetting(BuildContext context) {
     Navigator.of(context).pushNamed(SettingsScreen.routeName);

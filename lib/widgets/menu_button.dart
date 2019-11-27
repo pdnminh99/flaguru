@@ -43,7 +43,7 @@ class MenuButton extends AnimatedWidget {
       child: RaisedButton(
         elevation: 10,
         padding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         onPressed: () => title == "Login" ? onPress() : onPress(context),
         color: Colors.white.withOpacity(0.9),
         child: Row(
