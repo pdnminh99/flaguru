@@ -10,24 +10,18 @@ class SettingsHandler with ChangeNotifier {
   Settings _currentSettings;
   var countries = List<Country>();
 
-  bool get isSoundEnabled {
-    return this._currentSettings.isSoundON;
-  }
+  bool get isSoundEnabled => this._currentSettings.isSoundON;
 
   set isSoundEnabled(bool newState) {
-//    print('Set music to $newState');
     this._currentSettings.isSoundON = newState;
     LocalStorage.updateNewSettings(this._currentSettings)
         .catchError((error) => print(error));
     notifyListeners();
   }
 
-  bool get isMusicEnabled {
-    return this._currentSettings.isAudioON;
-  }
+  bool get isMusicEnabled => this._currentSettings.isAudioON;
 
   set isMusicEnabled(bool newState) {
-//    print('Set music to $newState');
     this._currentSettings.isAudioON = newState;
     LocalStorage.updateNewSettings(this._currentSettings)
         .catchError((error) => print(error));
@@ -35,9 +29,7 @@ class SettingsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  bool get skipTutorials {
-    return this._currentSettings.skipTutorials;
-  }
+  bool get skipTutorials => this._currentSettings.skipTutorials;
 
   set skipTutorials(bool newState) {
     this._currentSettings.skipTutorials = newState;

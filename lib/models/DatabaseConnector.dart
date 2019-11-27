@@ -92,8 +92,7 @@ class DatabaseConnector {
           correctCounter: country['correctcounter'],
           description: country['description'],
           chances: country['chances'],
-          continent: _mapContinent(country['continent']),
-          isAllow: country['isallow'] == 0 ? false : true));
+          continent: _mapContinent(country['continent'])));
     }
     return countriesSortByRatio(countries);
   }
@@ -129,10 +128,6 @@ class DatabaseConnector {
       _db.delete('answerlog').then((_) => true).catchError((_) => false);
 
   void saveLogs(bool isSaveLogsEnable) {
-    // if (isSaveLogsEnable)
-    //   print('Save logs to local storage since no network detected');
-    // else
-    //   print('Logs are send to the cloud. No need to store in local.');
     if (privateLogs.length == 0) return;
     var incrementCallCounterQuery = '''
     UPDATE country 
@@ -171,24 +166,12 @@ class DatabaseConnector {
           .rawUpdate(incrementCallCounterQuery)
           .then((_) => _db.rawUpdate(incrementCorrectCounterQuery))
           .then((_) => isSaveLogsEnable ? _db.rawInsert(insertQuery) : null)
-          .then((result) {
-        // if (result != null)
-        //   print(
-        //       'Update correctcounter, callcounter and insert results successfully.');
-        // else
-        //   print('Update correctcounter and callcounter successfully.');
-      }).catchError((error) => print(error));
-    } else {
+          .catchError((error) => print(error));
+    } else
       _db
           .rawUpdate(incrementCallCounterQuery)
           .then((_) => isSaveLogsEnable ? _db.rawInsert(insertQuery) : null)
-          .then((result) {
-        // if (result != null)
-        //   print('Update callcounter and insert results successfully.');
-        // else
-        //   print('Update callcounter successfully.');
-      }).catchError((error) => print(error));
-    }
+          .catchError((error) => print(error));
   }
 
   Future<Report> checkResultLogs() {
@@ -199,37 +182,12 @@ class DatabaseConnector {
       logsReport.correctCountriesIDs = List<int>();
       logsReport.wrongCountriesIDs = List<int>();
       logsReport.user = '';
-      for (var log in logs) {
-        if (log['isCorrect'] != 0)
-          logsReport.correctCountriesIDs.add(log['questionID']);
-        else
-          logsReport.wrongCountriesIDs.add(log['questionID']);
-      }
+      logs.forEach((log) => log['isCorrect'] != 0
+          ? logsReport.correctCountriesIDs.add(log['questionID'])
+          : logsReport.wrongCountriesIDs.add(log['questionID']));
       return logsReport;
     });
   }
-
-  Future<String> readLogs() => _db.rawQuery('''
-          SELECT *
-          FROM answerlog
-          ''').then((maps) {
-        String logsString = '';
-        int counter = 1;
-        for (var map in maps) {
-          logsString += '''
-              $counter >>>>>>>>>>>>>>>>>>>>>>
-              {
-                qID: ${map['questionID']},
-                aID: ${map['answerID']},
-                isCorrect: ${map['isCorrect']},
-                logTime: ${map['logTime']},
-                answerTime: ${map['answerTime']}
-              }
-              ''';
-          counter++;
-        }
-        return logsString;
-      });
 
   Future<bool> updateCountries(List<Country> newCountries) async {
     if (newCountries == null || newCountries.length == 0) return false;

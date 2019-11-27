@@ -7,38 +7,34 @@ import 'package:flaguru/models/LocalStorage.dart';
 import 'package:flaguru/models/Report.dart';
 
 class Connection {
-  Report _summarizeReports(String userID, List<AnswerLog> logs) {
+  Report _summarizeReports(String userID, String name, List<AnswerLog> logs) {
     var correctCountriesID = List<int>();
     var wrongCountriesID = List<int>();
-    for (var log in logs) {
-      if (log.isCorrect)
-        correctCountriesID.add(log.question.countryID);
-      else
-        wrongCountriesID.add(log.question.countryID);
-    }
+    logs.forEach((log) => log.isCorrect
+        ? correctCountriesID.add(log.question.countryID)
+        : wrongCountriesID.add(log.question.countryID));
     return Report(
         correctCountriesIDs: correctCountriesID,
         wrongCountriesIDs: wrongCountriesID,
+        name: name,
         user: userID);
   }
 
   Future<bool> sendReports(List<AnswerLog> logs) async {
     var connectivityInstance = await (Connectivity().checkConnectivity());
     if (connectivityInstance == ConnectivityResult.none) return false;
-    var auth = Authentication();
-    var currentUser = await auth.getCurrentUser();
-    var userID = currentUser == null ? 'guest' : currentUser.uuid;
-    var httpProvider = HttpProvider();
-    return await httpProvider.sendReports(_summarizeReports(userID, logs));
+    var currentUser = await Authentication().getCurrentUser();
+    return await HttpProvider().sendReports(_summarizeReports(
+        currentUser?.uuid ?? 'guest', currentUser?.name ?? 'unknown', logs));
   }
 
   static Future<Report> _summarizeReportFromSQLite() async {
     var logsResult =
         await (await DatabaseConnector.getInstance()).checkResultLogs();
     if (logsResult == null) return null;
-    var auth = Authentication();
-    var currentUser = await auth.getCurrentUser();
-    logsResult.user = currentUser == null ? 'guest' : currentUser.uuid;
+    var currentUser = await Authentication().getCurrentUser();
+    logsResult.user = currentUser?.uuid ?? 'guest';
+    logsResult.name = currentUser?.name ?? 'unknown';
     return logsResult;
   }
 
@@ -76,10 +72,8 @@ class Connection {
     var timestampNow = DateTime.now().millisecondsSinceEpoch;
     var db = await DatabaseConnector.getInstance();
     var currentUser = await Authentication().getCurrentUser();
-    var changes = await HttpProvider().getUpdates(
-        lastTimeUpdate,
-        currentUser == null ? 'guest' : currentUser.uuid,
-        currentUser == null ? 'unknown' : currentUser.name);
+    var changes = await HttpProvider().getUpdates(lastTimeUpdate,
+        currentUser?.uuid ?? 'guest', currentUser?.name ?? 'unknown');
     return await db.updateCountries(changes) &&
         await LocalStorage.updateLastTimeUpdate(timestampNow);
   }

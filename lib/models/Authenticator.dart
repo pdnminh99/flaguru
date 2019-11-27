@@ -22,7 +22,7 @@ class Authentication {
 
   Future<User> getCurrentUser() async {
     var currentUser = await _auth.currentUser();
-    print(currentUser);
+    // print(currentUser);
     return currentUser == null
         ? null
         : User(
