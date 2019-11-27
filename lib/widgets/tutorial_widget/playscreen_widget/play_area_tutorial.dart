@@ -37,7 +37,7 @@ Widget buildAnswersAreaTutorial()
     title: "Answer area",
     titleTextStyle: styleshowcase.tiltestyle,
     description: "Choose 1 of 4 answers",
-    child: AnswersAreaTutorial(),
+    child: AnswersArea(),
   );
 }
 

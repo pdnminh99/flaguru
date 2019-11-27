@@ -179,7 +179,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
           width: 355,
           child: Center(
               child: buildMenuButtonWrapper(
-                  600, gotoDiffScreen, Menu_Icon.play, "Play1", 0, 0.2))),
+                  600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2))),
     );
   }
 
