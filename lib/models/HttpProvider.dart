@@ -30,7 +30,6 @@ class HttpProvider {
           chances: 0,
           name: country['name'],
           correctCounter: country['correctcounter'],
-          isAllow: true,
           callCounter: country['callcounter']));
     });
     return countries;
