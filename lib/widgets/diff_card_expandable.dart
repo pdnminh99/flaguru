@@ -18,15 +18,14 @@ class ExpandableDiffCard extends AnimatedWidget {
     final animation = listenable as Animation<double>;
     final borderRadius = BorderRadius.circular(10);
 
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Material(
-        elevation: 8,
-        borderRadius: borderRadius,
-        child: InkWell(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Material(
+          elevation: 7,
           borderRadius: borderRadius,
-          onTap: onTap,
           child: Column(
             children: <Widget>[
               buildHeader(animation, context),
