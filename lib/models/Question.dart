@@ -8,7 +8,6 @@ class Question {
   String imageURL;
   String description;
   Continent continent;
-  // int node;
 
   @override
   String toString() {
@@ -20,7 +19,6 @@ class Question {
     this.country = country.name;
     this.imageURL = country.flag;
     this.description = country.description;
-    // this.node = country.nodeAddress;
     this.continent = country.continent;
   }
 
