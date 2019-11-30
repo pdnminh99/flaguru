@@ -45,6 +45,10 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
         }));
   }
 
+  void skipAnimation() {
+    controller.value = 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -79,14 +83,17 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                     ),
                     Stack(
                       children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          height: height * 0.45,
-                          child: ResultArea(
-                            result: widget.result,
-                            controller: animation.resultArea,
-                            bottomMargin: height * 0.06,
-                            highestScore: highestScore,
+                        GestureDetector(
+                          onTap: skipAnimation,
+                          child: Container(
+                            width: double.infinity,
+                            height: height * 0.45,
+                            child: ResultArea(
+                              result: widget.result,
+                              controller: animation.resultArea,
+                              bottomMargin: height * 0.06,
+                              highestScore: highestScore,
+                            ),
                           ),
                         ),
                         Positioned(
