@@ -11,15 +11,6 @@ class Node {
   int _cursor = 0;
   var _rand = Random();
 
-  /*
-   * These function is for test only.
-   */
-  List<Country> testCountries() => this._countries;
-
-  int testRatio() => this._ratio;
-
-  int testCursor() => this._cursor;
-
   int get ratio => this._ratio;
 
   Node(Country country) {
