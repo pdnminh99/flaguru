@@ -1,8 +1,5 @@
 import 'package:flaguru/models/Enum.dart';
 import 'package:flaguru/widgets/play_screen_drawer.dart';
-import 'package:flaguru/widgets/round_area.dart';
-import 'package:flaguru/widgets/top_bar.dart';
-import 'package:flaguru/widgets/tutorial_widget/playscreen_widget/play_screen_inherited.dart';
 import 'package:flaguru/widgets/tutorial_widget/playscreen_widget/round_area_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -34,7 +31,7 @@ class PlayScreenTutorial extends StatefulWidget {
 }
 
 class _PlayScreenTutorialState extends State<PlayScreenTutorial> {
-   List<GlobalKey> listkey = List<GlobalKey>(7);
+   List<GlobalKey> listkey = List<GlobalKey>(6);
    @override
   void initState() {
     for (var i = 0; i< listkey.length; i++)
@@ -42,16 +39,16 @@ class _PlayScreenTutorialState extends State<PlayScreenTutorial> {
       listkey[i] = GlobalKey();
     }
   
-    
+    delayShowCase();
     super.initState();
   }
   void delayShowCase ()
   {
-    Future.delayed(Duration(milliseconds: 500), () {WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([listkey[0], listkey[1], listkey[2], listkey[3], listkey[4]])); });
+    Future.delayed(Duration(milliseconds: 500), ()=> WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase(listkey)));
   }
   @override
   Widget build(BuildContext context) {
-    delayShowCase();
+    //delayShowCase();
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff019dad),
@@ -60,7 +57,8 @@ class _PlayScreenTutorialState extends State<PlayScreenTutorial> {
           onWillPop: () async => false,
           child: Column(
             children: <Widget>[
-              TopBar(widget.difficulty),
+              //TopBar(widget.difficulty),
+              Container(height: 55,),
               Expanded(child: RoundAreaTutorial(widget.difficulty, listkey)),
             ],
           ),

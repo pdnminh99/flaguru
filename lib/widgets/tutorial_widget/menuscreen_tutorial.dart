@@ -3,6 +3,7 @@ import 'package:flaguru/widgets/Menu_Icon/menu__icon_icons.dart';
 import 'package:flaguru/widgets/background_carousel.dart';
 import 'package:flaguru/widgets/menu_button.dart';
 import 'package:flaguru/widgets/tutorial_widget/difficultyscreen_tutorial.dart';
+import 'package:flaguru/widgets/tutorial_widget/style_tutorial/textstyle_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -18,7 +19,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
   AnimationController btnRotationController;
-
+  TextStyleTutorial styleshowcase = TextStyleTutorial();
   
   Timer timer1;
   Timer timer2;
@@ -146,7 +147,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           boolbuildshowcase ? 
-          buildTutorialButtonPlay(context): buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play1", 0, 0.2),
+          buildTutorialButtonPlay(context): buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2),
           sizedBox,
           buildMenuButtonWrapper(
               700, gotoLogin, Icons.person_outline, "Login", 0.15, 0.35,
@@ -170,16 +171,16 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
       //descTextStyle: TextStyle(locale: ),
       key: _keyofplaybutton,
       overlayOpacity: 0.7,
-      description: "Touch to this Play button to choose difficult",
-      descTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      description: "Touch this to play",
+      descTextStyle: styleshowcase.descstyle,
       disposeOnTap: true,
       onTargetClick: () => {gotoDiffScreen(context)},
       child: Container(
-          height: 60,
-          width: 355,
+          height: 59,
+          width: 359,
           child: Center(
               child: buildMenuButtonWrapper(
-                  600, gotoDiffScreen, Menu_Icon.play, "Play1", 0, 0.2))),
+                  600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2))),
     );
   }
 

@@ -273,7 +273,6 @@ class RoundHandler {
         remainLives: remainLives,
         totalLives: _lifeCount,
         answerLogs: _answerLogs);
-    // TODO check if network connection available before saveLog.
     var connection = Connection()
       ..sendReports(_answerLogs).then((status) {
         if (status)
@@ -286,17 +285,4 @@ class RoundHandler {
         .catchError((error) => print(error));
     return roundResult;
   }
-
-  String _nodeString() {
-    String message = '';
-    for (var node in _countriesChain) message += '${node.toString()}.\n';
-    return message;
-  }
-
-  @override
-  String toString() => '''
-      *** Node cursor at ${_countriesChain[_normalCursor].testCursor()}. ***
-      *** Cursor at node ${_countriesChain[_normalCursor].ratio}. ***
-${_nodeString()}
-''';
 }

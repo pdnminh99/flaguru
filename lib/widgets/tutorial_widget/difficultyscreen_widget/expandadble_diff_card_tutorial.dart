@@ -83,7 +83,7 @@ class ExpandableDiffCardTutorial extends ExpandableDiffCard {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             title: "Level of difficult",
             descTextStyle: TextStyle(fontSize: 15),
-            description: "Touch anywhere to continue",
+            description: "Touch screen to continue",
            child:  Container(
               width: 90,
               height: 60,

@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (context) => SettingsScreen(),
           DemoScreen.routeName: (context) => DemoScreen(),
           TutorialScreen.routeName: (context) => TutorialScreen(),
-          //Difftutorial.routeName :(context) => Difftutorial(),
         },
       ),
     );

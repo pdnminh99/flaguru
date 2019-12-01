@@ -31,11 +31,8 @@ dependencies:
   shared_preferences: ^0.4.2
   provider: ^3.1.0+1
   audioplayers: ^0.13.2
-<<<<<<< HEAD
   showcaseview: ^0.1.3
-=======
   http:
->>>>>>> f0d615d85681ef558c930a71e9e38ea6c39bce8d
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
