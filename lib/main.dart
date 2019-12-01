@@ -14,10 +14,11 @@ import 'utils/global_audio_player.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setEnabledSystemUIOverlays([]);
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
+  SystemChrome.setEnabledSystemUIOverlays([]);
+
   final settings = await SettingsHandler.getInstance();
   runApp(MyApp(settings));
 }
