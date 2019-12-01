@@ -52,8 +52,8 @@ class _InfoScreenState extends State<InfoScreen> {
 
   //meth
   void signOut(BuildContext context) {
-    // Navigator.pushNamed(context, MenuScreen.routeName);
-    // Navigator.pop(context);
+    Navigator.pushNamed(context, MenuScreen.routeName);
+    Navigator.pop(context);
     this.auth.signOut().then((_) {}).catchError((err) => print(err));
     backMenuScreen();
   }
@@ -99,9 +99,9 @@ class _InfoScreenState extends State<InfoScreen> {
                             Icons.arrow_back_ios,
                           ),
                           color: Color.fromARGB(255, 255, 255, 255),
-                          onPressed: () {
-                            backMenuScreen();
-                          },
+                          onPressed: () =>
+                            backMenuScreen()
+                          
                         ),
                       ),
                       Align(
@@ -171,7 +171,7 @@ class _InfoScreenState extends State<InfoScreen> {
                         this.hardDetails.winningCount.toString(),
                         _height,
                         _width),
-                    // SizedBox(height: _height * 0.04),
+                     SizedBox(height: _height * 0.02),
                     // getScroreUserCard(
                     //     'Enless',
                     //     this.easyDetails.playedCount.toString(),
@@ -179,8 +179,10 @@ class _InfoScreenState extends State<InfoScreen> {
                     //     this.easyDetails.winningCount.toString(),
                     //     _height,
                     //     _width),
-                    ButtonSwitchButtonLogout(
-                        signout: signOut, switchuser: switchUser, paramcontext: context),
+                   Container(
+                     //height: 70,
+                     width: double.infinity,
+                     child : ButtonSwitchButtonLogout(signOut, switchUser)),
                   ],
                 ),
               ),

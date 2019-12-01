@@ -98,11 +98,11 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
   }
 
   void gotoProfile(BuildContext context) {
-    Navigator.pushReplacementNamed(context, InfoScreen.routeName);
+    Navigator.popAndPushNamed(context, InfoScreen.routeName);
   }
 
   void gotoTutorial(BuildContext context) {
-    Navigator.pushReplacementNamed(context, TutorialScreen.routeName);
+    Navigator.popAndPushNamed(context, TutorialScreen.routeName);
   }
 
   void gotoSetting(BuildContext context) {

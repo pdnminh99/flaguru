@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class TutorialScreen extends StatefulWidget {
-  static String routeName = "./tutorial_screen";
+  static String routeName = "/tutorial_screen";
   @override
   _TutorialScreenState createState() => _TutorialScreenState();
 }

@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
 
 class AnswersAreaTutorial extends StatefulWidget {
-  final GlobalKey rightkey;
-  final GlobalKey wrongkey;
+  
   final TextStyleTutorial styleshowcase = TextStyleTutorial();
-  AnswersAreaTutorial(this.rightkey, this.wrongkey);
+  AnswersAreaTutorial();
   @override
   _AnswersAreaTutorialState createState() => _AnswersAreaTutorialState();
 }
@@ -65,19 +64,9 @@ class _AnswersAreaTutorialState extends State<AnswersAreaTutorial> with SingleTi
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Showcase(
-                  key: widget.rightkey,
-                  title: "This is right answer",
-                  titleTextStyle: widget.styleshowcase.tiltestyle,
-                  description: "",
-                  child: buildButtonWrapper(isFlag, halfWidth, 0)),
+                buildButtonWrapper(isFlag, halfWidth, 0),
                 spacingWidget,
-                Showcase (
-                    key : widget.wrongkey,
-                    title : "This is wrong answer",
-                    titleTextStyle: widget.styleshowcase.tiltestyle,
-                    description:  "",
-                  child : buildButtonWrapper(isFlag, halfWidth, 1)),
+                buildButtonWrapper(isFlag, halfWidth, 1),
               ],
             ),
             spacingWidget,
