@@ -1,5 +1,3 @@
-import 'package:flaguru/screens/tutorial_screen.dart';
-import 'package:flaguru/widgets/tutorial_widget/difficultyscreen_tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +7,7 @@ import 'screens/info_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/play_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/tutorial_screen.dart';
 import 'screens/difficulty_screen.dart';
 import 'models/SettingsHandler.dart';
 import 'utils/global_audio_player.dart';
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       builder: (context) => settings,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flaguru',
         theme: ThemeData(fontFamily: 'Quicksand'),
         initialRoute: MenuScreen.routeName,
