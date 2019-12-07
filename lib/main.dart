@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     audioPlayer.playMusic();
 
     return ChangeNotifierProvider(
-      builder: (context) => settings,
+      create: (context) => settings,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flaguru',

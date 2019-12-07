@@ -94,7 +94,7 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
       return this.auth.getCurrentUser();
     }).then((user) {
       setState(() => {this._currentUser = user});
-    }).catchError((e) => print("myerr" + e));
+    }).catchError((e) => print(e));
   }
 
   void gotoProfile(BuildContext context) {

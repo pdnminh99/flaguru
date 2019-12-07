@@ -14,7 +14,7 @@ class RoundArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => RoundProvider(difficulty),
+      create: (context) => RoundProvider(difficulty),
       child: Builder(builder: (context) {
         return buildArea(context);
       }),
