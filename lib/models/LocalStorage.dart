@@ -51,7 +51,7 @@ class LocalStorage {
       pref.setInt('${symbol}win', 0);
     else if (isWin) pref.setInt('${symbol}win', winning + 1);
     pref.setInt(
-        'totalscore', totalScore == null ? totalScore : totalScore + newScore);
+        'totalscore', totalScore == null ? newScore : totalScore + newScore);
   }
 
   static Future<RoundDetails> getLocalResult(Difficulty level) async {
@@ -79,8 +79,8 @@ class LocalStorage {
     }
   }
 
-  Future<String> getTotalScore() async =>
-      (await SharedPreferences.getInstance()).getInt('totalscore').toString();
+  static Future<int> getTotalScore() async =>
+      (await SharedPreferences.getInstance()).getInt('totalscore') ?? 0;
 
   static Future<int> queryLastTimeUpdates() async =>
       (await SharedPreferences.getInstance()).getInt('lasttimeupdate');

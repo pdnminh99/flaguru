@@ -74,12 +74,6 @@ class DatabaseConnector {
     }
   }
 
-  int _mapStatusToInt(bool status) => status ? 1 : 0;
-
-  Future<void> switchAllowStatus(bool newStatus, int countryID) =>
-      _db.update('country', {'isallow': _mapStatusToInt(newStatus)},
-          where: 'ID = ?', whereArgs: [countryID]);
-
   Future<List<Country>> collectCountries({bool isAllowedOnly: true}) async {
     var countries = List<Country>();
     var rawQueryResult = await _db.query('country');
