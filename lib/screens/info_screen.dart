@@ -50,8 +50,7 @@ class _InfoScreenState extends State<InfoScreen> {
       _authenticator.getCurrentUser().then((user) {
         setState(() {
           _currentUser = user;
-          _currentUser.email =
-              user.email[0].toUpperCase() + user.email.substring(1);
+          _currentUser.email = user.email[0].toUpperCase() + user.email.substring(1);
         });
       }),
       _getScore(),
@@ -59,23 +58,19 @@ class _InfoScreenState extends State<InfoScreen> {
     super.initState();
   }
 
-  void signOut(BuildContext context) => _authenticator
-      .signOut()
-      .then((_) => _navigateToMenuScreen())
-      .catchError((err) => print(err));
+  void signOut(BuildContext context) =>
+      _authenticator.signOut().then((_) => _navigateToMenuScreen()).catchError((err) => print(err));
 
   void _navigateToMenuScreen() {
     Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
-  void switchUser() => _authenticator
-          .switchUser()
-          .then((_) => this._authenticator.getCurrentUser())
-          .then((user) {
+  void switchUser() =>
+      _authenticator.switchUser().then((_) => this._authenticator.getCurrentUser()).then((user) {
         setState(() => _currentUser = user);
       }).catchError((err) => print(err));
 
-  Widget _profileBackButton(double _height) => Positioned(
+  Widget _profileBackButton(double _height, BuildContext context) => Positioned(
         top: _height * 0.03,
         left: _height * 0.02,
         child: IconButton(
@@ -103,13 +98,13 @@ class _InfoScreenState extends State<InfoScreen> {
           repeat: ImageRepeat.noRepeat,
           fit: BoxFit.cover);
 
-  Widget _profileHeader(double height) => Container(
+  Widget _profileHeader(double height, BuildContext context) => Container(
       height: height * 0.232,
       child: Stack(
         overflow: Overflow.visible,
         children: <Widget>[
           BackgroundInfo(),
-          _profileBackButton(height),
+          _profileBackButton(height, context),
           Align(
             alignment: Alignment(0, 1.2),
             child: Container(
@@ -125,8 +120,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   ),
                   Text(
                     _currentUser?.name ?? '...Loading',
-                    style: TextStyle(
-                        fontSize: height * 0.0273, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: height * 0.0273, fontWeight: FontWeight.w700),
                   )
                 ],
               ),
@@ -144,10 +138,11 @@ class _InfoScreenState extends State<InfoScreen> {
               SizedBox(height: _height * 0.05),
               _getScoreUserCard(round, _height, _width),
             ],
+            SizedBox(height: _height * 0.05),
             ButtonSwitchButtonLogout(
-                signout: signOut,
-                switchuser: switchUser,
-                paramcontext: context),
+              signOut,
+              switchUser,
+            ),
           ],
         ),
       );
@@ -156,15 +151,20 @@ class _InfoScreenState extends State<InfoScreen> {
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              _profileHeader(_height),
-              _profileBody(_height, _width),
-            ],
+    return WillPopScope(
+      onWillPop: () {
+        _navigateToMenuScreen();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                _profileHeader(_height, context),
+                _profileBody(_height, _width),
+              ],
+            ),
           ),
         ),
       ),
@@ -252,16 +252,14 @@ class _InfoScreenState extends State<InfoScreen> {
     }
   }
 
-  Widget _getScoreRepresentation(int score, double height, ScoreType type) =>
-      (Container(
+  Widget _getScoreRepresentation(int score, double height, ScoreType type) => (Container(
         margin: EdgeInsets.only(top: 40),
         child: Column(
           children: <Widget>[
             _getScoreIcon(type, height),
             Text(
               '$score',
-              style: TextStyle(
-                  fontSize: height * 0.039, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: height * 0.039, fontWeight: FontWeight.w700),
             ),
             SizedBox(
               height: height * 0.0023,
@@ -288,16 +286,14 @@ class _InfoScreenState extends State<InfoScreen> {
         alignment: Alignment(0, -1.4),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: _getColodiff(details.level)),
+              borderRadius: BorderRadius.circular(8.0), color: _getColodiff(details.level)),
           margin: EdgeInsets.only(top: 0, bottom: 6),
           alignment: Alignment.center,
           width: width * 0.35,
           height: 35,
           child: Text(
             _getDifficultyStringMap(details.level),
-            style: TextStyle(
-                fontSize: height * 0.031, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: height * 0.031, fontWeight: FontWeight.w700),
           ),
         ),
       );
@@ -308,19 +304,16 @@ class _InfoScreenState extends State<InfoScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _getScoreRepresentation(
-                  details.playedCount, height, ScoreType.RoundsCount),
+              _getScoreRepresentation(details.playedCount, height, ScoreType.RoundsCount),
               SizedBox(
                 width: height * 0.0068,
               ),
-              _getScoreRepresentation(
-                  details.highestScore, height, ScoreType.HighestScore),
+              _getScoreRepresentation(details.highestScore, height, ScoreType.HighestScore),
               if (details.level != Difficulty.ENDLESS) ...[
                 SizedBox(
                   width: height * 0.0060,
                 ),
-                _getScoreRepresentation(
-                    details.winningCount, height, ScoreType.WinningCount),
+                _getScoreRepresentation(details.winningCount, height, ScoreType.WinningCount),
               ],
             ],
           ),
