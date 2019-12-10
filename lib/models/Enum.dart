@@ -9,4 +9,9 @@ enum Continent {
   SOUTH_AMERICA,
   UNKNOWN,
 }
+enum ScoreType {
+  RoundsCount,
+  HighestScore,
+  WinningCount,
+}
 // enum RoundStatus { IDLE, PLAYING, OVER }
