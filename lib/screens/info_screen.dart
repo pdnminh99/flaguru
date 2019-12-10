@@ -232,7 +232,7 @@ class _InfoScreenState extends State<InfoScreen> {
     }
   }
 
-  Widget _scoreTypeString(ScoreType type, double height) {
+  Widget _scoreTypeString(ScoreType type, double height, bool isPluralNouns) {
     switch (type) {
       case ScoreType.HighestScore:
         return Text(
@@ -241,12 +241,12 @@ class _InfoScreenState extends State<InfoScreen> {
         );
       case ScoreType.RoundsCount:
         return Text(
-          'Rounds',
+          'Round${isPluralNouns ? 's' : ''}',
           style: TextStyle(fontSize: height * 0.019),
         );
       default:
         return Text(
-          'Wins',
+          'Win${isPluralNouns ? 's' : ''}',
           style: TextStyle(fontSize: height * 0.019),
         );
     }
@@ -266,7 +266,7 @@ class _InfoScreenState extends State<InfoScreen> {
             SizedBox(
               height: height * 0.0023,
             ),
-            _scoreTypeString(type, height),
+            _scoreTypeString(type, height, score > 1),
           ],
         ),
       ));
@@ -284,12 +284,50 @@ class _InfoScreenState extends State<InfoScreen> {
     }
   }
 
-  Widget _getScoreUserCard(
-      RoundDetails details, double _height, double _width) {
-    return (Container(
-      height: _height * 0.205,
-      width: double.infinity,
-      decoration: BoxDecoration(
+  Widget _cardHeader(double height, width, RoundDetails details) => Align(
+        alignment: Alignment(0, -1.4),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: _getColodiff(details.level)),
+          margin: EdgeInsets.only(top: 0, bottom: 6),
+          alignment: Alignment.center,
+          width: width * 0.35,
+          height: 35,
+          child: Text(
+            _getDifficultyStringMap(details.level),
+            style: TextStyle(
+                fontSize: height * 0.031, fontWeight: FontWeight.w700),
+          ),
+        ),
+      );
+
+  Widget _cardBody(double height, width, RoundDetails details) => Padding(
+        padding: const EdgeInsets.only(top: 0),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _getScoreRepresentation(
+                  details.playedCount, height, ScoreType.RoundsCount),
+              SizedBox(
+                width: height * 0.0068,
+              ),
+              _getScoreRepresentation(
+                  details.highestScore, height, ScoreType.HighestScore),
+              if (details.level != Difficulty.ENDLESS) ...[
+                SizedBox(
+                  width: height * 0.0060,
+                ),
+                _getScoreRepresentation(
+                    details.winningCount, height, ScoreType.WinningCount),
+              ],
+            ],
+          ),
+        ),
+      );
+
+  BoxDecoration _scoreCardDecoration(RoundDetails details) => BoxDecoration(
           color: Colors.white,
           border: Border.all(
             color: _getColodiff(details.level),
@@ -303,53 +341,18 @@ class _InfoScreenState extends State<InfoScreen> {
               blurRadius: 3.0,
               offset: Offset(0, 0),
             )
-          ]),
+          ]);
+
+  Widget _getScoreUserCard(RoundDetails details, double height, width) {
+    return (Container(
+      height: height * 0.205,
+      width: double.infinity,
+      decoration: _scoreCardDecoration(details),
       child: Stack(
         overflow: Overflow.visible,
-        //crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          //name
-          Align(
-            alignment: Alignment(0, -1.4),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: _getColodiff(details.level)),
-              margin: EdgeInsets.only(top: 0, bottom: 6),
-              alignment: Alignment.center,
-              width: _width * 0.35,
-              height: 35,
-              child: Text(
-                _getDifficultyStringMap(details.level),
-                style: TextStyle(
-                    fontSize: _height * 0.031, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 0),
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  _getScoreRepresentation(
-                      details.playedCount, _height, ScoreType.RoundsCount),
-                  SizedBox(
-                    width: _height * 0.0068,
-                  ),
-                  _getScoreRepresentation(
-                      details.highestScore, _height, ScoreType.HighestScore),
-                  if (details.level != Difficulty.ENDLESS) ...[
-                    SizedBox(
-                      width: _height * 0.0060,
-                    ),
-                    _getScoreRepresentation(
-                        details.winningCount, _height, ScoreType.WinningCount),
-                  ],
-                ],
-              ),
-            ),
-          )
+          _cardHeader(height, width, details),
+          _cardBody(height, width, details),
         ],
       ),
     ));
