@@ -71,6 +71,7 @@ flutter:
     - assets/infoscreen_icon/
     - assets/tutorial_picture/
     - assets/audio/
+    - assets/images/blankavatar.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
