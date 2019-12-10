@@ -17,175 +17,153 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
-  RoundDetails easyDetails;
-
-  RoundDetails normalDetails;
-
-  RoundDetails hardDetails;
-
-  String totalScore;
-
-  //pro
-  var auth = Authentication();
+  List<RoundDetails> _profileDetails;
+  int _totalScore = 0;
+  ProfileProvider _profileInstance;
+  Authentication _authenticator;
   User _currentUser;
 
-  //get score
-  Future _getScore() async {
-    this.easyDetails = await ProfileProvider().getLocalResult(Difficulty.EASY);
-    this.normalDetails = await ProfileProvider().getLocalResult(Difficulty.NORMAL);
-    this.hardDetails = await ProfileProvider().getLocalResult(Difficulty.HARD);
-    this.totalScore = await LocalStorage().getTotalScore();
-  }
+  Future<List<RoundDetails>> _getLocalResult() => Future.wait([
+        _profileInstance.getLocalResult(Difficulty.EASY),
+        _profileInstance.getLocalResult(Difficulty.NORMAL),
+        _profileInstance.getLocalResult(Difficulty.HARD),
+        _profileInstance.getLocalResult(Difficulty.ENDLESS),
+      ]);
 
-  //ctor
-  _InfoScreenState() {
-    //
-    _getScore();
-    //
-    this.auth.getCurrentUser().then((user) {
-      setState(() {
-        this._currentUser = user;
-        this._currentUser.email = user.email[0].toUpperCase() + user.email.substring(1);
+  Future<void> _getScore() => _getLocalResult().then((result) {
+        setState(() {
+          _profileDetails = result;
+        });
+        return LocalStorage.getTotalScore();
+      }).then((score) {
+        setState(() {
+          _totalScore = score;
+        });
       });
-    });
+
+  @override
+  void initState() {
+    _profileInstance = ProfileProvider();
+    _authenticator = Authentication();
+    _profileDetails = List<RoundDetails>();
+    Future.wait([
+      _authenticator.getCurrentUser().then((user) {
+        setState(() {
+          _currentUser = user;
+          _currentUser.email =
+              user.email[0].toUpperCase() + user.email.substring(1);
+        });
+      }),
+      _getScore(),
+    ]);
+    super.initState();
   }
 
-  //meth
-  void signOut(BuildContext context) {
-    Navigator.pushNamed(context, MenuScreen.routeName);
-    Navigator.pop(context);
-    this.auth.signOut().then((_) {}).catchError((err) => print(err));
-    backMenuScreen();
-  }
+  void signOut(BuildContext context) => _authenticator
+      .signOut()
+      .then((_) => _navigateToMenuScreen())
+      .catchError((err) => print(err));
 
-  void backMenuScreen() {
+  void _navigateToMenuScreen() {
     Navigator.of(context).pushReplacementNamed(MenuScreen.routeName);
   }
 
-  void switchUser() {
-    this.auth.switchUser().then((_) {
-      return this.auth.getCurrentUser();
-    }).then((user) {
-      setState(() {
-        this._currentUser = user;
-      });
-    }).catchError((err) => print(err));
-    print(this._currentUser);
-  }
+  void switchUser() => _authenticator
+          .switchUser()
+          .then((_) => this._authenticator.getCurrentUser())
+          .then((user) {
+        setState(() => _currentUser = user);
+      }).catchError((err) => print(err));
+
+  Widget _profileBackButton(double _height) => Positioned(
+        top: _height * 0.03,
+        left: _height * 0.02,
+        child: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+          ),
+          color: Color.fromARGB(255, 255, 255, 255),
+          onPressed: () {
+            _navigateToMenuScreen();
+          },
+        ),
+      );
+
+  Widget _profilePicture(double height) => _currentUser?.avatar != null
+      ? Image.network(
+          _currentUser.avatar,
+          height: height * 0.10,
+          width: height * 0.10,
+          repeat: ImageRepeat.noRepeat,
+          fit: BoxFit.cover,
+        )
+      : Image.asset('assets/images/blankavatar.png',
+          height: height * 0.10,
+          width: height * 0.10,
+          repeat: ImageRepeat.noRepeat,
+          fit: BoxFit.cover);
+
+  Widget _profileHeader(double height) => Container(
+      height: height * 0.232,
+      child: Stack(
+        overflow: Overflow.visible,
+        children: <Widget>[
+          BackgroundInfo(),
+          _profileBackButton(height),
+          Align(
+            alignment: Alignment(0, 1.2),
+            child: Container(
+              height: height * 0.1709,
+              child: Column(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: _profilePicture(height),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    _currentUser?.name ?? '...Loading',
+                    style: TextStyle(
+                        fontSize: height * 0.0273, fontWeight: FontWeight.w700),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ));
+
+  Widget _profileBody(double _height, double _width) => Padding(
+        padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+        child: Column(
+          children: <Widget>[
+            getTotalScore(_height),
+            for (var round in _profileDetails) ...[
+              SizedBox(height: _height * 0.05),
+              _getScoreUserCard(round, _height, _width),
+            ],
+            ButtonSwitchButtonLogout(
+                signOut,
+                switchUser,
+                ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    print(_height);
-    print(_width);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                  height: _height * 0.232,
-                  child: Stack(
-                    overflow: Overflow.visible,
-                    children: <Widget>[
-                      BackgroundInfo(),
-                      Positioned(
-                        top: _height * 0.03,
-                        left: _height * 0.02,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                          ),
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          onPressed: () =>
-                            backMenuScreen()
-                          
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment(0, 1.2),
-                        child: Container(
-                          //margin: EdgeInsets.only(top: 50),
-                          height: _height * 0.1709,
-                          child: Column(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  this._currentUser.avatar,
-                                  height: _height * 0.10,
-                                  width: _height * 0.10,
-                                  repeat: ImageRepeat.noRepeat,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                _currentUser.name,
-                                style: TextStyle(
-                                    fontSize: _height * 0.0273, fontWeight: FontWeight.w700),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-              Padding(
-                // double paddingvl = _height*0.04;
-                padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                child: Column(
-                  children: <Widget>[
-                    //ProgressUser(),
-                    // InfoUser(
-                    //   name: _currentUser.name,
-                    //   email: _currentUser.email,
-                    //   score: '100',
-                    // ),
-                    getTotalScore(_height),
-                    SizedBox(height: _height * 0.05),
-                    getScroreUserCard(
-                        'Easy',
-                        this.easyDetails.playedCount.toString(),
-                        this.easyDetails.highestScore.toString(),
-                        this.easyDetails.winningCount.toString(),
-                        _height,
-                        _width),
-                    SizedBox(height: _height * 0.04),
-                    getScroreUserCard(
-                        'Medium',
-                        this.normalDetails.playedCount.toString(),
-                        this.normalDetails.highestScore.toString(),
-                        this.normalDetails.winningCount.toString(),
-                        _height,
-                        _width),
-                    SizedBox(height: _height * 0.04),
-                    getScroreUserCard(
-                        'Hard',
-                        this.hardDetails.winningCount.toString(),
-                        this.hardDetails.winningCount.toString(),
-                        this.hardDetails.winningCount.toString(),
-                        _height,
-                        _width),
-                     SizedBox(height: _height * 0.02),
-                    // getScroreUserCard(
-                    //     'Enless',
-                    //     this.easyDetails.playedCount.toString(),
-                    //     this.easyDetails.highestScore.toString(),
-                    //     this.easyDetails.winningCount.toString(),
-                    //     _height,
-                    //     _width),
-                   Container(
-                     //height: 70,
-                     width: double.infinity,
-                     child : ButtonSwitchButtonLogout(signOut, switchUser)),
-                  ],
-                ),
-              ),
+              _profileHeader(_height),
+              _profileBody(_height, _width),
             ],
           ),
         ),
@@ -193,30 +171,28 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Color getColodiff(String diff) {
-    if (diff == "Easy")
-      return Color.fromRGBO(210, 155, 111, 1);
-    else if (diff == "Medium")
-      return Color.fromRGBO(222, 222, 222, 1);
-    else if (diff == "Hard")
-      return Color.fromRGBO(255, 193, 0, 1);
-    else
-      return Color.fromRGBO(56, 187, 231, 1);
-  }
-  
-  int sumTotalScore()
-  {
-    int total;
-    total = easyDetails.highestScore + hardDetails.highestScore + normalDetails.highestScore;
-    return total;
+  Color _getColodiff(Difficulty diff) {
+    switch (diff) {
+      case Difficulty.EASY:
+        return Color.fromRGBO(210, 155, 111, 1);
+      case Difficulty.NORMAL:
+        return Color.fromRGBO(222, 222, 222, 1);
+      case Difficulty.HARD:
+        return Color.fromRGBO(255, 193, 0, 1);
+      default:
+        return Color.fromRGBO(56, 187, 231, 1);
+    }
   }
 
-  Widget getTotalScore( double _height) {
-    print(this.totalScore);
+  Widget getTotalScore(double _height) {
     return Container(
       child: Row(
         children: <Widget>[
-          Image.asset('assets/infoscreen_icon/award.png', height: (_height * 0.063), width: (_height * 0.063),),
+          Image.asset(
+            'assets/infoscreen_icon/award.png',
+            height: (_height * 0.063),
+            width: (_height * 0.063),
+          ),
           Text(
             'Total Score: ',
             style: TextStyle(
@@ -225,8 +201,7 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           Text(
-            //this.totalScore == null ? '0': this.totalScore,
-            sumTotalScore().toString(),
+            '$_totalScore',
             style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
           )
         ],
@@ -234,81 +209,128 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 
-  Widget getScoreSmall(String score, double _height, String name) {
-    return (Container(
-      //height: _height * 0.1,
-      margin: EdgeInsets.only(top: 40),
-      width: _height * 0.09,
-      child: Column(
-        children: <Widget>[
-          name == 'Rounds'
-              ? Image.asset(
-                  'assets/infoscreen_icon/replay.png',
-                  height: _height * 0.04,
-                  width: _height * 0.04,
-                )
-              : Image.asset(
-                  'assets/infoscreen_icon/winner.png',
-                  height: _height * 0.04,
-                  width: _height * 0.04,
-                ),
-          Padding(
-            padding: EdgeInsets.all(0),
-            // padding: EdgeInsets.only(top: _height * 0.005),
-            child: Container(
-              child: Text(
-                score,
-                style: TextStyle(fontSize: _height * 0.039, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: _height * 0.00218,
-          ),
-          Text(
-            name,
-            style: TextStyle(fontSize: _height * 0.019),
-          )
-        ],
-      ),
-    ));
+  Widget _getScoreIcon(ScoreType type, double height) {
+    switch (type) {
+      case ScoreType.HighestScore:
+        return Image.asset(
+          'assets/infoscreen_icon/star.png',
+          height: height * 0.04,
+          width: height * 0.04,
+        );
+      case ScoreType.RoundsCount:
+        return Image.asset(
+          'assets/infoscreen_icon/replay.png',
+          height: height * 0.04,
+          width: height * 0.04,
+        );
+      default:
+        return Image.asset(
+          'assets/infoscreen_icon/winner.png',
+          height: height * 0.04,
+          width: height * 0.04,
+        );
+    }
   }
 
-  Widget getScoreHight(String score, _height) {
-    return (Container(
-      margin: EdgeInsets.only(top: 40),
-      child: Column(
-        children: <Widget>[
-          Image.asset(
-            'assets/infoscreen_icon/star.png',
-            height: _height * 0.04,
-            width: _height * 0.04,
-          ),
-          Text(
-            score,
-            style: TextStyle(fontSize: _height * 0.039, fontWeight: FontWeight.w700),
-          ),
-          SizedBox(
-            height: _height * 0.0023,
-          ),
-          Text(
-            'High Score',
-            style: TextStyle(fontSize: _height * 0.019),
-          ),
-        ],
-      ),
-    ));
+  Widget _scoreTypeString(ScoreType type, double height, bool isPluralNouns) {
+    switch (type) {
+      case ScoreType.HighestScore:
+        return Text(
+          'Best Score',
+          style: TextStyle(fontSize: height * 0.019),
+        );
+      case ScoreType.RoundsCount:
+        return Text(
+          'Round${isPluralNouns ? 's' : ''}',
+          style: TextStyle(fontSize: height * 0.019),
+        );
+      default:
+        return Text(
+          'Win${isPluralNouns ? 's' : ''}',
+          style: TextStyle(fontSize: height * 0.019),
+        );
+    }
   }
-   Widget getScroreUserCard(String diff, String rounds, String highestScore,
-      String wins, double _height, double _width) {
-    return (Container(
-      height: _height * 0.205,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          //color: Color.fromRGBO(34, 182, 192, 1),
+
+  Widget _getScoreRepresentation(int score, double height, ScoreType type) =>
+      (Container(
+        margin: EdgeInsets.only(top: 40),
+        child: Column(
+          children: <Widget>[
+            _getScoreIcon(type, height),
+            Text(
+              '$score',
+              style: TextStyle(
+                  fontSize: height * 0.039, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: height * 0.0023,
+            ),
+            _scoreTypeString(type, height, score > 1),
+          ],
+        ),
+      ));
+
+  String _getDifficultyStringMap(Difficulty level) {
+    switch (level) {
+      case Difficulty.EASY:
+        return 'Easy';
+      case Difficulty.NORMAL:
+        return 'Normal';
+      case Difficulty.HARD:
+        return 'Hard';
+      default:
+        return 'Endless';
+    }
+  }
+
+  Widget _cardHeader(double height, width, RoundDetails details) => Align(
+        alignment: Alignment(0, -1.4),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: _getColodiff(details.level)),
+          margin: EdgeInsets.only(top: 0, bottom: 6),
+          alignment: Alignment.center,
+          width: width * 0.35,
+          height: 35,
+          child: Text(
+            _getDifficultyStringMap(details.level),
+            style: TextStyle(
+                fontSize: height * 0.031, fontWeight: FontWeight.w700),
+          ),
+        ),
+      );
+
+  Widget _cardBody(double height, width, RoundDetails details) => Padding(
+        padding: const EdgeInsets.only(top: 0),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _getScoreRepresentation(
+                  details.playedCount, height, ScoreType.RoundsCount),
+              SizedBox(
+                width: height * 0.0068,
+              ),
+              _getScoreRepresentation(
+                  details.highestScore, height, ScoreType.HighestScore),
+              if (details.level != Difficulty.ENDLESS) ...[
+                SizedBox(
+                  width: height * 0.0060,
+                ),
+                _getScoreRepresentation(
+                    details.winningCount, height, ScoreType.WinningCount),
+              ],
+            ],
+          ),
+        ),
+      );
+
+  BoxDecoration _scoreCardDecoration(RoundDetails details) => BoxDecoration(
           color: Colors.white,
           border: Border.all(
-            color: getColodiff(diff),
+            color: _getColodiff(details.level),
             style: BorderStyle.solid,
             width: 3,
           ),
@@ -319,52 +341,18 @@ class _InfoScreenState extends State<InfoScreen> {
               blurRadius: 3.0,
               offset: Offset(0, 0),
             )
-          ]),
+          ]);
+
+  Widget _getScoreUserCard(RoundDetails details, double height, width) {
+    return (Container(
+      height: height * 0.205,
+      width: double.infinity,
+      decoration: _scoreCardDecoration(details),
       child: Stack(
         overflow: Overflow.visible,
-        //crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          //name
-        Align(
-          alignment: Alignment(0, -1.4),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: getColodiff(diff)
-                ),
-                margin: EdgeInsets.only(top: 0, bottom: 6),
-                alignment: Alignment.center,
-                width: _width * 0.35,
-                height: 35,
-                child: Text(
-                  diff,
-                  style: TextStyle(
-                      fontSize: _height * 0.031, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-          //Text('EASY'),
-          // score
-          Padding(
-            padding: const EdgeInsets.only(top: 0),
-            child: Container(
-              //height: _height *0.1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  getScoreSmall(rounds, _height, 'Rounds'),
-                  SizedBox(
-                    width: _height * 0.0068,
-                  ),
-                  getScoreHight(highestScore, _height),
-                  SizedBox(
-                    width: _height * 0.0060,
-                  ),
-                  getScoreSmall(rounds, _height, 'Wins'),
-                ],
-              ),
-            ),
-          )
+          _cardHeader(height, width, details),
+          _cardBody(height, width, details),
         ],
       ),
     ));

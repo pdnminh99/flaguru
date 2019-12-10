@@ -15,14 +15,12 @@ class Authentication {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
     var user = (await _auth.signInWithCredential(credential));
     return user;
   }
 
   Future<User> getCurrentUser() async {
     var currentUser = await _auth.currentUser();
-    // print(currentUser);
     return currentUser == null
         ? null
         : User(

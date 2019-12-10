@@ -13,8 +13,33 @@ class RoundDetails {
     this.winningCount,
     this.playedCount,
   }) {
-    if (this.highestScore == null) this.highestScore = 0;
-    if (this.winningCount == null) this.winningCount = 0;
-    if (this.playedCount == null) this.playedCount = 0;
+    this.highestScore ??= 0;
+    this.winningCount ??= 0;
+    this.playedCount ??= 0;
+  }
+
+  @override
+  String toString() {
+    String message;
+    switch (level) {
+      case Difficulty.EASY:
+        message = 'Level EASY, ';
+        break;
+      case Difficulty.NORMAL:
+        message = 'Level NORMAL, ';
+        break;
+      case Difficulty.HARD:
+        message = 'Level HARD, ';
+        break;
+      case Difficulty.ENDLESS:
+        message = 'Level ENDLESS, ';
+        break;
+      default:
+        message = 'Level UNKNOWN, ';
+        break;
+    }
+    message +=
+        'Highest score = $highestScore, Winning Count = $winningCount, playedCount = $playedCount.';
+    return message;
   }
 }
