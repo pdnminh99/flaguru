@@ -47,9 +47,10 @@ class LocalStorage {
     var totalScore = pref.getInt('totalscore');
     if (lastHighestScore == null || lastHighestScore < newScore)
       pref.setInt('${symbol}score', newScore);
-    if (winning == null)
+    if (isWin)
+      pref.setInt('${symbol}win', winning == null ? 1 : winning + 1);
+    else
       pref.setInt('${symbol}win', 0);
-    else if (isWin) pref.setInt('${symbol}win', winning + 1);
     pref.setInt(
         'totalscore', totalScore == null ? newScore : totalScore + newScore);
   }
