@@ -14,33 +14,28 @@ class MenuScreenTutorial extends StatefulWidget {
   _MenuScreenTutorialState createState() => _MenuScreenTutorialState();
 }
 
-class _MenuScreenTutorialState extends State<MenuScreenTutorial>
-    with TickerProviderStateMixin {
+class _MenuScreenTutorialState extends State<MenuScreenTutorial> with TickerProviderStateMixin {
   Animation<double> btnFlyInAnim;
   AnimationController btnFlyInController;
   AnimationController btnRotationController;
   TextStyleTutorial styleshowcase = TextStyleTutorial();
-  
+
   Timer timer1;
   Timer timer2;
 
   bool shouldQuit;
-  
+
   bool boolbuildshowcase = false;
   GlobalKey _keyofplaybutton = GlobalKey();
 
   @override
   void initState() {
-    
-    
-    
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context).startShowCase([_keyofplaybutton]));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([_keyofplaybutton]));
 
-    btnFlyInController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    btnFlyInAnim = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
-        parent: btnFlyInController, curve: Curves.fastOutSlowIn));
+    btnFlyInController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    btnFlyInAnim = Tween(begin: -1.0, end: 0.0)
+        .animate(CurvedAnimation(parent: btnFlyInController, curve: Curves.fastOutSlowIn));
     btnFlyInController.forward();
 
     //build show case when done animation fly
@@ -53,15 +48,13 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
             }
         });
 
-    btnRotationController =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    btnRotationController = AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
     setBtnRotationTimer();
 
     super.initState();
-    
   }
-  
+
   @override
   void dispose() {
     timer1?.cancel();
@@ -72,6 +65,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
   }
 
   setbuildShowcasse() {}
+
   setBtnRotationTimer() {
     timer1 = Timer(const Duration(seconds: 2), () {
       btnRotationController.forward();
@@ -83,7 +77,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
   }
 
   void gotoDiffScreen(BuildContext context) {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Difftutorial()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Difftutorial()));
   }
 
   void gotoLogin() {
@@ -106,17 +100,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
   }
 
   void gotoAbout(BuildContext context) {
-   Scaffold.of(context).showSnackBar(buildSnackBarPressPlayButton());
-  }
-
-  bool confirmQuit(BuildContext context) {
-    final status = shouldQuit;
-    if (!shouldQuit) {
-      shouldQuit = true;
-      Timer(const Duration(seconds: 2), () => shouldQuit = false);
-      Scaffold.of(context).showSnackBar(buildSnackBar(2));
-    }
-    return status;
+    Scaffold.of(context).showSnackBar(buildSnackBarPressPlayButton());
   }
 
   @override
@@ -126,7 +110,7 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
       body: Builder(
         builder: (context) {
           return WillPopScope(
-            onWillPop: () async => confirmQuit(context),
+            onWillPop: () async => false,
             child: Stack(
               children: <Widget>[
                 BackgroundCarousel(),
@@ -146,21 +130,18 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          boolbuildshowcase ? 
-          buildTutorialButtonPlay(context): buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2),
+          boolbuildshowcase
+              ? buildTutorialButtonPlay(context)
+              : buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2),
           sizedBox,
-          buildMenuButtonWrapper(
-              700, gotoLogin, Icons.person_outline, "Login", 0.15, 0.35,
+          buildMenuButtonWrapper(700, gotoLogin, Icons.person_outline, "Login", 0.15, 0.35,
               rightIcon: 'G'),
           sizedBox,
-          buildMenuButtonWrapper(
-              800, gotoTutorial, Icons.bookmark_border, "Tutorial", 0.3, 0.5),
+          buildMenuButtonWrapper(800, gotoTutorial, Icons.bookmark_border, "Tutorial", 0.3, 0.5),
           sizedBox,
-          buildMenuButtonWrapper(
-              900, gotoSetting, Menu_Icon.settings, "Settings", 0.45, 0.65),
+          buildMenuButtonWrapper(900, gotoSetting, Menu_Icon.settings, "Settings", 0.45, 0.65),
           sizedBox,
-          buildMenuButtonWrapper(
-              1000, gotoAbout, Menu_Icon.info_outline, "About", 0.6, 0.8),
+          buildMenuButtonWrapper(1000, gotoAbout, Menu_Icon.info_outline, "About", 0.6, 0.8),
         ],
       ),
     );
@@ -168,7 +149,6 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
 
   Widget buildTutorialButtonPlay(BuildContext context) {
     return Showcase(
-      //descTextStyle: TextStyle(locale: ),
       key: _keyofplaybutton,
       overlayOpacity: 0.7,
       description: "Touch this to play",
@@ -179,13 +159,12 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
           height: 59,
           width: 359,
           child: Center(
-              child: buildMenuButtonWrapper(
-                  600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2))),
+              child: buildMenuButtonWrapper(600, gotoDiffScreen, Menu_Icon.play, "Play", 0, 0.2))),
     );
   }
 
-  Widget buildMenuButtonWrapper(int offsetX, Function onPress,
-      IconData leftIcon, String title, double begin, double end,
+  Widget buildMenuButtonWrapper(
+      int offsetX, Function onPress, IconData leftIcon, String title, double begin, double end,
       {String rightIcon}) {
     return AnimatedBuilder(
       animation: btnFlyInAnim,
@@ -200,21 +179,10 @@ class _MenuScreenTutorialState extends State<MenuScreenTutorial>
     );
   }
 
-Widget buildSnackBarPressPlayButton()
-{
-  return SnackBar(
-    content: Text("Please touch play button to continue tutorial",
-    textAlign: TextAlign.center,
-    style: TextStyle(fontSize: 17),),
-  );
-}
-  Widget buildSnackBar(int duration) {
+  Widget buildSnackBarPressPlayButton() {
     return SnackBar(
-      elevation: 0,
-      duration: Duration(seconds: duration),
-      backgroundColor: Colors.black38,
       content: Text(
-        'Press again to quit',
+        "Please touch play button to continue tutorial",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 17),
       ),

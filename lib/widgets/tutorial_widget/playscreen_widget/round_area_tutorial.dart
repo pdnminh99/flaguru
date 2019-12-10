@@ -7,16 +7,17 @@ import 'package:provider/provider.dart';
 
 import 'play_area_tutorial.dart';
 
-class RoundAreaTutorial extends RoundArea
-{
+class RoundAreaTutorial extends RoundArea {
   RoundAreaTutorial(Difficulty difficulty, this.listkey) : super(difficulty);
   final List<GlobalKey> listkey;
- @override
+
+  @override
   Widget buildArea(BuildContext context) {
     // TODO: implement buildArea
     final handler = Provider.of<RoundProvider>(context).roundHandler;
     if (handler == null)
-    return LoadingSpinner();
-    else return PlayAreaTutorial(listkey);
+      return LoadingSpinner();
+    else
+      return PlayAreaTutorial(listkey);
   }
 }

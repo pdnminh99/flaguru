@@ -13,17 +13,16 @@ import 'answers_area_tutorial.dart';
 import 'count_down_watch_area_tutorial.dart';
 import 'question_info_area_tutorial.dart';
 
-class PlayAreaTutorial extends PlayArea
-{
+class PlayAreaTutorial extends PlayArea {
   final TextStyleTutorial styleshowcase = TextStyleTutorial();
   final List<GlobalKey> listkey;
+
   PlayAreaTutorial(this.listkey);
-  @override 
-  Widget build(BuildContext context)
-  { 
+
+  @override
+  Widget build(BuildContext context) {
     //delay1(context);
-    return 
-      Column(
+    return Column(
       children: <Widget>[
         Expanded(flex: 7, child: InfoBarTutorial(listkey[0], listkey[1])),
         Expanded(flex: 40, child: buildQuestionAreaAndWatch()),
@@ -33,25 +32,24 @@ class PlayAreaTutorial extends PlayArea
     );
   }
 
-void delay1(BuildContext context)
-{
-  Future.delayed(Duration(milliseconds: 500), ()=> ShowCaseWidget.of(context).startShowCase(listkey));
-}
-Widget buildAnswersAreaTutorial()
-{
-  return 
-  Showcase(
-    key: listkey[3],
-    showArrow: false,
-    title: "Answer area",
-    titleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-    description: "Touch to try play",
-    descTextStyle: TextStyle(fontSize: 13),
-    child:  AnswersArea());
-}
+  void delay1(BuildContext context) {
+    Future.delayed(
+        Duration(milliseconds: 500), () => ShowCaseWidget.of(context).startShowCase(listkey));
+  }
+
+  Widget buildAnswersAreaTutorial() {
+    return Showcase(
+        key: listkey[3],
+        showArrow: false,
+        title: "Answer area",
+        titleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        description: "Touch to try play",
+        descTextStyle: TextStyle(fontSize: 13),
+        child: AnswersArea());
+  }
 
   @override
- Widget buildQuestionAreaAndWatch() {
+  Widget buildQuestionAreaAndWatch() {
     return LayoutBuilder(
       builder: (context, constraints) {
         final millis = 400;
@@ -61,7 +59,7 @@ Widget buildAnswersAreaTutorial()
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            QuestionInfoAreaTutorial(listkey[2],listkey[4],millis,height, width),
+            QuestionInfoAreaTutorial(listkey[2], listkey[4], millis, height, width),
             CountDownWatchArea(millis: millis, height: height, width: width),
           ],
         );

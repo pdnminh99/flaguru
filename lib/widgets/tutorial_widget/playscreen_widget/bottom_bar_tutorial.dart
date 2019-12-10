@@ -13,6 +13,7 @@ class BottomBarTutorial extends StatefulWidget {
   final GlobalKey nextkey;
 
   BottomBarTutorial(this.nextkey);
+
   @override
   _BottomBarTutorialState createState() => _BottomBarTutorialState();
 }
@@ -34,31 +35,42 @@ class _BottomBarTutorialState extends State<BottomBarTutorial> with SingleTicker
     _controller.dispose();
     super.dispose();
   }
-   void _showDialog(){
-     showDialog(
-       context: context,
-       builder : (BuildContext context){
-         return AlertDialog(
-           title: Text("Thank you", style: TextStyle(fontWeight: FontWeight.bold),),
-           content: Text("Thank you for following our tutorial"),
-           actions: <Widget>[
-             FlatButton(
-               child: Text('REPLAY', style: TextStyle(fontWeight: FontWeight.bold),),
-               onPressed: ()=>{
-                 Navigator.popAndPushNamed(context, TutorialScreen.routeName),
-               },
-             ),
-             FlatButton(
-               child: Text("QUIT", style: TextStyle(fontWeight: FontWeight.bold),),
-              onPressed: ()=>{
-                Navigator.popAndPushNamed(context, MenuScreen.routeName),
+
+  void _showDialog(BuildContext preContext) {
+    showDialog(
+      context: preContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "TUTORIAL",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text("Thank you for following our tutorial"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'REPLAY',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => {
+                Navigator.of(preContext).pushReplacementNamed(TutorialScreen.routeName),
               },
-             )
-           ],
-         );
-       },
-     );
-   }
+            ),
+            FlatButton(
+              child: Text(
+                "QUIT",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => {
+                Navigator.of(preContext).pushReplacementNamed(MenuScreen.routeName),
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final round = Provider.of<RoundProvider>(context);
@@ -79,36 +91,35 @@ class _BottomBarTutorialState extends State<BottomBarTutorial> with SingleTicker
           children: <Widget>[
             AnimatedBuilder(
               animation: animation,
-              child: 
-              Showcase(
+              child: Showcase(
                 key: widget.nextkey,
                 title: "Next question",
-                titleTextStyle: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-                description: "touch this button to continue",
-                onTargetClick: ()=> _showDialog(),
+                titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                description: "Touch this button to continue",
+                onTargetClick: () => _showDialog(context),
                 disposeOnTap: true,
-
-              child : Stack(
-                children: <Widget>[
-                  SizedBox(
-                    height: constraint.maxHeight * 0.7,
-                    width: constraint.maxWidth * 0.2,
-                    child: RaisedButton(
-                      elevation: 5,
-                      color: Colors.white,
-                      onPressed: () => _showDialog(),
-                      child: Icon(
-                        (isOver) ? Icons.airplay : Icons.arrow_forward,
-                        size: constraint.maxHeight * 0.55,
+                child: Stack(
+                  children: <Widget>[
+                    SizedBox(
+                      height: constraint.maxHeight * 0.7,
+                      width: constraint.maxWidth * 0.2,
+                      child: RaisedButton(
+                        elevation: 5,
+                        color: Colors.white,
+                        onPressed: () => _showDialog(context),
+                        child: Icon(
+                          (isOver) ? Icons.airplay : Icons.arrow_forward,
+                          size: constraint.maxHeight * 0.55,
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                  ),
-                  Visibility(
-                      visible: !isAnswered,
-                      child: Positioned.fill(child: Container(color: Colors.transparent))),
-                ],
-              ),),
+                    Visibility(
+                        visible: !isAnswered,
+                        child: Positioned.fill(child: Container(color: Colors.transparent))),
+                  ],
+                ),
+              ),
               builder: (context, child) {
                 return Transform(
                   transform: Matrix4.rotationX(animation.value),

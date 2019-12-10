@@ -10,62 +10,72 @@ class PlayTutorial extends StatefulWidget {
 }
 
 class _PlayTutorialState extends State<PlayTutorial> {
- 
   Difficulty diff = Difficulty.EASY;
- 
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  ShowCaseWidget(builder: Builder(builder: (context) => PlayScreenTutorial( difficulty : diff),),),
-    );
-  }
-}
-
-class PlayScreenTutorial extends StatefulWidget {
-   final Difficulty difficulty;
-  const PlayScreenTutorial({this.difficulty});
-  
-  @override
-  _PlayScreenTutorialState createState() => _PlayScreenTutorialState();
-}
-
-class _PlayScreenTutorialState extends State<PlayScreenTutorial> {
-   List<GlobalKey> listkey = List<GlobalKey>(6);
-   @override
-  void initState() {
-    for (var i = 0; i< listkey.length; i++)
-    {
-      listkey[i] = GlobalKey();
-    }
-  
-    delayShowCase();
-    super.initState();
-  }
-  void delayShowCase ()
-  {
-    Future.delayed(Duration(milliseconds: 500), ()=> WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase(listkey)));
-  }
-  @override
-  Widget build(BuildContext context) {
-    //delayShowCase();
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff019dad),
-        drawer: PlayScreenDrawer(widget.difficulty),
-        body: WillPopScope(
-          onWillPop: () async => false,
-          child: Column(
-            children: <Widget>[
-              //TopBar(widget.difficulty),
-              Container(height: 55,),
-              Expanded(child: RoundAreaTutorial(widget.difficulty, listkey)),
-            ],
-          ),
+      body: ShowCaseWidget(
+        builder: Builder(
+          builder: (context) => PlayScreenTutorial(difficulty: diff),
         ),
       ),
     );
   }
 }
 
+class PlayScreenTutorial extends StatefulWidget {
+  final Difficulty difficulty;
 
+  const PlayScreenTutorial({this.difficulty});
+
+  @override
+  _PlayScreenTutorialState createState() => _PlayScreenTutorialState();
+}
+
+class _PlayScreenTutorialState extends State<PlayScreenTutorial> {
+  List<GlobalKey> listkey = List<GlobalKey>(6);
+
+  @override
+  void initState() {
+    for (var i = 0; i < listkey.length; i++) {
+      listkey[i] = GlobalKey();
+    }
+
+    delayShowCase();
+    super.initState();
+  }
+
+  void delayShowCase() {
+    Future.delayed(
+        Duration(milliseconds: 500),
+        () => WidgetsBinding.instance
+            .addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase(listkey)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //delayShowCase();
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color(0xff019dad),
+          drawer: PlayScreenDrawer(widget.difficulty),
+          body: WillPopScope(
+            onWillPop: () async => false,
+            child: Column(
+              children: <Widget>[
+                //TopBar(widget.difficulty),
+                Container(
+                  height: 55,
+                ),
+                Expanded(child: RoundAreaTutorial(widget.difficulty, listkey)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

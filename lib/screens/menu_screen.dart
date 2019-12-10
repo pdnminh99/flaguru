@@ -23,11 +23,12 @@ import '../widgets/menu_button.dart';
 
 class MenuScreen extends StatefulWidget {
   static final String routeName = '/';
+
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin {
+class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
   var auth = Authentication();
   User _currentUser;
   Animation<double> btnFlyInAnim;
@@ -98,11 +99,11 @@ class _MenuScreenState extends State<MenuScreen>  with TickerProviderStateMixin 
   }
 
   void gotoProfile(BuildContext context) {
-    Navigator.popAndPushNamed(context, InfoScreen.routeName);
+    Navigator.of(context).pushReplacementNamed(InfoScreen.routeName);
   }
 
   void gotoTutorial(BuildContext context) {
-    Navigator.popAndPushNamed(context, TutorialScreen.routeName);
+    Navigator.of(context).pushReplacementNamed(TutorialScreen.routeName);
   }
 
   void gotoSetting(BuildContext context) {
