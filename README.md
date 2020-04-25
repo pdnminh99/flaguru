@@ -24,7 +24,7 @@ https://drive.google.com/file/d/1kIGwDO9evZXn7RPy07j9PUvag1gQK63a/view?usp=shari
 https://flaguru-35568.web.app/
 
 ## Demo video
-
+The video was recorded in debug mode, the answer of every quiz was always A.  
 https://drive.google.com/file/d/1WlyzsRIMxr9AZyJhJTKMmo5o0nPC8vXk/view
 
 ## App screenshots
