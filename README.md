@@ -25,7 +25,7 @@ https://flaguru-35568.web.app/
 
 ## App screenshots
 
-![GameplayScreen](/images/Picture1.gif)
+![GameplayScreen](/images/menu-screen.png)
 ![GameplayScreen](/images/Picture2.png)
 ![GameplayScreen](/images/Picture3.png)
 ![GameplayScreen](/images/Picture4.png)
